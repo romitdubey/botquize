@@ -80,7 +80,7 @@ async def publish_quiz(bot: Bot, session: QuizSession,
             f"Question {i + 1}/{session.total_questions}"
         )
 
-        poll_msg = await _send_quiz_poll_with_retry(
+        poll_msg, error_detail = await _send_quiz_poll_with_retry(
             bot=bot,
             chat_id=CHANNEL_ID,
             question=q.question_text,
@@ -90,12 +90,17 @@ async def publish_quiz(bot: Bot, session: QuizSession,
         )
 
         if poll_msg is None:
-            # Fatal error, abort and notify admin
+            # Fatal error, abort and notify admin with exact detail
             await bot.send_message(
                 chat_id=admin_chat_id,
                 text=(
-                    f"❌ Failed to send question {i + 1}. Quiz aborted.\n"
-                    "Check bot channel permissions and try /reset then start again."
+                    f"❌ Failed to send question {i + 1}. Quiz aborted.\n\n"
+                    f"Telegram Error: {error_detail}\n\n"
+                    "Common fixes:\n"
+                    "1. Ensure the bot is added as an ADMINISTRATOR in the channel.\n"
+                    "2. Give the bot 'Post Messages' permission.\n"
+                    "3. Ensure CHANNEL_ID starts with -100 (e.g. -1001234567890).\n\n"
+                    "Use /reset to start over."
                 ),
             )
             db.update_session_status(session.session_id, SessionStatus.CANCELLED)
@@ -139,8 +144,9 @@ async def _send_quiz_poll_with_retry(
     correct_option_id: int,
     explanation: Optional[str],
     max_retries: int = 3,
-):
-    """Send a quiz poll, handling Telegram RetryAfter gracefully."""
+) -> tuple[Optional[any], Optional[str]]:
+    """Send a quiz poll, handling Telegram RetryAfter gracefully. Returns (message, error_string)."""
+    last_error = None
     for attempt in range(max_retries):
         try:
             msg = await bot.send_poll(
@@ -153,17 +159,19 @@ async def _send_quiz_poll_with_retry(
                 explanation=explanation,
                 allows_multiple_answers=False,
             )
-            return msg
+            return msg, None
         except RetryAfter as e:
+            last_error = f"Flood rate limited: retry after {e.retry_after}s"
             wait = e.retry_after + 1
             logger.warning("Rate limited; waiting %s seconds (attempt %d)", wait, attempt + 1)
             await asyncio.sleep(wait)
         except TelegramError as e:
+            last_error = str(e)
             logger.error("Telegram error sending poll (attempt %d): %s", attempt + 1, e)
             if attempt == max_retries - 1:
-                return None
+                return None, last_error
             await asyncio.sleep(2)
-    return None
+    return None, last_error
 
 
 # ─── Answer recording ─────────────────────────────────────────────────────────
