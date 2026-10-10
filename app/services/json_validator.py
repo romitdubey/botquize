@@ -125,16 +125,19 @@ def validate_json_bytes(raw: bytes) -> ValidationResult:
             ))
             continue
 
+        # Auto-trim options if longer than MAX_OPTION_LEN
+        sanitized_options = []
         for j, opt in enumerate(options):
             if not isinstance(opt, str) or not opt.strip():
                 errors.append(ValidationError(
                     num, f"options[{j}]", "Empty or invalid option"
                 ))
-            elif len(opt) > MAX_OPTION_LEN:
-                errors.append(ValidationError(
-                    num, f"options[{j}]",
-                    f"Too long ({len(opt)} chars; max {MAX_OPTION_LEN})"
-                ))
+            else:
+                opt_str = opt.strip()
+                if len(opt_str) > MAX_OPTION_LEN:
+                    # Truncate cleanly so Telegram accepts the poll
+                    opt_str = opt_str[:MAX_OPTION_LEN - 3].rstrip() + "..."
+                sanitized_options.append(opt_str)
 
         # correct_option
         correct = q.get("correct_option")
@@ -164,6 +167,32 @@ def validate_json_bytes(raw: bytes) -> ValidationResult:
     )
 
 
+def sanitize_data(data: dict) -> dict:
+    """Trim strings to fit Telegram API limits so send_poll never fails."""
+    for q in data.get("questions", []):
+        if "question" in q and isinstance(q["question"], str):
+            q["question"] = q["question"].strip()
+            if len(q["question"]) > MAX_QUESTION_LEN:
+                q["question"] = q["question"][:MAX_QUESTION_LEN - 3].rstrip() + "..."
+
+        if "options" in q and isinstance(q["options"], list):
+            sanitized = []
+            for opt in q["options"]:
+                opt_str = str(opt).strip()
+                if len(opt_str) > MAX_OPTION_LEN:
+                    opt_str = opt_str[:MAX_OPTION_LEN - 3].rstrip() + "..."
+                sanitized.append(opt_str)
+            q["options"] = sanitized
+
+        if "explanation" in q and isinstance(q["explanation"], str):
+            # Telegram quiz poll explanation limit is 200 characters
+            expl = q["explanation"].strip()
+            if len(expl) > 200:
+                q["explanation"] = expl[:197].rstrip() + "..."
+
+    return data
+
+
 def parse_questions(data: dict) -> list[dict]:
     """Return the raw list of question dicts from already-validated data."""
     return data["questions"]
@@ -175,4 +204,5 @@ def load_and_validate(raw: bytes) -> tuple[ValidationResult, Optional[dict]]:
     if not result.ok:
         return result, None
     data = json.loads(raw.decode("utf-8"))
-    return result, data
+    sanitized_data = sanitize_data(data)
+    return result, sanitized_data

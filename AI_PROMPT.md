@@ -33,6 +33,8 @@ You are an expert OCR and data extraction assistant. I am providing you with ima
 - If an explanation is not present or cannot be reliably determined, omit the "explanation" field entirely (do not guess).
 - Maximum 10 options per question.
 - Minimum 2 options per question.
+- **Each option must be under 100 characters** (Telegram poll limit). If an option is very long, summarize or truncate it cleanly.
+- Question text must be under 300 characters.
 - Question text must not be empty.
 - Options must not be empty strings.
 
