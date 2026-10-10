@@ -1,0 +1,50 @@
+"""
+config.py – Central configuration loaded from environment variables.
+"""
+
+import os
+import logging
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # Running without dotenv is fine when env vars are set externally (e.g. Render)
+
+logger = logging.getLogger(__name__)
+
+# ─── Required ──────────────────────────────────────────────────────────────────
+
+BOT_TOKEN: str = os.environ.get("BOT_TOKEN", "")
+ADMIN_USER_ID: int = int(os.environ.get("ADMIN_USER_ID", "0"))
+CHANNEL_ID: str = os.environ.get("CHANNEL_ID", "")
+
+# ─── Optional / Deployment ─────────────────────────────────────────────────────
+
+WEBHOOK_URL: str = os.environ.get("WEBHOOK_URL", "")
+PORT: int = int(os.environ.get("PORT", "8080"))
+DATABASE_PATH: str = os.environ.get("DATABASE_PATH", "./data/quizbot.db")
+
+# ─── Quiz Settings ─────────────────────────────────────────────────────────────
+
+QUESTION_DELAY: float = float(os.environ.get("QUESTION_DELAY", "2"))
+MAX_JSON_SIZE_MB: float = float(os.environ.get("MAX_JSON_SIZE_MB", "10"))
+REVIEW_PAGE_SIZE: int = int(os.environ.get("REVIEW_PAGE_SIZE", "3"))
+HISTORY_PAGE_SIZE: int = int(os.environ.get("HISTORY_PAGE_SIZE", "5"))
+
+# ─── Validation ────────────────────────────────────────────────────────────────
+
+def validate_config() -> None:
+    errors = []
+    if not BOT_TOKEN:
+        errors.append("BOT_TOKEN is not set")
+    if ADMIN_USER_ID == 0:
+        errors.append("ADMIN_USER_ID is not set or is 0")
+    if not CHANNEL_ID:
+        errors.append("CHANNEL_ID is not set")
+    if errors:
+        for e in errors:
+            logger.error("Config error: %s", e)
+        raise RuntimeError(
+            "Missing required environment variables:\n" + "\n".join(f"  - {e}" for e in errors)
+        )

@@ -1,0 +1,83 @@
+{
+  "quiz_title": "Biology Chapter 1 - Cell Biology",
+  "description": "MCQs covering fundamental cell biology concepts",
+  "questions": [
+    {
+      "question": "Which organelle is known as the 'powerhouse of the cell' because it produces ATP through cellular respiration?",
+      "options": [
+        "Ribosome",
+        "Golgi apparatus",
+        "Mitochondria",
+        "Endoplasmic reticulum"
+      ],
+      "correct_option": 2,
+      "explanation": "Mitochondria produce ATP via oxidative phosphorylation during cellular respiration, earning them the nickname 'powerhouse of the cell'."
+    },
+    {
+      "question": "Which sequence of events best represents initiation of bacterial DNA replication?",
+      "options": [
+        "Ligase → helicase → primase → polymerase",
+        "Origin recognition → DNA unwinding → primer synthesis → DNA synthesis",
+        "Polymerase → origin recognition → ligase → helicase",
+        "Primer synthesis → chromosome segregation → helicase → ligase"
+      ],
+      "correct_option": 1,
+      "explanation": "Replication begins with recognition of the origin of replication, followed by DNA unwinding by helicase, primer synthesis by primase, and then DNA synthesis by DNA polymerase."
+    },
+    {
+      "question": "The fluid mosaic model describes the plasma membrane as having:",
+      "options": [
+        "A rigid, solid lipid bilayer with embedded proteins",
+        "A fluid phospholipid bilayer with mobile proteins",
+        "A static protein layer surrounding lipids",
+        "A crystalline structure of cholesterol and phospholipids"
+      ],
+      "correct_option": 1,
+      "explanation": "The fluid mosaic model, proposed by Singer and Nicolson in 1972, describes the plasma membrane as a fluid phospholipid bilayer in which proteins can move laterally."
+    },
+    {
+      "question": "Which type of RNA carries the genetic code from the nucleus to the ribosomes for protein synthesis?",
+      "options": [
+        "tRNA (transfer RNA)",
+        "rRNA (ribosomal RNA)",
+        "mRNA (messenger RNA)",
+        "snRNA (small nuclear RNA)"
+      ],
+      "correct_option": 2,
+      "explanation": "mRNA (messenger RNA) is transcribed from DNA in the nucleus and carries the genetic information (codons) to the ribosomes in the cytoplasm where translation occurs."
+    },
+    {
+      "question": "Osmosis is best defined as the movement of water molecules:",
+      "options": [
+        "From a region of low solute concentration to a region of high solute concentration through a semi-permeable membrane",
+        "From a region of high solute concentration to a region of low solute concentration",
+        "Against the concentration gradient using ATP",
+        "Through a channel protein using facilitated diffusion"
+      ],
+      "correct_option": 0,
+      "explanation": "Osmosis is the passive movement of water across a semi-permeable membrane from an area of low solute concentration (high water potential) to an area of high solute concentration (low water potential)."
+    },
+    {
+      "question": "Which phase of mitosis is characterized by chromosomes aligning at the cell's equatorial plate (metaphase plate)?",
+      "options": [
+        "Prophase",
+        "Anaphase",
+        "Metaphase",
+        "Telophase"
+      ],
+      "correct_option": 2,
+      "explanation": "During metaphase, chromosomes are fully condensed and are aligned along the metaphase plate (cell equator) by the spindle apparatus. This alignment ensures equal distribution of chromosomes to daughter cells."
+    },
+    {
+      "question": "The enzyme responsible for adding RNA primers during DNA replication is:",
+      "options": [
+        "DNA polymerase I",
+        "DNA ligase",
+        "Helicase",
+        "Primase"
+      ],
+      "correct_option": 3,
+      "explanation": "Primase is an RNA polymerase that synthesizes short RNA primers complementary to the template DNA strand. These primers provide the 3'-OH group needed for DNA polymerase to begin synthesis."
+    }
+  ]
+}

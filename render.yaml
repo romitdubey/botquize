@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: telegram-mcq-quiz-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.bot:fastapi_app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BOT_TOKEN
+        sync: false          # Set manually in Render dashboard
+      - key: ADMIN_USER_ID
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: WEBHOOK_URL
+        sync: false          # Set to https://<your-app-name>.onrender.com
+      - key: QUESTION_DELAY
+        value: "2"
+      - key: MAX_JSON_SIZE_MB
+        value: "10"
+      - key: REVIEW_PAGE_SIZE
+        value: "3"
+      - key: HISTORY_PAGE_SIZE
+        value: "5"
+    # Render free tier: service sleeps after inactivity.
+    # Consider using a free uptime service (e.g. UptimeRobot) to ping /health.
+    healthCheckPath: /health
