@@ -16,7 +16,17 @@ logger = logging.getLogger(__name__)
 # ─── Required ──────────────────────────────────────────────────────────────────
 
 BOT_TOKEN: str = os.environ.get("BOT_TOKEN", "")
-ADMIN_USER_ID: int = int(os.environ.get("ADMIN_USER_ID", "0"))
+
+def _parse_admin_ids(raw: str) -> set[int]:
+    result = set()
+    for item in raw.replace(";", ",").split(","):
+        item = item.strip()
+        if item.isdigit():
+            result.add(int(item))
+    return result
+
+ADMIN_USER_IDS: set[int] = _parse_admin_ids(os.environ.get("ADMIN_USER_ID", "0"))
+ADMIN_USER_ID: int = next(iter(ADMIN_USER_IDS)) if ADMIN_USER_IDS else 0
 CHANNEL_ID: str = os.environ.get("CHANNEL_ID", "")
 
 # ─── Optional / Deployment ─────────────────────────────────────────────────────

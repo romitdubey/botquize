@@ -11,7 +11,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from app import state as db
-from app.config import ADMIN_USER_ID
+from app.config import ADMIN_USER_IDS
 from app.services import quiz_service
 from app.services.statistics import format_result
 
@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 async def poll_answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle incoming poll_answer updates."""
     poll_answer = update.poll_answer
-    if poll_answer is None:
+    if poll_answer is None or poll_answer.user is None:
         return
 
-    # Only track the admin user's answers
-    if poll_answer.user.id != ADMIN_USER_ID:
+    # Only track authorized users
+    if poll_answer.user.id not in ADMIN_USER_IDS:
         return
 
     poll_id = poll_answer.poll_id
@@ -50,7 +50,7 @@ async def poll_answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
         result_text = format_result(session)
         try:
             await context.bot.send_message(
-                chat_id=ADMIN_USER_ID,
+                chat_id=poll_answer.user.id,
                 text=result_text + (
                     "\n\nUse /review to see which questions you got wrong.\n"
                     "Use /history to see past quizzes."

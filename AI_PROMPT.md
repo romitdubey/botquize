@@ -5,58 +5,71 @@ Copy and paste the prompt below (everything between the lines) and send it to an
 ---
 
 ```
-You are an expert OCR and data extraction assistant. I am providing you with images of pages from a study book or question bank. Your task is to extract all multiple-choice questions (MCQs) and format them as a JSON file I can use with my Telegram Quiz Bot.
+You are an expert OCR and data extraction assistant for competitive exams and study books.
+I am providing you with images/scans of pages from my MCQ question bank.
 
-## YOUR TASKS
+Your task is to:
+1. Extract ALL multiple-choice questions into a structured JSON file for my Telegram Quiz Bot.
+2. Flag any questions that require a visual diagram or figure so I can manually screenshot them.
 
-1. **Carefully read all provided pages.**
-2. **Identify every MCQ question** on those pages.
-3. **Extract the exact question text** — preserve the original wording as accurately as possible. Do not paraphrase or simplify.
-4. **Extract all answer options** exactly as written, including option labels if present (A, B, C, D, etc.) — but do NOT include the letter prefix in the option text itself. The bot handles numbering.
-5. **Identify the correct answer** from any answer key, tick marks, underlines, bold text, or annotations visible in the images.
-6. **If the book provides an explanation or rationale**, extract it exactly and include it in the "explanation" field.
-7. **Use 0-based indexing** for correct_option:
-   - First option  = 0
-   - Second option = 1
-   - Third option  = 2
-   - Fourth option = 3
-   - And so on.
-8. **Do NOT invent or modify questions.** Only extract what is clearly visible.
-9. **Do NOT change the meaning** of any question or option.
-10. **Preserve question numbering** where visible (you can use the original numbers in the question text if helpful, but it is not required).
+## INSTRUCTIONS & RULES:
 
-## IMPORTANT RULES
+1. **Text & Equation Questions:**
+   - Extract the question and all options accurately.
+   - For chemical reactions, equilibrium arrows, math symbols, and units, transcribe them as clean Unicode text (e.g. ⇄, →, ΔG, °, kJ/mol, mM). Do NOT require an image if it can be typed.
+   - Keep each option under 100 characters (Telegram poll limit).
 
-- Return ONLY valid JSON — no markdown code fences, no extra explanation, no preamble.
-- Follow the exact schema shown below.
-- If a correct answer is ambiguous or unclear from the images, set "correct_option" to -1 and add a note in the "explanation" field: "ANSWER UNCLEAR — please verify manually."
-- If an explanation is not present or cannot be reliably determined, omit the "explanation" field entirely (do not guess).
-- Maximum 10 options per question.
-- Minimum 2 options per question.
-- **Each option must be under 100 characters** (Telegram poll limit). If an option is very long, summarize or truncate it cleanly.
-- Question text must be under 300 characters.
-- Question text must not be empty.
-- Options must not be empty strings.
+2. **Diagram / Figure / Graph Questions:**
+   - If a question has a visual diagram, succession flowchart, anatomy sketch, gel electrophoresis picture, or pathway that CANNOT be cleanly typed as text:
+     - Set `"image_url": "NEEDS_IMAGE_Q<number>"` (e.g., `"NEEDS_IMAGE_Q59"`).
+     - In `"options"`, output simple labels: `["Option 1", "Option 2", "Option 3", "Option 4"]`.
+   - If a question does NOT need an image, omit the `"image_url"` key or set it to `null`.
 
-## JSON SCHEMA
+3. **Answer & Explanation:**
+   - Identify the correct answer (from the answer key or markings on the pages).
+   - Use 0-based indexing for `correct_option`:
+     0 = first option, 1 = second option, 2 = third option, 3 = fourth option.
+   - Include the explanation if available in the book.
 
+4. **OUTPUT FORMAT:**
+   - Output the valid JSON block first inside a ```json code block.
+   - After the JSON block, provide a short **"📸 Questions Requiring Images"** list telling me exactly which question numbers need a screenshot and why.
+
+## JSON SCHEMA:
+
+```json
 {
-  "quiz_title": "Chapter Name or Topic (e.g., Biology Chapter 3 - DNA Replication)",
-  "description": "Brief description, e.g., MCQs from pages 45-55",
+  "quiz_title": "Subject / Chapter Name",
+  "description": "MCQs extracted from pages X-Y",
   "questions": [
     {
-      "question": "The exact question text here?",
+      "question": "59. Which of the following species replacement sequence depicts tolerance model of community succession? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q59",
       "options": [
-        "First option text",
-        "Second option text",
-        "Third option text",
-        "Fourth option text"
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4"
       ],
       "correct_option": 1,
-      "explanation": "Optional explanation text here. Only include if clearly available."
+      "explanation": "In the tolerance model, later species can invade and grow to maturity in the presence of early species without being inhibited."
+    },
+    {
+      "question": "74. In a human cell, the concentration of ATP, ADP and Pi are 2.25, 0.50 and 0.825mM respectively. The free energy of hydrolysis of ATP at pH 7.0 and 25°C is:",
+      "options": [
+        "-30.5 kJ/mol",
+        "-61 kJ/mol",
+        "-15.25 kJ/mol",
+        "-52 kJ/mol"
+      ],
+      "correct_option": 3,
+      "explanation": "ΔG = ΔG°' + RT ln([ADP][Pi]/[ATP]). Calculating gives approx -52 kJ/mol."
     }
   ]
 }
+```
+
+Now, carefully process all uploaded pages and generate the JSON and the Image List.
 
 ## EXAMPLE
 

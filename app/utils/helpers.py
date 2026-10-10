@@ -8,7 +8,7 @@ from typing import Callable
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from app.config import ADMIN_USER_ID
+from app.config import ADMIN_USER_IDS
 
 
 def admin_only(func: Callable) -> Callable:
@@ -16,7 +16,7 @@ def admin_only(func: Callable) -> Callable:
     @wraps(func)
     async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = update.effective_user
-        if user is None or user.id != ADMIN_USER_ID:
+        if user is None or user.id not in ADMIN_USER_IDS:
             if update.message:
                 await update.message.reply_text("⛔ Unauthorized user.")
             elif update.callback_query:
@@ -27,4 +27,4 @@ def admin_only(func: Callable) -> Callable:
 
 
 def is_admin(user_id: int) -> bool:
-    return user_id == ADMIN_USER_ID
+    return user_id in ADMIN_USER_IDS

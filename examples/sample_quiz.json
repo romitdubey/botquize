@@ -1,83 +1,1380 @@
 {
-  "quiz_title": "Biology Chapter 1 - Cell Biology",
-  "description": "MCQs covering fundamental cell biology concepts",
+  "quiz_title": "CSIR NET Life Sciences - Model Question Paper",
+  "description": "Comprehensive MCQ extraction covering Biochemistry, Cell Biology, Genetics, Plant & Animal Physiology, Evolution, and Ecology.",
   "questions": [
     {
-      "question": "Which organelle is known as the 'powerhouse of the cell' because it produces ATP through cellular respiration?",
+      "question": "21. Which of the following bonds will be most difficult to break?",
       "options": [
-        "Ribosome",
-        "Golgi apparatus",
-        "Mitochondria",
-        "Endoplasmic reticulum"
-      ],
-      "correct_option": 2,
-      "explanation": "Mitochondria produce ATP via oxidative phosphorylation during cellular respiration, earning them the nickname 'powerhouse of the cell'."
-    },
-    {
-      "question": "Which sequence of events best represents initiation of bacterial DNA replication?",
-      "options": [
-        "Ligase → helicase → primase → polymerase",
-        "Origin recognition → DNA unwinding → primer synthesis → DNA synthesis",
-        "Polymerase → origin recognition → ligase → helicase",
-        "Primer synthesis → chromosome segregation → helicase → ligase"
-      ],
-      "correct_option": 1,
-      "explanation": "Replication begins with recognition of the origin of replication, followed by DNA unwinding by helicase, primer synthesis by primase, and then DNA synthesis by DNA polymerase."
-    },
-    {
-      "question": "The fluid mosaic model describes the plasma membrane as having:",
-      "options": [
-        "A rigid, solid lipid bilayer with embedded proteins",
-        "A fluid phospholipid bilayer with mobile proteins",
-        "A static protein layer surrounding lipids",
-        "A crystalline structure of cholesterol and phospholipids"
-      ],
-      "correct_option": 1,
-      "explanation": "The fluid mosaic model, proposed by Singer and Nicolson in 1972, describes the plasma membrane as a fluid phospholipid bilayer in which proteins can move laterally."
-    },
-    {
-      "question": "Which type of RNA carries the genetic code from the nucleus to the ribosomes for protein synthesis?",
-      "options": [
-        "tRNA (transfer RNA)",
-        "rRNA (ribosomal RNA)",
-        "mRNA (messenger RNA)",
-        "snRNA (small nuclear RNA)"
-      ],
-      "correct_option": 2,
-      "explanation": "mRNA (messenger RNA) is transcribed from DNA in the nucleus and carries the genetic information (codons) to the ribosomes in the cytoplasm where translation occurs."
-    },
-    {
-      "question": "Osmosis is best defined as the movement of water molecules:",
-      "options": [
-        "From a region of low solute concentration to a region of high solute concentration through a semi-permeable membrane",
-        "From a region of high solute concentration to a region of low solute concentration",
-        "Against the concentration gradient using ATP",
-        "Through a channel protein using facilitated diffusion"
+        "C–O",
+        "C–C",
+        "C–N",
+        "C–S"
       ],
       "correct_option": 0,
-      "explanation": "Osmosis is the passive movement of water across a semi-permeable membrane from an area of low solute concentration (high water potential) to an area of high solute concentration (low water potential)."
+      "explanation": "The C–O bond has the highest bond dissociation energy among the given single bonds."
     },
     {
-      "question": "Which phase of mitosis is characterized by chromosomes aligning at the cell's equatorial plate (metaphase plate)?",
+      "question": "22. A solution of 1% (w/v) starch at pH 6.7 is digested by 15 µg of β-amylase (mol wt 152,000). The rate of maltose (mol wt = 342) had a maximal initial velocity of 8.5 mg formed per min. The turnover number is:",
       "options": [
-        "Prophase",
-        "Anaphase",
-        "Metaphase",
-        "Telophase"
+        "0.25 × 10⁵ min⁻¹",
+        "25 × 10⁵ min⁻¹",
+        "2.5 × 10⁵ min⁻¹",
+        "2.5 × 10⁴ min⁻¹"
       ],
       "correct_option": 2,
-      "explanation": "During metaphase, chromosomes are fully condensed and are aligned along the metaphase plate (cell equator) by the spindle apparatus. This alignment ensures equal distribution of chromosomes to daughter cells."
+      "explanation": "Moles of enzyme = 15 µg / 152,000 g/mol = 9.87 × 10⁻¹¹ mol. Rate of product = 8.5 mg/min / 342 g/mol = 2.485 × 10⁻⁵ mol/min. Turnover number (kcat) = Vmax / [E] ≈ 2.5 × 10⁵ min⁻¹."
     },
     {
-      "question": "The enzyme responsible for adding RNA primers during DNA replication is:",
+      "question": "23. The conformation of a nucleotide in DNA is affected by rotation about how many bonds?",
       "options": [
-        "DNA polymerase I",
-        "DNA ligase",
-        "Helicase",
-        "Primase"
+        "4",
+        "6",
+        "7",
+        "3"
+      ],
+      "correct_option": 2,
+      "explanation": "There are 7 torsion angles per nucleotide: 6 along the phosphodiester backbone (α, β, γ, δ, ε, ζ) and 1 around the glycosidic bond (χ)."
+    },
+    {
+      "question": "24. Which of the following proteins acts as an energy transducer?",
+      "options": [
+        "G-protein",
+        "Bacteriorhodopsin",
+        "Hemoglobin",
+        "Heat shock protein"
+      ],
+      "correct_option": 1,
+      "explanation": "Bacteriorhodopsin directly transduces light energy into an electrochemical proton gradient across the cell membrane."
+    },
+    {
+      "question": "25. Which of the following predicted property of lipid bilayers would result if the phospholipids had only one hydrocarbon chain instead of two?",
+      "options": [
+        "The bilayers formed would be much less fluid.",
+        "The diameter of the head group would be much larger than acyl chain, tending to form micelles.",
+        "The bilayers formed would be much more fluid.",
+        "The bilayers would be more permeable to small water-soluble molecules."
+      ],
+      "correct_option": 1,
+      "explanation": "Single-tailed lipids have an inverted conical shape, which favors the formation of spherical micelles rather than planar bilayers."
+    },
+    {
+      "question": "26. Which pump is responsible for initiating muscle contraction through depolarization of muscle cell membrane?",
+      "options": [
+        "Na⁺ pump",
+        "K⁺ pump",
+        "Ca²⁺ pump",
+        "Mg²⁺ pump"
+      ],
+      "correct_option": 0,
+      "explanation": "Depolarization of the muscle cell membrane is mediated by sodium ion movement following neuromuscular excitation."
+    },
+    {
+      "question": "27. Which of the following statements is NOT true for transposable element system?",
+      "options": [
+        "It consists of both autonomous and non-autonomous elements.",
+        "Dissociation elements are autonomous in nature.",
+        "Transposase is transcribed by the central region of autonomous elements.",
+        "Certain repeats in the genome remain fixed even after the element transposes out."
+      ],
+      "correct_option": 1,
+      "explanation": "Dissociation (Ds) elements are non-autonomous and require the presence of an autonomous Activator (Ac) element to transpose."
+    },
+    {
+      "question": "28. A set of virulence genes (vir genes), located in the Agrobacterium Ti-plasmid, is activated by:",
+      "options": [
+        "octopine",
+        "nopaline",
+        "acetosyringone",
+        "auxin"
+      ],
+      "correct_option": 2,
+      "explanation": "Acetosyringone, a phenolic compound released by wounded plant cells, activates the VirA/VirG two-component regulatory system."
+    },
+    {
+      "question": "29. When two mutants having the same phenotype were crossed, the progeny obtained showed a wild-type phenotype. Thus the mutations are:",
+      "options": [
+        "non-allelic",
+        "allelic",
+        "segregating from each other",
+        "independently assorting"
+      ],
+      "correct_option": 0,
+      "explanation": "Complementation occurs when two recessive mutations reside in different genes (non-allelic), restoring the wild-type phenotype."
+    },
+    {
+      "question": "30. A conjugation experiment between F⁺ his⁺ leu⁺ thr⁺ pro⁺ and F⁻ his⁻ leu⁻ thr⁻ pro⁻ stopped at 25 min yields his⁺: 0, leu⁺: 13, thr⁺: 26, pro⁺: 6. What is the probable order of genes?",
+      "options": [
+        "thr, leu, pro, his",
+        "pro, leu, thr and the position of his cannot be determined",
+        "thr, leu, pro, and the position of his cannot be determined",
+        "his, pro, leu, thr"
+      ],
+      "correct_option": 2,
+      "explanation": "The transfer order correlates with the frequency of recombinants (thr > leu > pro). Because his has 0 colonies, its relative position cannot yet be determined."
+    },
+    {
+      "question": "31. Crossing 48-inch and 72-inch maize gives 60-inch F₁. In 500 F₂ plants, the shortest 2 are 48 inches and the tallest 2 are 72 inches. What is the probable number of polygenes?",
+      "options": [
+        "Four",
+        "Eight",
+        "Sixteen",
+        "Thirty two"
+      ],
+      "correct_option": 0,
+      "explanation": "Fraction of extreme phenotype = 2/500 ≈ 1/256 = (1/4)ⁿ. Hence, n = 4 polygenes (gene pairs)."
+    },
+    {
+      "question": "32. Repair of double strand breaks made during meiosis in the yeast Saccharomyces cerevisiae:",
+      "options": [
+        "occurs mostly by non-homologous end joining.",
+        "occurs mostly using the sister chromatid as a template.",
+        "occurs mostly using the homologous chromosome as a template.",
+        "is associated with a high frequency of mutations."
+      ],
+      "correct_option": 2,
+      "explanation": "Meiotic double-strand breaks in yeast are repaired via homologous recombination biased toward the non-sister chromatid of the homologous chromosome."
+    },
+    {
+      "question": "33. Which of the following signaling molecules enters the cell to initiate its action?",
+      "options": [
+        "Transferrin",
+        "Insulin",
+        "Glucagon",
+        "Thyroxine"
       ],
       "correct_option": 3,
-      "explanation": "Primase is an RNA polymerase that synthesizes short RNA primers complementary to the template DNA strand. These primers provide the 3'-OH group needed for DNA polymerase to begin synthesis."
+      "explanation": "Thyroxine is a hydrophobic hormone that readily crosses the plasma membrane and binds to intracellular/nuclear receptors."
+    },
+    {
+      "question": "34. The mode of action of the anticancer drug methotrexate is through its strong competitive inhibition on:",
+      "options": [
+        "dihydrofolate reductase.",
+        "thymidine synthase.",
+        "thymidine kinase.",
+        "adenylate cyclase."
+      ],
+      "correct_option": 0,
+      "explanation": "Methotrexate is a structural analogue of folic acid that competitively inhibits dihydrofolate reductase (DHFR)."
+    },
+    {
+      "question": "35. Which class of immunoglobulins will increase in case of a chronic infection?",
+      "options": [
+        "IgA",
+        "IgG",
+        "IgM",
+        "IgE"
+      ],
+      "correct_option": 1,
+      "explanation": "IgM indicates an acute primary infection, whereas IgG is the hallmark of chronic or long-term secondary immune responses."
+    },
+    {
+      "question": "36. When prospective neuroectoderm from an early amphibian gastrula is transplanted in the prospective epidermal region of a recipient early gastrula embryo, the donor tissue will give rise to:",
+      "options": [
+        "neural tube.",
+        "epidermis.",
+        "neural tube and notochord.",
+        "neural tube and epidermis."
+      ],
+      "correct_option": 1,
+      "explanation": "In an early gastrula, ectodermal cell fate is conditionally specified and not yet determined; therefore, surrounding signals direct it to form epidermis."
+    },
+    {
+      "question": "37. Amphibian oocytes remain for years in the diplotene stage of meiotic prophase. Resumption of meiosis is initiated by:",
+      "options": [
+        "gonadotropic hormone.",
+        "growth hormone.",
+        "oestrogen.",
+        "progesterone."
+      ],
+      "correct_option": 3,
+      "explanation": "Progesterone secreted by surrounding follicle cells triggers meiotic maturation (MPF activation) in amphibian oocytes."
+    },
+    {
+      "question": "38. A group of six cells called 'equivalence group cells' divide to form the vulval structure in C. elegans. They are called so because:",
+      "options": [
+        "they have similar fates during development of vulva.",
+        "all six cells are competent to form vulva and can replace each other under experimental conditions.",
+        "they are all under the influence of the anchor cell, signals from which initiate vulval development.",
+        "they interact with each other to form the vulval structure."
+      ],
+      "correct_option": 1,
+      "explanation": "Equivalence group cells (P3.p–P8.p) all possess the developmental competence to adopt any of the vulval fates depending on inductive signalling."
+    },
+    {
+      "question": "39. Due to the presence of cellulose in the cell wall of plants, leaf shape is determined in the leaf primordia by:",
+      "options": [
+        "rates of cell division.",
+        "planes of cell division.",
+        "cell migration.",
+        "cell-cell interactions."
+      ],
+      "correct_option": 1,
+      "explanation": "Because plant cells are immobilized by rigid cell walls, morphogenesis is governed by oriented cell division and cell expansion."
+    },
+    {
+      "question": "40. DCMU inhibits electron transport in chloroplast by preventing the reduction of:",
+      "options": [
+        "P 680.",
+        "QA.",
+        "PQ.",
+        "QB."
+      ],
+      "correct_option": 3,
+      "explanation": "DCMU (Diuron) binds to the plastoquinone-binding niche at the QB site of Photosystem II, preventing electron transfer from QA to QB."
+    },
+    {
+      "question": "41. In higher plant leaves, the reduction of nitrate to ammonium takes place by nitrate reductase in cytosol and nitrite reductase in:",
+      "options": [
+        "peroxisomes.",
+        "mitochondria.",
+        "chloroplasts.",
+        "cytosol."
+      ],
+      "correct_option": 2,
+      "explanation": "Nitrite reductase is localized in the chloroplast stroma, where it reduces nitrite to ammonium using reduced ferredoxin."
+    },
+    {
+      "question": "42. In higher plants, phytochrome is a light-regulated kinase. Which of the following classes of kinases does it represent?",
+      "options": [
+        "Two-component sensor regulator (histidine kinase).",
+        "Two-component sensor regulator (serine/threonine kinase).",
+        "Leucine rich repeat (LRR) receptor kinase.",
+        "Calcium-dependent protein kinase."
+      ],
+      "correct_option": 0,
+      "explanation": "Phytochromes are evolutionarily derived from prokaryotic two-component sensor histidine kinases."
+    },
+    {
+      "question": "43. Vesicular-arbuscular mycorrhiza (VAM) represents a beneficial association where the fungus assists plants in obtaining from the soil:",
+      "options": [
+        "iron.",
+        "zinc.",
+        "sulphate.",
+        "phosphate."
+      ],
+      "correct_option": 3,
+      "explanation": "VAM fungi specifically enhance plant uptake of poorly mobile soil phosphate ions."
+    },
+    {
+      "question": "44. Unidirectional propagation of electrical signal in nervous system is:",
+      "options": [
+        "proportional to the length of axon.",
+        "due to chemical synapse.",
+        "due to electrical synapse.",
+        "proportional to myelination."
+      ],
+      "correct_option": 1,
+      "explanation": "Chemical synapses enforce one-way transmission because neurotransmitters are released solely from the presynaptic terminal."
+    },
+    {
+      "question": "45. A myasthenia gravis patient develops muscle paralysis because:",
+      "options": [
+        "the nerve terminal at the neuromuscular junction fails to release acetylcholine.",
+        "enough acetylcholine is released but destroyed excessively by acetylcholinesterase.",
+        "the patient develops immunity against his own acetylcholine receptor.",
+        "the patient develops antibody against his own acetylcholine."
+      ],
+      "correct_option": 2,
+      "explanation": "Myasthenia gravis is an autoimmune disorder driven by autoantibodies against nicotinic acetylcholine receptors at the motor end plate."
+    },
+    {
+      "question": "46. Inhibin from Sertoli cells of testes selectively inhibits:",
+      "options": [
+        "luteinizing hormone.",
+        "follicle stimulating hormone.",
+        "thyroid stimulating hormone.",
+        "growth hormone."
+      ],
+      "correct_option": 1,
+      "explanation": "Inhibin exerts negative feedback selectively on FSH secretion from the anterior pituitary gland."
+    },
+    {
+      "question": "47. Hawk's retina possesses a large number of:",
+      "options": [
+        "rods.",
+        "melanocytes.",
+        "cones.",
+        "Kupffer cells."
+      ],
+      "correct_option": 2,
+      "explanation": "Diurnal birds of prey possess high cone densities to enable exceptional daytime visual acuity and colour vision."
+    },
+    {
+      "question": "48. E. coli grown in ¹⁵N medium for generations were shifted to ¹⁴N medium for one generation. In a CsCl gradient, the result will be:",
+      "options": [
+        "a single band of double helix DNA consisting of one strand with ¹⁴N and another with ¹⁵N label.",
+        "single band of double helix DNA consisting of ¹⁴N and ¹⁵N in both the strands.",
+        "two bands containing double helix DNA each containing both ¹⁴N and ¹⁵N label.",
+        "two bands containing single stranded DNA one with ¹⁴N and other with ¹⁵N label."
+      ],
+      "correct_option": 0,
+      "explanation": "Semi-conservative replication yields 100% hybrid density duplex DNA (¹⁴N-¹⁵N) after one generation."
+    },
+    {
+      "question": "49. Which of the following processes does NOT take place in the 5'→3' direction?",
+      "options": [
+        "DNA replication",
+        "Transcription",
+        "Nick translation",
+        "RNA editing"
+      ],
+      "correct_option": 3,
+      "explanation": "U-insertion/deletion RNA editing in trypanosome kinetoplasts proceeds progressively in the 3'→5' direction guided by gRNAs."
+    },
+    {
+      "question": "50. A deletion of three consecutive bases in the coding region of a gene CANNOT result in:",
+      "options": [
+        "deletion of a single amino acid without any other change in the protein.",
+        "replacement of two adjacent amino acids by a single amino acid.",
+        "replacement of a single amino acid by another without any other change in sequence of protein.",
+        "production of a truncated protein."
+      ],
+      "correct_option": 2,
+      "explanation": "Deleting 3 base pairs removes one full codon length; therefore, the polypeptide chain length must be shortened by one residue."
+    },
+    {
+      "question": "51. Deletion of the leader sequence of trp operon of E. coli would result in:",
+      "options": [
+        "decreased transcription of trp operon.",
+        "increased transcription of trp operon.",
+        "no effect on transcription.",
+        "decreased transcription of trp operon in the presence of tryptophan."
+      ],
+      "correct_option": 1,
+      "explanation": "The leader contains the attenuator. Eliminating it prevents attenuation, resulting in elevated transcription of structural genes."
+    },
+    {
+      "question": "52. In the endodermis of higher plants, the role of Casparian strip is to control water movement so that it flows:",
+      "options": [
+        "between the cells.",
+        "through the plasma membrane.",
+        "through the cell wall.",
+        "through the transfusion tissue."
+      ],
+      "correct_option": 1,
+      "explanation": "Suberin in the Casparian strip blocks the apoplastic pathway, forcing water and solutes through the selectively permeable plasma membrane."
+    },
+    {
+      "question": "53. The reptilian order Squamata includes:",
+      "options": [
+        "crocodiles and alligators.",
+        "the living fossil 'tuatara'.",
+        "turtles and tortoises.",
+        "snakes and lizards."
+      ],
+      "correct_option": 3,
+      "explanation": "Squamata is the largest order of reptiles, encompassing lizards and snakes."
+    },
+    {
+      "question": "54. Cultivated bananas are sterile because:",
+      "options": [
+        "male flower-bearing plants are very rare.",
+        "they lack natural pollinators in the crop plants.",
+        "they are triploid and therefore seeds are not set.",
+        "they are a cross of two unrelated species."
+      ],
+      "correct_option": 2,
+      "explanation": "Commercial bananas are triploid (3n); irregular meiosis prevents viable seed production."
+    },
+    {
+      "question": "55. One life history trait that is NOT characteristic of very small sized organisms is:",
+      "options": [
+        "delayed age at first reproduction.",
+        "earlier age at first reproduction.",
+        "high population growth rate.",
+        "short lifespan."
+      ],
+      "correct_option": 0,
+      "explanation": "Small organisms typically follow r-selected life strategies with early maturation, not delayed reproduction."
+    },
+    {
+      "question": "56. Which of the following statements is the most appropriate example of character displacement?",
+      "options": [
+        "Two related species avoid competition by feeding at different times of the day.",
+        "Body sizes are similar in allopatry, but in sympatry one species is significantly smaller.",
+        "The food niche of a species is wider in the absence of competing species.",
+        "Closely related species can coexist if their densities are regulated by a predator."
+      ],
+      "correct_option": 1,
+      "explanation": "Character displacement involves evolutionary divergence of morphological traits in areas of sympatry to minimize competition."
+    },
+    {
+      "question": "57. In a population growing logistically and approaching Carrying Capacity (K), the change in density per unit time (dN/dt) is maximum when N equals:",
+      "options": [
+        "K²",
+        "K/2",
+        "K",
+        "0"
+      ],
+      "correct_option": 1,
+      "explanation": "In logistic growth, the maximum rate of population increase occurs at the inflection point, where N = K/2."
+    },
+    {
+      "question": "58. The losses of ozone over Arctic are significantly lower than that over Antarctica because:",
+      "options": [
+        "polar vortex over Arctic is not as tight as over Antarctic.",
+        "Arctic stratosphere warms slower in the spring.",
+        "concentration of chlorine in the atmosphere over Arctic is less than over Antarctic.",
+        "freezing of NO₂ and CH₄ are slower over Arctic than over Antarctic."
+      ],
+      "correct_option": 0,
+      "explanation": "The Arctic polar vortex is warmer and less stable/tight due to Northern Hemisphere planetary waves, limiting polar stratospheric cloud formation."
+    },
+    {
+      "question": "59. Which of the following species replacement sequence depicts tolerance model of community succession? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q59",
+      "options": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4"
+      ],
+      "correct_option": 1,
+      "explanation": "In the tolerance model, early species have neither positive nor negative effects on later colonists; superior competitors gradually dominate."
+    },
+    {
+      "question": "60. Evolutionarily, with which of the following could parental care in animals be associated?",
+      "options": [
+        "Smaller clutch size.",
+        "Polygamy.",
+        "Greater longevity.",
+        "Semelparity."
+      ],
+      "correct_option": 0,
+      "explanation": "Parental care is associated with smaller clutch size due to trade-offs in parental investment per offspring."
+    },
+    {
+      "question": "61. The change in a trait with time as a result of natural selection is shown above. This type of natural selection is: (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q61",
+      "options": [
+        "directional",
+        "disruptive",
+        "stabilizing",
+        "random"
+      ],
+      "correct_option": 2,
+      "explanation": "The distribution narrows around the intermediate mean trait value, characteristic of stabilizing selection."
+    },
+    {
+      "question": "62. During which geological period did the greatest diversification of life on earth occur?",
+      "options": [
+        "Permian",
+        "Jurassic",
+        "Cambrian",
+        "Ordovician"
+      ],
+      "correct_option": 2,
+      "explanation": "The Cambrian period witnessed the 'Cambrian explosion', the rapid evolutionary diversification of major animal phyla."
+    },
+    {
+      "question": "63. Which of the following plant groups evolved during the Silurian period?",
+      "options": [
+        "Bryophyta",
+        "Psilophyta",
+        "Lycophyta",
+        "Sphaerophyta"
+      ],
+      "correct_option": 1,
+      "explanation": "Earliest vascular land plants (Psilophyta/rhyniophytes like Cooksonia) appeared during the mid-to-late Silurian."
+    },
+    {
+      "question": "64. Which of the following GM crops is the most widely cultivated globally?",
+      "options": [
+        "Herbicide resistant soybean.",
+        "Insect resistant cotton.",
+        "Insect resistant brinjal.",
+        "delayed ripening tomato."
+      ],
+      "correct_option": 0,
+      "explanation": "Herbicide-tolerant soybean accounts for the largest proportion of global genetically modified crop acreage."
+    },
+    {
+      "question": "65. PCR based DNA amplification is an essential feature of which of the following combination of molecular markers?",
+      "options": [
+        "RFLP, AFLP and SSR.",
+        "AFLP, SSR and RAPD.",
+        "RFLP, RAPD and SSR.",
+        "RAPD, RFLP and SSR."
+      ],
+      "correct_option": 1,
+      "explanation": "AFLP, SSR, and RAPD require PCR amplification. RFLP relies strictly on restriction endonuclease digestion and Southern hybridization."
+    },
+    {
+      "question": "66. The genes whose promoters are extensively used for production of pharmaceutical proteins in transgenic dairy cattles are:",
+      "options": [
+        "lactalbumin and ovalbumin.",
+        "lactoglobulin and casein.",
+        "lactoferrin and transferrin.",
+        "casein and ovalbumin."
+      ],
+      "correct_option": 1,
+      "explanation": "Mammary gland-specific expression typically employs β-lactoglobulin and casein promoters for protein secretion into milk."
+    },
+    {
+      "question": "67. In the given enzyme purification table, which step represents the most effective purification step?",
+      "options": [
+        "iv (Affinity chromatography)",
+        "iii (Ion-exchange chromatography)",
+        "v (Size-exclusion chromatography)",
+        "ii (Salt precipitation)"
+      ],
+      "correct_option": 1,
+      "explanation": "Ion-exchange chromatography yielded the greatest fold increase in specific activity (from 600 units/mg to 4,000 units/mg, a 6.67-fold purification)."
+    },
+    {
+      "question": "68. Similarities in sequence and function of two proteins indicate a common ancestor. If they are from different species, they are called:",
+      "options": [
+        "homologs.",
+        "orthologs.",
+        "paralogs.",
+        "proteologs."
+      ],
+      "correct_option": 1,
+      "explanation": "Orthologs are genes in different species that diverged as a result of speciation and typically retain the same function."
+    },
+    {
+      "question": "69. Peptide NMR shows ³J_NH of 4 Hz for most amide protons and strong Ni-Ni+1 NOE connectivities. The conformation is:",
+      "options": [
+        "anti-parallel β sheet.",
+        "parallel β sheet.",
+        "helix-like.",
+        "unordered."
+      ],
+      "correct_option": 2,
+      "explanation": "Low coupling constants (³JHNα ≈ 4 Hz) and sequential dNN (Ni-Ni+1) NOEs are typical features of α-helical secondary structure."
+    },
+    {
+      "question": "70. A sample of ³²P disintegrates at 30,120 dpm. Radioactivity in microcuries (1 Ci = 3.7 × 10¹⁰ dps) is:",
+      "options": [
+        "15,060",
+        "1.36 × 10⁻²",
+        "81.6 × 10⁻²",
+        "1.36 × 10⁻⁸"
+      ],
+      "correct_option": 1,
+      "explanation": "30,120 dpm / 60 = 502 dps. Radioactivity = 502 / (3.7 × 10¹⁰) Ci = 1.357 × 10⁻⁸ Ci = 1.36 × 10⁻² µCi."
+    },
+    {
+      "question": "71. [θ]₂₂₂ for native α-helix is -30,000 and unfolded is -2,000 deg cm² dmol⁻¹. At 60°C, [θ]₂₂₂ is -14,000. Fraction of α-helix is:",
+      "options": [
+        "0.40",
+        "0.43",
+        "0.50",
+        "0.57"
+      ],
+      "correct_option": 1,
+      "explanation": "f = (θ_obs - θ_u) / (θ_f - θ_u) = (-14,000 - (-2,000)) / (-30,000 - (-2,000)) = -12,000 / -28,000 ≈ 0.43."
+    },
+    {
+      "question": "72. 100 ml of 0.02 M acetic acid (pKₐ = 4.76) is titrated with KOH to pH 2.76. At this pH, the degree of protonation is:",
+      "options": [
+        "0%",
+        "10%",
+        "90%",
+        "99%"
+      ],
+      "correct_option": 3,
+      "explanation": "pH = pKa + log([A⁻]/[HA]) → 2.76 = 4.76 + log([A⁻]/[HA]) → [A⁻]/[HA] = 0.01. Degree of protonation = [HA] / ([HA]+[A⁻]) = 100/101 ≈ 99%."
+    },
+    {
+      "question": "73. Transfer of (A+D) from water to nonpolar solvent has ΔG = +6.12 kcal/mol; H-bond formation in nonpolar has ΔG = -2.4 kcal/mol; transfer of A-D is +0.62 kcal/mol. ΔG for H-bond in water is:",
+      "options": [
+        "-0.1 kcal mol⁻¹",
+        "+3.1 kcal mol⁻¹",
+        "-3.1 kcal mol⁻¹",
+        "-1.78 kcal mol⁻¹"
+      ],
+      "correct_option": 1,
+      "explanation": "ΔG_water = ΔG_transfer(A+D) + ΔG_formation(np) - ΔG_transfer(A-D) = +6.12 + (-2.4) - 0.62 = +3.1 kcal/mol."
+    },
+    {
+      "question": "74. Concentrations: ATP = 2.25 mM, ADP = 0.50 mM, Pi = 0.825 mM. The free energy of hydrolysis of ATP at pH 7.0 and 25°C is:",
+      "options": [
+        "-30.5 kJ/mol.",
+        "-61 kJ/mol.",
+        "-15.25 kJ/mol.",
+        "-52 kJ/mol."
+      ],
+      "correct_option": 3,
+      "explanation": "ΔG = ΔG°' + RT ln([ADP][Pi]/[ATP]) = -30.5 + (2.479) ln(1.833 × 10⁻⁴) ≈ -52 kJ/mol."
+    },
+    {
+      "question": "75. Which one of the following enzyme reactions represents noncompetitive inhibition?",
+      "options": [
+        "E + S ⇄ ES → E + P; ES + I ⇄ EI",
+        "E + S ⇄ ES → E + P; ES + I ⇄ ESI",
+        "E + S₁ ⇄ ES₁ ⇄ E'P₁ ⇄ E' ⇄ E'S₂ → E + P₂",
+        "E + S ⇄ ES → E + P; E + I ⇄ EI; ES + I ⇄ ESI; EI + S ⇄ ESI"
+      ],
+      "correct_option": 3,
+      "explanation": "In classic noncompetitive inhibition, inhibitor binds both free enzyme E and ES complex with equal affinity."
+    },
+    {
+      "question": "76. To determine sequence, position, and configuration of glycosidic bonds in a glycoprotein oligosaccharide, which method is best?",
+      "options": [
+        "Alkaline hydrolysis followed by NMR analysis of cleaved oligosaccharide mixture",
+        "Two dimensional NMR spectroscopic analysis of intact glycoprotein",
+        "Endoglycosidase release → purification → sequential specific glycosidases → mass spec analysis",
+        "Trypsin treatment followed by MALDI analysis of tryptic peptides"
+      ],
+      "correct_option": 2,
+      "explanation": "Sequential exoglycosidase digestion paired with mass spectrometry determines anomeric linkage, sugar identity, and connectivity."
+    },
+    {
+      "question": "77. For balanced first-order bacterial growth where rate of increase is proportional to cell number N, growth is expressed as:",
+      "options": [
+        "dN/dt = µN",
+        "dt/dN = µN",
+        "dµ/dt = N",
+        "(dN/dt) × N = µ"
+      ],
+      "correct_option": 0,
+      "explanation": "The differential equation for exponential balanced bacterial growth is dN/dt = µN."
+    },
+    {
+      "question": "78. To determine the topological distribution of glycolipids and glycoproteins, lectin is used based on:",
+      "options": [
+        "Only (A) Protein-protein interaction",
+        "Only (B) Protein-sugar interaction",
+        "All of (A), (B) and (C)",
+        "Only (D) Protein-sterol interaction"
+      ],
+      "correct_option": 1,
+      "explanation": "Lectins are carbohydrate-binding proteins that specifically interact with sugar moieties on glycoproteins and glycolipids."
+    },
+    {
+      "question": "79. Linkage in Drosophila chromosomes is broken in prophase by a process called:",
+      "options": [
+        "Recombination.",
+        "Jumping of genes.",
+        "Integration.",
+        "Mutation."
+      ],
+      "correct_option": 0,
+      "explanation": "Crossing over during prophase I of meiosis leads to homologous genetic recombination, breaking allele linkage."
+    },
+    {
+      "question": "80. Flow cytometry analysis of DNA content yields Peaks A and B. Which statements are correct? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q80",
+      "options": [
+        "(1) and (2)",
+        "(3) and (4)",
+        "(2) and (4)",
+        "(1) and (3)"
+      ],
+      "correct_option": 0,
+      "explanation": "Peak A represents diploid 2C DNA content (G1 phase); Peak B represents 4C replicated DNA content (G2/M phase)."
+    },
+    {
+      "question": "81. Anaphase Promoting Complex (APC) facilitates cyclin degradation via proteasomes. APC is an:",
+      "options": [
+        "E1 enzyme.",
+        "E2 enzyme.",
+        "E3 enzyme.",
+        "Protease."
+      ],
+      "correct_option": 2,
+      "explanation": "APC/C functions as a multisubunit E3 ubiquitin ligase that targets securin and cyclins for degradation."
+    },
+    {
+      "question": "82. In mitogenic stimulation via MAP kinase pathway, which factors regulating protein synthesis are portable targets? (A. eIF-2, B. eeF-1, C. S6 kinase, D. eIF-4E BP)",
+      "options": [
+        "A + B",
+        "C + D",
+        "D + A",
+        "B + D"
+      ],
+      "correct_option": 1,
+      "explanation": "Growth factor/mitogen signaling activates p70 S6 kinase and phosphorylates 4E-BP1, liberating eIF4E to promote translation initiation."
+    },
+    {
+      "question": "83. The 3'→5' exonuclease proofreading activity is present in:",
+      "options": [
+        "(A) and (B)",
+        "(A), (B) and (C)",
+        "(A) and (C)",
+        "(A), (C) and (D)"
+      ],
+      "correct_option": 2,
+      "explanation": "All three E. coli polymerases (I, II, III) have 3'→5' exonuclease activity, while among mammalian polymerases, Pol δ, ε, and γ possess it, but Pol α and β lack it."
+    },
+    {
+      "question": "84. Phage λ genetic circuit: Which statement is correct? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q84",
+      "options": [
+        "(A), (B) and (C)",
+        "(B), (C) and (D)",
+        "(A) and (D) only",
+        "(A), (C) and (D)"
+      ],
+      "correct_option": 2,
+      "explanation": "N and Q are antiterminators; cI acts as both repressor and activator depending on concentration."
+    },
+    {
+      "question": "85. Rho-dependent termination requires an upstream rut site lacking secondary structure. These observations suggest that:",
+      "options": [
+        "Rho attaches to nascent RNA and migrates 5'→3' until encountering paused RNAP.",
+        "Rho unwinds RNA-DNA duplex forming the bubble to release transcript.",
+        "Rho attaches to RNA while in the RNA-DNA hybrid condition.",
+        "Other factors eliminate the need for Rho to unwind RNA-DNA hybrid."
+      ],
+      "correct_option": 0,
+      "explanation": "Rho binds to single-stranded C-rich rut sequences on the nascent transcript and translocates 5'→3' to catch up with paused RNA polymerase."
+    },
+    {
+      "question": "86. Phage temporal gene expression progresses from early to late genes via: (A) cascade of σ factors, (B) new RNA polymerases, (C) different holoenzymes, (D) transcription factors.",
+      "options": [
+        "(A), (D)",
+        "(A), (C), (D)",
+        "(A), (B), (D)",
+        "(A), (B), (C)"
+      ],
+      "correct_option": 2,
+      "explanation": "Phages control developmental cascades via alternative sigma factors, phage-encoded RNA polymerases, and dedicated regulatory transcription factors."
+    },
+    {
+      "question": "87. Polyclonal IgG antibodies against BSA are digested with pepsin or papain. Which possibility is correct?",
+      "options": [
+        "Pepsin-digested antibodies cannot precipitate the antigen",
+        "Papain-digested antibodies cannot precipitate the antigen",
+        "Pepsin digestion will produce two Fab molecules",
+        "Pepsin-digested antibodies will lose all interchain disulfide bonds"
+      ],
+      "correct_option": 1,
+      "explanation": "Papain cleaves IgG into monovalent Fab fragments that bind antigen but cannot cross-link to form an immunoprecipitate."
+    },
+    {
+      "question": "88. In a pathway, activated K1 gives response without signal; activated K1 with inactivated K2 gives response; both inactivated gives no response. Which is correct?",
+      "options": [
+        "K1 activates K2",
+        "K2 activates K1",
+        "K1 inhibits K2",
+        "K2 inhibits K1"
+      ],
+      "correct_option": 1,
+      "explanation": "Active K1 bypasses the requirement for K2, showing that K1 functions downstream of K2; thus, K2 activates K1."
+    },
+    {
+      "question": "89. Conversion of proto-oncogene to oncogene may involve: A: coding mutation, B: gene amplification, C: chromosome rearrangement, D: non-coding mutation.",
+      "options": [
+        "A, B and C",
+        "B, C and D",
+        "A, C and D",
+        "All"
+      ],
+      "correct_option": 3,
+      "explanation": "Proto-oncogenes can be activated by missense mutations, copy-number amplification, translocation/rearrangement, or promoter mutations."
+    },
+    {
+      "question": "90. Macrophages infected with WT or opsonised Mycobacterium. Which observation is true?",
+      "options": [
+        "WT: Mycobacteria inhibits its transport to the lysosomes and survive in macrophages.",
+        "Opsonised: Mycobacteria inhibits transport to lysosomes and survive.",
+        "WT: Mycobacteria are targeted to lysosomes and killed.",
+        "Opsonised: Mycobacteria are targeted to lysosomes and survive."
+      ],
+      "correct_option": 0,
+      "explanation": "Wild-type M. tuberculosis blocks phagosome-lysosome maturation and replicates within macrophages."
+    },
+    {
+      "question": "91. Which method CANNOT be used for permanent determination of tissue lineage of a progenitor cell population?",
+      "options": [
+        "Marking progenitor cells with vital dye.",
+        "Transplanting equivalent progenitor cells from immunologically distinct related organism.",
+        "Marking cells by genomic recombination coupled with reporter gene expression.",
+        "Marking cells by reporter gene expression under promoter-enhancer specific to progenitor."
+      ],
+      "correct_option": 3,
+      "explanation": "Progenitor-specific promoters turn off upon differentiation, causing loss of reporter expression in daughter cells."
+    },
+    {
+      "question": "92. Based on experiments on the Apical Ectodermal Ridge (AER) and FGFs, which statement CANNOT be concluded?",
+      "options": [
+        "FGF 2, 4, and 8 are secreted proteins.",
+        "FGF 2, 4, and 8 are necessary and sufficient for AER function",
+        "FGF 2, 4, and 8 are sufficient for AER function",
+        "FGF 2, 4, and 8 have largely redundant functions"
+      ],
+      "correct_option": 1,
+      "explanation": "Redundancy means individual FGFs are not strictly necessary on their own, even though providing them is sufficient to rescue limb bud outgrowth."
+    },
+    {
+      "question": "93. During amphibian fertilization, what is the correct sequence preceding plasma membrane fusion? (A: acrosomal exocytosis, B: vitelline binding, C: chemoattraction, D: envelope passage)",
+      "options": [
+        "(A)→(B)→(C)→(D)",
+        "(B)→(A)→(C)→(D)",
+        "(C)→(A)→(B)→(D)",
+        "(C)→(B)→(A)→(D)"
+      ],
+      "correct_option": 2,
+      "explanation": "Chemoattraction is followed by acrosome reaction upon jelly coat contact, binding to the vitelline envelope, and penetration."
+    },
+    {
+      "question": "94. In lateral inhibition, two distinct cell populations emerge from a uniform group. Which must NOT be true?",
+      "options": [
+        "(D)",
+        "(A) and (D)",
+        "(B) and (C)",
+        "(A)"
+      ],
+      "correct_option": 3,
+      "explanation": "Lateral inhibition is mediated by contact-dependent juxtacrine signaling (Delta-Notch), not by long-range morphogen gradients."
+    },
+    {
+      "question": "95. Which statements are true about dorso-ventral patterning of Drosophila? (B: dorsal is default fate, C: regulated by preventing nuclear entry of TF in dorsal cells)",
+      "options": [
+        "(A), (B) and (C)",
+        "(A),(B), (C) and (D)",
+        "(A) and (D)",
+        "(B) and (C)"
+      ],
+      "correct_option": 3,
+      "explanation": "Dorsal protein enters ventral nuclei to specify ventral fate; exclusion of Dorsal from dorsal nuclei leads to the default dorsal fate."
+    },
+    {
+      "question": "96. Which of the following is true about amphibian limb regeneration? (A: Requires minimum functional nerves, B: Transplanted blastema gives rise to limb)",
+      "options": [
+        "(A)",
+        "(B) and (C)",
+        "(A) and (C)",
+        "(A), (B) and (C)"
+      ],
+      "correct_option": 0,
+      "explanation": "Limb regeneration has an absolute neurotrophic requirement for a minimum nerve threshold (mediated by nAG)."
+    },
+    {
+      "question": "97. In an agamous mutant (flower within flower phenotype), which statement is valid?",
+      "options": [
+        "Class A genes in first two whorls, Class B in second and third, Class C in third and fourth.",
+        "Class A genes are not expressed. Class B and C expressed in all whorls.",
+        "Class A genes not expressed. Class B in second/third, Class C in all whorls.",
+        "Class A genes are expressed in all the whorls. Class B genes expressed in second and third."
+      ],
+      "correct_option": 3,
+      "explanation": "In agamous (C-function loss), Class A activity expands throughout all four floral whorls; Class B remains restricted to whorls 2 and 3."
+    },
+    {
+      "question": "98. Plants pre-exposed to 35°C for 6 h tolerate subsequent 42°C heat stress much better. What is this phenomenon called?",
+      "options": [
+        "Acquired thermo-tolerance because of the induction of mutagens.",
+        "Induced thermo-tolerance because of the induction of heat shock proteins.",
+        "Induced thermo-tolerance because changes in RNA polymerase II improve transcription.",
+        "Acquired thermo-tolerance because of efficient post translational modification."
+      ],
+      "correct_option": 1,
+      "explanation": "Acquired thermotolerance is driven by the rapid synthesis of heat shock proteins (HSPs) which act as molecular chaperones."
+    },
+    {
+      "question": "99. In which molecule would radiolabel appear earliest when wheat and sugarcane leaves are fed with ¹⁴CO₂?",
+      "options": [
+        "Wheat – malate, sugarcane – 3phosphoglycerate.",
+        "Wheat – aspartate, sugarcane – malate.",
+        "Wheat – 3phosphoglycerate, sugarcane – 3phosphoglycerate.",
+        "Wheat – 3phosphoglycerate, sugarcane – malate."
+      ],
+      "correct_option": 3,
+      "explanation": "Wheat is a C3 plant (initial product: 3-PGA); sugarcane is a C4 plant (initial product: oxaloacetate/malate)."
+    },
+    {
+      "question": "100. In a horizontally placed young dicot seedling, the shoot bends upwards and root bends downwards because:",
+      "options": [
+        "Redistribution of auxin is responsible for stimulatory unequal growth in shoots and roots.",
+        "Auxin in shoots and cytokinin in roots cause unequal growth.",
+        "Auxin in roots and cytokinin in shoots cause unequal growth.",
+        "Redistribution of cytokinin throughout seedling causes unequal growth."
+      ],
+      "correct_option": 0,
+      "explanation": "Auxin accumulates on the lower side: in shoots it promotes cell elongation (bending up), whereas in roots high auxin inhibits elongation (bending down)."
+    },
+    {
+      "question": "101. Which statements are associated with photorespiration? (A: Takes place in C3 plants, D: Glycolate oxidized to glyoxylate in peroxisome)",
+      "options": [
+        "(A) and (D)",
+        "(C) and (D)",
+        "(B) and (E)",
+        "(C) and (E)"
+      ],
+      "correct_option": 0,
+      "explanation": "Photorespiration occurs prominently in C3 plants; glycolate is transported to peroxisomes and oxidized to glyoxylate by glycolate oxidase."
+    },
+    {
+      "question": "102. Transgenic maize expressing E. coli aspartate kinase failed to show increased seed lysine. What is the most plausible explanation?",
+      "options": [
+        "Bacterial proteins are not stable in plants.",
+        "Bacterial proteins are not properly folded in plants.",
+        "Proper post-translational modification did not take place in plants.",
+        "Lysine causes feed back inhibition of aspartate kinase."
+      ],
+      "correct_option": 3,
+      "explanation": "Wild-type E. coli aspartate kinase is sensitive to allosteric feedback inhibition by accumulated end-product lysine."
+    },
+    {
+      "question": "103. Recording a nerve bundle compound action potential at 15°C instead of 37°C will: (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q103",
+      "options": [
+        "not affect the record.",
+        "not show A, but would show B, C and D peaks.",
+        "not show peak D and may not show C, but would show A and B.",
+        "show all the peaks along with a new peak."
+      ],
+      "correct_option": 2,
+      "explanation": "Cold selectively blocks thinner, unmyelinated/slow-conducting fibers (C and D fibers) before thicker, myelinated A fibers."
+    },
+    {
+      "question": "104. Electrical stimulation of a brain site produces a different effect than cannula microinjection of excitatory neurotransmitter because:",
+      "options": [
+        "animal variations only.",
+        "stimulation of cell bodies or nerve fibers only.",
+        "difference in anatomical brain areas only.",
+        "variations in all the reasons mentioned in 1, 2 and 3."
+      ],
+      "correct_option": 1,
+      "explanation": "Electrodes stimulate cell bodies as well as passing axons, whereas chemical transmitters activate only soma/dendrites with matching receptors."
+    },
+    {
+      "question": "105. Substance 'A' increases heart rate when injected IV in frog, but has no effect applied directly to the heart or in cats. The most likely deduction is:",
+      "options": [
+        "Substance 'A' is stimulatory on heart and the effect was inotropic.",
+        "Substance 'A' acted in the brain and also might have released other hormones to increase rate.",
+        "Substance 'A' could not have acted on brain but induced substances in blood.",
+        "Increased heart rate was merely due to increased volume of heart muscles."
+      ],
+      "correct_option": 1,
+      "explanation": "Lack of direct effect on cardiac tissue indicates that the response is mediated indirectly via the central nervous/endocrine system."
+    },
+    {
+      "question": "106. In a healthy kidney: Glomerular hydrostatic pressure = 75 mmHg, colloid osmotic pressure = 40 mmHg, Bowman's capsule pressure = 20 mmHg. Net filtration pressure is:",
+      "options": [
+        "55 mm Hg",
+        "15 mm Hg",
+        "35 mm Hg",
+        "135 mm Hg"
+      ],
+      "correct_option": 1,
+      "explanation": "NFP = P_GC - (π_GC + P_BS) = 75 - (40 + 20) = 15 mmHg."
+    },
+    {
+      "question": "108. Match the commonest cause and treatment for erythroblastosis fetalis in a newborn: (A: Mother Rh+, father Rh-; B: Mother Rh-, father Rh+; C: replace blood with Rh-; D: replace with Rh+)",
+      "options": [
+        "A and C",
+        "A and D",
+        "B and C",
+        "B and D"
+      ],
+      "correct_option": 2,
+      "explanation": "Rh incompatibility occurs when an Rh⁻ mother carries an Rh⁺ fetus; exchange transfusion of the neonate is performed using Rh⁻ blood."
+    },
+    {
+      "question": "109. In a haploid organism, loci A/a and D/d are 8 map units apart. In a cross Ad × aD, what is the proportion of progeny classes (a) Ad and (b) Recombinants?",
+      "options": [
+        "92%, 8%",
+        "46%, 8%",
+        "92%, 4%",
+        "46%, 4%"
+      ],
+      "correct_option": 1,
+      "explanation": "Total recombinants = 8%. Total parentals = 92% (split equally between Ad = 46% and aD = 46%)."
+    },
+    {
+      "question": "110. A cell line is found to be RecA⁻/⁻. What is the probable finding?",
+      "options": [
+        "Loss of recombination.",
+        "Showing aberrant cell morphology.",
+        "Cells developed phagocytic properly.",
+        "Cells were aggregating."
+      ],
+      "correct_option": 0,
+      "explanation": "RecA is essential for homologous DNA recombination and strand invasion."
+    },
+    {
+      "question": "111. Find the pattern of inheritance showing incomplete penetrance from the given pedigree: (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q111",
+      "options": [
+        "Autosomal dominant.",
+        "Autosomal recessive.",
+        "Mitochondrial inheritance.",
+        "X-linked recessive."
+      ],
+      "correct_option": 0,
+      "explanation": "Trait appears in successive generations with unaffected transmitters, characteristic of autosomal dominant inheritance with incomplete penetrance."
+    },
+    {
+      "question": "112. Which of the following assumptions supports Hardy-Weinberg Equilibrium?",
+      "options": [
+        "Presence of Natural Selection.",
+        "Random mating.",
+        "Genetic Drift.",
+        "Assortative mating."
+      ],
+      "correct_option": 1,
+      "explanation": "Hardy-Weinberg equilibrium assumes panmixia (random mating), large population size, and absence of selection, mutation, or migration."
+    },
+    {
+      "question": "113. Which illustration explains pairing preceding recombination between (ABC•DEFG) and inverted homologue (ABC•DGFE)? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q113",
+      "options": [
+        "Illustration 1",
+        "Illustration 2",
+        "Illustration 3",
+        "Illustration 4"
+      ],
+      "correct_option": 2,
+      "explanation": "Synapsis between normal and inversion chromosomes requires the formation of a characteristic inversion loop in meiotic prophase I."
+    },
+    {
+      "question": "114. Four Hfr strains donate markers in orders: 1: F-L-K-O-Z; 2: C-Y-A-Z-O; 3: P-D-W-C-Y; 4: P-F-L-K-O. What is the circular chromosome marker order?",
+      "options": [
+        "K O Z P D F L W C Y A K",
+        "F L K O Z P D W C Y A F",
+        "F L K O Z A Y C W D P F",
+        "F L K C Y A Z O W D P F"
+      ],
+      "correct_option": 2,
+      "explanation": "Overlapping alignment of the four transfer sets gives the unique circular sequence: F - L - K - O - Z - A - Y - C - W - D - P - F."
+    },
+    {
+      "question": "115. A father is AA and mother is aa (albino). The child unexpectedly displays the albino phenotype. Which phenomenon can explain this?",
+      "options": [
+        "Nondisjunction",
+        "Uniparental Disomy",
+        "Gene conversion",
+        "All of the above"
+      ],
+      "correct_option": 3,
+      "explanation": "Maternal uniparental disomy, loss of paternal chromosome through nondisjunction, or gene conversion can each account for homozygous recessive expression."
+    },
+    {
+      "question": "116. Which of the following characteristics differentiates Eubacteria from Archaebacteria?",
+      "options": [
+        "Circular nature of chromosome.",
+        "Absence of nuclear membrane.",
+        "Presence of 70S ribosomes.",
+        "Presence of murein in cell wall."
+      ],
+      "correct_option": 3,
+      "explanation": "Murein (peptidoglycan containing muramic acid) is uniquely present in eubacterial cell walls and absent in archaea."
+    },
+    {
+      "question": "117. Tropical semi-evergreen forests are found in the region having rainfall:",
+      "options": [
+        "> 3000 mm.",
+        "2000 – 2500 mm.",
+        "1200–2500 mm.",
+        "800–1200 mm."
+      ],
+      "correct_option": 1,
+      "explanation": "Tropical semi-evergreen forests typically occur in zones with annual precipitation between 2000 mm and 2500 mm."
+    },
+    {
+      "question": "118. Presence of which flora and fauna in Peninsular India is explained by the Satpura hypothesis?",
+      "options": [
+        "Chinese.",
+        "Malayan.",
+        "African.",
+        "Mediterranean."
+      ],
+      "correct_option": 1,
+      "explanation": "Hora's Satpura hypothesis proposes that the Satpura-Vindhya hill range served as a moist forest corridor for Malayan species reaching southern India."
+    },
+    {
+      "question": "119. Complete: 'Species are critically endangered when it is not endangered but is facing _____ risk of extinction in the wild in the _____ future.'",
+      "options": [
+        "a, a (high, high)",
+        "b, c (very high, extremely high)",
+        "c, e (extremely high, immediate)",
+        "c, d (extremely high, near)"
+      ],
+      "correct_option": 2,
+      "explanation": "According to IUCN criteria, a taxon is Critically Endangered when facing an extremely high risk of extinction in the wild in the immediate future."
+    },
+    {
+      "question": "120. Based on the Coefficient of Association table given below, which of the following taxonomic phenograms of relationship is correct? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q120",
+      "options": [
+        "Phenogram 1",
+        "Phenogram 2",
+        "Phenogram 3",
+        "Phenogram 4"
+      ],
+      "correct_option": 0,
+      "explanation": "W and X show the highest similarity (0.9), Y and Z cluster at 0.9, and S and T cluster at 0.8. The phenogram pairing (W,X), (S,T), and (Y,Z) accurately reflects UPGMA clustering."
+    },
+    {
+      "question": "121. Which one of the following trait sets best characterizes an r-selected species?",
+      "options": [
+        "Usually a type III survivorship curve, short life span and density dependent mortality",
+        "Usually a type I survivorship curve, short life span and density dependent mortality",
+        "Usually a type I survivorship curve, long life span and density independent mortality",
+        "Usually a type III survivorship curve, short life span and density independent mortality"
+      ],
+      "correct_option": 3,
+      "explanation": "r-selected species typically exhibit high juvenile mortality (Type III survivorship curve), short lifespans, and population fluctuations governed by density-independent factors."
+    },
+    {
+      "question": "122. The following graphs show the population growth of two species P and Q, each growing either alone (a) or in the presence of the other species (b). What is the most important conclusion? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q122",
+      "options": [
+        "P and Q are equally competitive.",
+        "In competition, the growth of both species is adversely affected.",
+        "In competition, species P remains unaffected while Q suffers.",
+        "There is no evidence of competitive exclusion."
+      ],
+      "correct_option": 1,
+      "explanation": "When cultured together, the carrying capacities/abundances of both species decrease compared to when grown alone, demonstrating mutual adverse competitive effects."
+    },
+    {
+      "question": "123. Which of the curves (a) or (b) represents the correct relation of generation time, population growth rate (r), and metabolic rate per gram body weight to body size? (Refer to diagram)",
+      "image_url": "NEEDS_IMAGE_Q123",
+      "options": [
+        "Generation time – (a); population growth rate – (b); metabolic rate/g bw – (a)",
+        "Generation time – (a); population growth rate – (b); metabolic rate/g bw – (b)",
+        "Generation time – (b); population growth rate – (a); metabolic rate/g bw – (a)",
+        "Generation time – (b); population growth rate – (b); metabolic rate/g bw – (a)"
+      ],
+      "correct_option": 2,
+      "explanation": "Generation time scales positively with body size (curve b), whereas intrinsic rate of increase (r) and mass-specific metabolic rate scale inversely with body size (curve a)."
+    },
+    {
+      "question": "124. In spite of heavy herbivore pressure, green plants persist ('green world hypothesis'). Which of the following account for the relative success of green plants? (A) Inefficient feeders, (B) Insect densities kept low by predators, (C) Herbivore-deterrent chemicals.",
+      "options": [
+        "(B) and (C)",
+        "(A) only",
+        "(B) only",
+        "(A), (B) and (C)"
+      ],
+      "correct_option": 0,
+      "explanation": "The persistence of vegetation is explained by top-down control of herbivores by predators (Hairston, Smith, & Slobodkin) and bottom-up chemical defenses produced by plants."
+    },
+    {
+      "question": "125. In the process of nitrification, the respective bacteria A and B in: NH₄⁺ + 1.5 O₂ → NO₂⁻ + 2H⁺ + H₂O and NO₂⁻ + 0.5 O₂ → NO₃⁻ are:",
+      "options": [
+        "Azotobacter, Nitrobacter",
+        "Nitrobacter, Azotobacter",
+        "Nitrosomonas, Nitrobacter",
+        "Nitrobacter, Nitrosomonas"
+      ],
+      "correct_option": 2,
+      "explanation": "Ammonia oxidation to nitrite is carried out by Nitrosomonas, and subsequent nitrite oxidation to nitrate is catalyzed by Nitrobacter."
+    },
+    {
+      "question": "126. The flightless birds ostrich, rhea, and emu are distributed on different continents. What is the most plausible explanation given by an evolutionary biologist?",
+      "options": [
+        "The birds were able to fly earlier, but lost their flight ability later",
+        "Prehistoric humans transported these birds to different continents",
+        "The birds used drifting logs to cross the ocean and reach other continents",
+        "All continents were a single landmass earlier and birds were isolated after breakup"
+      ],
+      "correct_option": 3,
+      "explanation": "Vicariance biogeography explains the southern continental distribution of ratites via the breakup and continental drift of ancient Gondwanaland."
+    },
+    {
+      "question": "127. In spite of its two-fold cost, sexual reproduction is dominant among living organisms due to: (A) Genetic heterogeneity via recombination, (B) Purging deleterious mutations, (C) Coevolution against fast-evolving parasites.",
+      "options": [
+        "(A) only",
+        "(A) and (B)",
+        "(C) only",
+        "(A), (B) and (C)"
+      ],
+      "correct_option": 3,
+      "explanation": "The evolution of sex is favored by Fisher-Muller acceleration, Muller's ratchet purging of mutations, and the Red Queen hypothesis against parasites."
+    },
+    {
+      "question": "128. Field predation experiments on dark and pale morph moths on dark trunks (45% dark, 55% pale captured) and light trunks (48% dark, 52% pale captured) suggest:",
+      "options": [
+        "Natural selection favours dark morphs in forests where trees with dark trunks are dominant.",
+        "Birds can detect dark morphs better than light morphs.",
+        "Pale morphs prefer to rest on light coloured trunks",
+        "Birds detect the moths by cues other than their wing colour."
+      ],
+      "correct_option": 3,
+      "explanation": "Predation rates on both morphs did not differ significantly between trunk colors, indicating that visual crypsis was not the sole selective determinant."
+    },
+    {
+      "question": "129. People with sickle cell trait are resistant to malaria. Which of the following best describes the underlying evolutionary mechanism?",
+      "options": [
+        "Frequency-dependent selection",
+        "Superiority of heterozygotes",
+        "Transient polymorphism",
+        "Balanced polymorphism"
+      ],
+      "correct_option": 1,
+      "explanation": "Heterozygote advantage (overdominance/superiority of heterozygotes) provides selective protection against Plasmodium falciparum malaria."
+    },
+    {
+      "question": "130. In species A the male solely provides parental care; in B the female solely provides care; in C both contribute equally. Uninvolved partners mate multiply. Which sex develops colourful plumage?",
+      "options": [
+        "Male in species A and B, both sexes in species C.",
+        "Female in species A, male in species B and C.",
+        "Female in species A and B, neither in species C.",
+        "Female in species A, male in species B, neither in species C."
+      ],
+      "correct_option": 3,
+      "explanation": "Sexual selection is strongest on the sex with less parental investment: females in species A (sex-role reversed) and males in species B. In monogamous/biparental species C, ornamentation is minimal in both."
+    },
+    {
+      "question": "131. If a gene has alleles a, b, and c with frequencies 0.5, 0.2, and 0.3, what is the expected frequency of genotypes ab and bc at Hardy-Weinberg equilibrium?",
+      "options": [
+        "0.1 and 0.06",
+        "0.2 and 0.15",
+        "0.2 and 0.12",
+        "0.04 and 0.09"
+      ],
+      "correct_option": 2,
+      "explanation": "Frequency of ab = 2 × p × q = 2(0.5)(0.2) = 0.20. Frequency of bc = 2 × q × r = 2(0.2)(0.3) = 0.12."
+    },
+    {
+      "question": "132. Which of the following industrial enzyme-microorganism source pairs is correct?",
+      "options": [
+        "A and H (Amylase - Aspergillus oryzae)",
+        "B and G (Asparaginase - Aspergillus aureus)",
+        "C and E (Lipase - Azotobacter vinelandii)",
+        "D and F (Pectinase - Serratia marcescens)"
+      ],
+      "correct_option": 0,
+      "explanation": "Aspergillus oryzae is widely utilized industrially for the large-scale commercial production of α-amylase."
+    },
+    {
+      "question": "133. For recombinant production and purification of human growth hormone (a secreted therapeutic protein), choose the best cell line and starting material:",
+      "options": [
+        "NIH3T3 cell pellet",
+        "CHO and cell pellet",
+        "NIH3T3 and culture medium",
+        "CHO and culture medium"
+      ],
+      "correct_option": 3,
+      "explanation": "CHO cells possess appropriate mammalian post-translational machinery, and secreted proteins are isolated directly from the conditioned culture medium."
+    },
+    {
+      "question": "134. A malaria vaccine targeting the sporozoite liver-stage antigen Mp elicited high-titre neutralizing IgG but failed universally in pre-clinical trials. What explains this failure?",
+      "options": [
+        "The liver cell surface receptor to which Mp binds is changed.",
+        "The malaria parasite is successful in changing the epitope in Mp to which IgG binds",
+        "IgG molecules change its binding sites for Mp.",
+        "The affinity of Ig to Mp epitopes is reduced."
+      ],
+      "correct_option": 1,
+      "explanation": "Plasmodium exhibits high antigenic variation and polymorphic surface epitopes, rendering strain-specific antibodies ineffective in vivo."
+    },
+    {
+      "question": "135. Regarding Agrobacterium–plant interactions, which statements are true? (B) Transfers T-DNA from Ti-plasmid into plant cell; (E) Some vir genes are inducible; (F) Some vir proteins function in both bacteria and plants.",
+      "options": [
+        "(A), (C) and (D)",
+        "(B), (E) and (F)",
+        "(C), (D) and (E)",
+        "(B), (E) and (F)"
+      ],
+      "correct_option": 1,
+      "explanation": "T-DNA is transferred from the Ti plasmid; vir genes (except virA/virG) are acetosyringone-inducible; VirD2 and VirE2 function in both the bacterium and the plant host nucleus."
+    },
+    {
+      "question": "136. In designing a gene knockout targeting vector, what is the correct location of the negative selection cassette (e.g., HSV-tk)?",
+      "options": [
+        "Negative selection cassette is supplied in a separate construct.",
+        "Negative selection cassette is placed between the two homology arms.",
+        "Negative selection cassette is placed 3' to the 3'-homology arm.",
+        "Negative selection cassette is inserted between the promoter Exon I of positive selection cassette."
+      ],
+      "correct_option": 2,
+      "explanation": "The negative selection marker is placed outside the homologous arms (flanking either the 5' or 3' end) so it is lost during homologous recombination but retained during non-homologous end joining."
+    },
+    {
+      "question": "137. Which human stem cell source is extensively used for clinical somatic cell gene therapy?",
+      "options": [
+        "(A) and (B)",
+        "(B) only",
+        "(B) and (D)",
+        "(D) only"
+      ],
+      "correct_option": 3,
+      "explanation": "Adult stem cells (such as hematopoietic stem cells isolated from bone marrow or peripheral blood) are standardly employed for somatic cell gene therapy."
+    },
+    {
+      "question": "138. Which statements regarding RFLP and RAPD molecular markers are correct? (A) RFLP is codominant, (C) Both are ubiquitous, (D) Only RFLP detects heterozygotes, (F) RAPD cannot detect allelic variation.",
+      "options": [
+        "A, C, D, E",
+        "B, C, E, F",
+        "A, C, D, F",
+        "C, D, E, F"
+      ],
+      "correct_option": 2,
+      "explanation": "RFLP markers are codominant and distinguish heterozygotes; RAPD markers are dominant/null and cannot resolve heterozygotes."
+    },
+    {
+      "question": "139. Which of the following indicates the correct steps involved in DNase I foot-printing to monitor DNA-protein interactions?",
+      "options": [
+        "DNA + protein → treat with restriction enzymes → run agarose gel → stain with EtBr",
+        "Label one DNA strand radiolytically → treat one portion with protein + DNase I; other with DNase I alone → run on sequencing gel",
+        "Analyze fragments obtained from experiments described in (2) by MALDI mass spectrometry.",
+        "DNA + protein → treat with DNase followed by restriction enzymes → SDS-PAGE"
+      ],
+      "correct_option": 1,
+      "explanation": "End-labeled DNA protected by protein binding is digested with limiting DNase I and resolved alongside an unbound control on a denaturing polyacrylamide sequencing gel."
+    },
+    {
+      "question": "140. If a mitochondrial fraction obtained by sucrose gradient centrifugation is contaminated with nuclei, which technique will obtain a clean mitochondrial fraction?",
+      "options": [
+        "Gel filtration",
+        "Percoll density gradient",
+        "Immuno-magnetic separation",
+        "Pulse field electrophoresis"
+      ],
+      "correct_option": 1,
+      "explanation": "Iso-osmotic Percoll density gradient centrifugation achieves high-resolution separation of intact functional mitochondria from denser nuclear debris."
+    },
+    {
+      "question": "141. Internalized ligand A colocalizes with Rab5 at 5 min and with Lamp1 at 90 min. Which conclusion is correct?",
+      "options": [
+        "(A) and (B)",
+        "(B) and (D)",
+        "(C) and (D)",
+        "(A) and (D)"
+      ],
+      "correct_option": 3,
+      "explanation": "Rab5 marks the early endosomal compartment (reached at 5 min), while Lamp1 marks late endosomes/lysosomes (reached by 90 min)."
+    },
+    {
+      "question": "142. A 10-mg protein hydrolysate in 100 ml gives A₂₄₀ = 0.717 and A₂₈₀ = 0.239 (1 cm path). Given ε₂₄₀(Tyr)=11300, ε₂₄₀(Trp)=1960; ε₂₈₀(Tyr)=1500, ε₂₈₀(Trp)=5380, the contents of Trp and Tyr (µmol/g protein) are:",
+      "options": [
+        "586 and 28.1",
+        "58.6 and 281",
+        "586 and 281",
+        "58.6 and 28.1"
+      ],
+      "correct_option": 1,
+      "explanation": "Solving simultaneous Beer-Lambert equations gives [Tyr] ≈ 6.0 × 10⁻⁵ M and [Trp] ≈ 2.8 × 10⁻⁵ M, corresponding to 58.6 µmol/g Trp and 281 µmol/g Tyr."
+    },
+    {
+      "question": "143. X-ray crystallography shows 30% α-helix, 50% β-sheet, 20% coil; CD in solution shows 50% α-helix, 40% β-sheet, 10% coil. What could NOT be a possible explanation?",
+      "options": [
+        "Protein structure in the crystal is different from that in the solution.",
+        "CD analysis for structural components is not appropriate for this protein.",
+        "Contributions from other chromophores also contribute to the CD spectrum of the protein",
+        "Protein contains high content of disulphide bonds."
+      ],
+      "correct_option": 1,
+      "explanation": "Far-UV circular dichroism is a well-established and valid biophysical technique for estimating protein secondary structure in solution."
+    },
+    {
+      "question": "144. Match the population growth equations in Column I with their models in Column II: 1: dN₁/dt = r₁N₁[(K₁ - N₁)/K₁], 2: dN₁/dt = r₁N₁, 3: dN₁/dt = r₁N₁[(K₁ - N₁ - αN₂)/K₁], 4: dN₁/dt = N₁b₁ - d₁N₁N₂.",
+      "options": [
+        "b, d, a and c",
+        "d, b, c and d",
+        "b, d, c and a",
+        "d, b, a and c"
+      ],
+      "correct_option": 0,
+      "explanation": "1 matches logistic growth (b); 2 matches exponential growth (d); 3 matches Lotka-Volterra competition (a); 4 matches Lotka-Volterra predator-prey dynamics (c)."
+    },
+    {
+      "question": "145. Claimed mean groundwater arsenic is µ = 20 µg/L with σ = 3. In a random sample of n = 16, what values should lead to rejection of the claim at the 95% confidence level (Z = 1.96)?",
+      "options": [
+        "values lower then 18.53 and values higher that 21.47",
+        "values higher than 21.47",
+        "values lower than 18.53",
+        "values lower than 18.07 and values higher than 21.93"
+      ],
+      "correct_option": 0,
+      "explanation": "Standard error SE = σ / √n = 3 / 4 = 0.75. The 95% two-tailed critical boundaries are 20 ± (1.96 × 0.75) = [18.53, 21.47]. Sample means outside this interval lead to rejection."
     }
   ]
 }

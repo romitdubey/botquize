@@ -35,6 +35,7 @@ def create_session(quiz_data: dict) -> QuizSession:
             options=[o.strip() for o in q["options"]],
             correct_option=int(q["correct_option"]),
             explanation=q.get("explanation", "").strip() or None,
+            image_url=q.get("image_url", "").strip() or None,
         )
         for i, q in enumerate(raw_questions)
     ]
@@ -66,6 +67,9 @@ async def publish_quiz(bot: Bot, session: QuizSession,
     db.update_session_status(session.session_id, SessionStatus.RUNNING,
                              current_question=start_index)
 
+    # Target chat: if CHANNEL_ID is 'me', 'private', or unset, post directly to admin DM
+    target_chat = admin_chat_id if CHANNEL_ID in ("", "me", "private", str(admin_chat_id)) else CHANNEL_ID
+
     for i in range(start_index, session.total_questions):
         q = session.questions[i]
 
@@ -75,14 +79,20 @@ async def publish_quiz(bot: Bot, session: QuizSession,
             db.advance_current_question(session.session_id, i + 1)
             continue
 
-        caption = (
-            f"📚 {session.quiz_title}\n\n"
-            f"Question {i + 1}/{session.total_questions}"
-        )
+        # If question has an image, send the photo first
+        if q.image_url:
+            try:
+                await bot.send_photo(
+                    chat_id=target_chat,
+                    photo=q.image_url,
+                    caption=f"📸 Question {i + 1} Diagram/Figure",
+                )
+            except Exception as e:
+                logger.warning("Could not send image for Q%d: %s", i + 1, e)
 
         poll_msg, error_detail = await _send_quiz_poll_with_retry(
             bot=bot,
-            chat_id=CHANNEL_ID,
+            chat_id=target_chat,
             question=q.question_text,
             options=q.options,
             correct_option_id=q.correct_option,
@@ -91,15 +101,28 @@ async def publish_quiz(bot: Bot, session: QuizSession,
 
         if poll_msg is None:
             # Fatal error, abort and notify admin with exact detail
+            if error_detail and "channel chats" in error_detail.lower():
+                err_explanation = (
+                    "💡 Telegram channels ONLY allow anonymous polls.\n"
+                    "However, to track your personal score, Telegram requires polls to be non-anonymous!\n\n"
+                    "To fix this, choose either:\n"
+                    "👉 1. Create a Private Telegram GROUP (not channel), add the bot, and set CHANNEL_ID to the group ID.\n"
+                    "👉 2. Or set CHANNEL_ID=me in Render environment variables to have polls posted directly in this private chat!"
+                )
+            else:
+                err_explanation = (
+                    "Common fixes:\n"
+                    "1. Ensure the bot is added as an ADMINISTRATOR in the chat.\n"
+                    "2. Give the bot 'Post Messages' permission.\n"
+                    "3. Ensure CHANNEL_ID is correct."
+                )
+
             await bot.send_message(
                 chat_id=admin_chat_id,
                 text=(
                     f"❌ Failed to send question {i + 1}. Quiz aborted.\n\n"
                     f"Telegram Error: {error_detail}\n\n"
-                    "Common fixes:\n"
-                    "1. Ensure the bot is added as an ADMINISTRATOR in the channel.\n"
-                    "2. Give the bot 'Post Messages' permission.\n"
-                    "3. Ensure CHANNEL_ID starts with -100 (e.g. -1001234567890).\n\n"
+                    f"{err_explanation}\n\n"
                     "Use /reset to start over."
                 ),
             )
@@ -239,9 +262,17 @@ def reset_session(session: QuizSession) -> None:
 # ─── Channel permission check ─────────────────────────────────────────────────
 
 async def check_channel_permissions(bot: Bot) -> tuple[bool, str]:
-    """Try to verify the bot can post to the channel."""
+    """Try to verify the bot can post to the target chat/channel."""
+    if CHANNEL_ID in ("", "me", "private"):
+        return True, "✅ Target chat: Private DM with Bot"
     try:
         chat = await bot.get_chat(CHANNEL_ID)
+        if chat.type == "channel":
+            return False, (
+                "⚠️ Warning: Selected target is a Telegram CHANNEL.\n"
+                "Telegram channels do not support non-anonymous polls needed for score tracking.\n"
+                "Please use a Telegram GROUP ID or set CHANNEL_ID=me instead."
+            )
         member = await bot.get_chat_member(CHANNEL_ID, bot.id)
         can_post = getattr(member, "can_post_messages", True)
         if not can_post:

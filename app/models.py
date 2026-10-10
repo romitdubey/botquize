@@ -23,6 +23,7 @@ class QuizQuestion:
     options: list[str]
     correct_option: int          # 0-based
     explanation: Optional[str] = None
+    image_url: Optional[str] = None
 
     # Set after publishing to Telegram
     telegram_poll_id: Optional[str] = None
