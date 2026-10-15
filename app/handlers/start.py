@@ -20,9 +20,26 @@ Available commands:
 📝 /review  – Review wrong answers
 📚 /history – Quiz history
 📉 /stats   – Overall statistics
+🗓 /plan    – Planned topic for today
+🏷 /topic   – Label the next upload with topic + study date
+💾 /sync    – Update Notion stats explicitly
+❌ /wrong   – Export wrong questions as JSON
+🔁 /retryweek – Prepare last week's mistakes as a new quiz
+🗄 /backup  – Download the saved quiz database
+⚙ /notion_setup – Create/resume the Notion tracker
 ❓ /help    – Show help"""
 
-HELP_TEXT = """📖 HOW TO USE
+HELP_TEXT = """TRACKING
+
+/topic 2026-10-20 | Enzyme kinetics
+Upload the quiz JSON after setting its study date/topic.
+/result only displays the score. Answers are saved locally automatically.
+/sync sends today's quiz updates to Notion; /sync all catches up everything.
+/wrong today or /wrong lastweek exports reusable JSON.
+/retryweek prepares last week's mistakes for a new Monday quiz.
+/backup downloads the persistent database.
+
+📖 HOW TO USE
 
 1️⃣  Prepare your MCQ JSON file.
     • Use an AI to extract questions from book images.

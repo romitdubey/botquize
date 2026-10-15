@@ -1,0 +1,182 @@
+[
+  {
+    "part": "Biochemistry",
+    "topic": "Introduction to Biochemistry; Discoveries in Biochemistry",
+    "page_start": 3,
+    "page_end": 22
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Digestion; Bioenergetics; Biological Oxidation and Reduction",
+    "page_start": 23,
+    "page_end": 45
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Enzymes and Coenzymes; Enzyme kinetics",
+    "page_start": 46,
+    "page_end": 68
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Carbohydrate Metabolism; Lipid Metabolism",
+    "page_start": 69,
+    "page_end": 91
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Amino Acid and Protein Metabolism; Nucleic Acid & Nucleotide Metabolism and the Urea Cycle; Porphyrin Metabolism",
+    "page_start": 92,
+    "page_end": 111
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Citric Acid Cycle; Vitamins and Minerals",
+    "page_start": 112,
+    "page_end": 126
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis - Light and Dark Reactions",
+    "page_start": 127,
+    "page_end": 141
+  },
+  {
+    "part": "Biochemistry",
+    "topic": "Signal Transduction; Biochemical Pathway Interconnections",
+    "page_start": 142,
+    "page_end": 153
+  },
+  {
+    "part": "Cell Biology",
+    "topic": "Cellular Organization; Cell Divisions",
+    "page_start": 164,
+    "page_end": 190
+  },
+  {
+    "part": "Cell Biology",
+    "topic": "Cell Cycle; Cell Organelles",
+    "page_start": 191,
+    "page_end": 207
+  },
+  {
+    "part": "Cell Biology",
+    "topic": "Cytoskeleton",
+    "page_start": 208,
+    "page_end": 218
+  },
+  {
+    "part": "Cell Biology",
+    "topic": "Cell Signaling and Communication",
+    "page_start": 219,
+    "page_end": 231
+  },
+  {
+    "part": "Developmental Biology",
+    "topic": "Gametes and Gametogenesis",
+    "page_start": 236,
+    "page_end": 255
+  },
+  {
+    "part": "Developmental Biology",
+    "topic": "Fertilization and Zygote Formation; Early Development and Germ Layers",
+    "page_start": 256,
+    "page_end": 270
+  },
+  {
+    "part": "Developmental Biology",
+    "topic": "Organogenesis - first half",
+    "page_start": 271,
+    "page_end": 283
+  },
+  {
+    "part": "Developmental Biology",
+    "topic": "Organogenesis - second half; Sex Determination",
+    "page_start": 284,
+    "page_end": 300
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "Discoveries in Genetics and Molecular Biology",
+    "page_start": 304,
+    "page_end": 324
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "Mendelian and Non-Mendelian Inheritances",
+    "page_start": 325,
+    "page_end": 336
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "Nucleic Acids; DNA Replication",
+    "page_start": 337,
+    "page_end": 362
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "RNA Transcription; Central Dogma - Genetic Code/Translation",
+    "page_start": 363,
+    "page_end": 380
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "DNA Condensation and Structural Organization; Prokaryotic Genetics",
+    "page_start": 381,
+    "page_end": 395
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "Regulation of Gene Expression; Mutations and DNA Repair Mechanisms",
+    "page_start": 396,
+    "page_end": 411
+  },
+  {
+    "part": "Genetics & Molecular Biology",
+    "topic": "rDNA and Genetic Engineering",
+    "page_start": 412,
+    "page_end": 424
+  },
+  {
+    "part": "Immunology",
+    "topic": "Introduction; History; Innate Immune System; Adaptive Immune System",
+    "page_start": 431,
+    "page_end": 452
+  },
+  {
+    "part": "Immunology",
+    "topic": "Antigens; Immunoglobulins; Antigen-Antibody Interactions; Humoral Immune Mechanisms",
+    "page_start": 453,
+    "page_end": 473
+  },
+  {
+    "part": "Immunology",
+    "topic": "Cell Mediated Immune Mechanisms; Immunoglobulin Genes; Major Histocompatibility Complex; Antigen Processing and Presentation",
+    "page_start": 474,
+    "page_end": 488
+  },
+  {
+    "part": "Immunology",
+    "topic": "B Cell and T Cell Development; Cytokines; Complement System",
+    "page_start": 489,
+    "page_end": 503
+  },
+  {
+    "part": "Immunology",
+    "topic": "Hypersensitive Reactions; Vaccines; Autoimmunity",
+    "page_start": 504,
+    "page_end": 520
+  },
+  {
+    "part": "Immunology",
+    "topic": "Immunodeficiency; Hematopoiesis; Transplantation Immunology; Antibody Engineering",
+    "page_start": 521,
+    "page_end": 533
+  },
+  {
+    "part": "Immunology",
+    "topic": "Experimental Immunology/Immunotechniques; Immunological Discoveries",
+    "page_start": 534,
+    "page_end": 554
+  }
+]

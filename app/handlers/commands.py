@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 @admin_only
 async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    session = db.load_active_session()
+    session = db.load_active_session() or db.load_latest_session()
     if session is None:
         await update.message.reply_text("ℹ️ No active quiz.")
         return
@@ -37,7 +37,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 @admin_only
 async def result_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    session = db.load_active_session()
+    session = db.load_active_session() or db.load_latest_session()
     if session is None:
         await update.message.reply_text(
             "ℹ️ No active quiz. Use /history to see past results."
@@ -73,7 +73,7 @@ async def reset_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 @admin_only
 async def review_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    session = db.load_active_session()
+    session = db.load_active_session() or db.load_latest_session()
     if session is None:
         await update.message.reply_text(
             "ℹ️ No active quiz. Use /history for past quizzes."

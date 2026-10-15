@@ -40,13 +40,12 @@ async def poll_answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
     session_id, _question_index, _correct = lookup
 
     # Record the answer and get updated session
-    session = quiz_service.record_poll_answer(session_id, poll_id, option_ids)
+    session = quiz_service.record_poll_answer(session_id, poll_id, option_ids, user_id=poll_answer.user.id)
     if session is None:
         return
 
     # Check if all published questions are answered
-    if quiz_service.check_completion(session):
-        quiz_service.mark_completed(session)
+    if quiz_service.check_completion(session) and quiz_service.mark_completed(session):
         result_text = format_result(session)
         try:
             await context.bot.send_message(

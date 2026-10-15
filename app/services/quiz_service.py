@@ -8,14 +8,15 @@ It talks to the database and is called by handlers.
 import asyncio
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from telegram import Bot
 from telegram.error import RetryAfter, TelegramError
 
 from app import state as db
-from app.config import CHANNEL_ID, QUESTION_DELAY
+from app.config import CHANNEL_ID, QUESTION_DELAY, LEARNER_USER_ID
+from app.services.planner import today
 from app.models import QuizQuestion, QuizSession, SessionStatus
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 def create_session(quiz_data: dict) -> QuizSession:
     """Build a QuizSession from parsed JSON and persist it."""
-    session_id = str(uuid.uuid4())[:8]
+    session_id = str(uuid.uuid4())
     raw_questions = quiz_data["questions"]
 
     questions = [
@@ -34,8 +35,10 @@ def create_session(quiz_data: dict) -> QuizSession:
             question_text=q["question"].strip(),
             options=[o.strip() for o in q["options"]],
             correct_option=int(q["correct_option"]),
-            explanation=q.get("explanation", "").strip() or None,
-            image_url=q.get("image_url", "").strip() or None,
+            explanation=(q.get("explanation") or "").strip() or None,
+            image_url=(q.get("image_url") or "").strip() or None,
+            source_id=q.get("source_id", ""),
+            source_topic=q.get("source_topic") or quiz_data.get("topic") or quiz_data.get("quiz_title", "Quiz"),
         )
         for i, q in enumerate(raw_questions)
     ]
@@ -47,6 +50,10 @@ def create_session(quiz_data: dict) -> QuizSession:
         total_questions=len(questions),
         questions=questions,
         status=SessionStatus.READY,
+        topic=quiz_data.get("topic") or quiz_data.get("quiz_title", "Quiz"),
+        study_date=quiz_data.get("study_date") or today().isoformat(),
+        quiz_kind=quiz_data.get("quiz_kind", "book"),
+        learner_user_id=LEARNER_USER_ID or None,
     )
     db.save_session(session)
     return session
@@ -58,19 +65,24 @@ async def publish_quiz(bot: Bot, session: QuizSession,
                        admin_chat_id: int, start_index: int = 0) -> None:
     """
     Publish all questions (or from start_index) to the channel.
-    This is called in the background via asyncio.create_task().
+    Run as a managed background task on the Telegram Application.
     """
+    persisted = db.load_session(session.session_id)
+    if persisted is None or persisted.status == SessionStatus.CANCELLED:
+        return
     # Mark as RUNNING
     session.status = SessionStatus.RUNNING
-    session.started_at = datetime.utcnow()
+    session.started_at = datetime.now(timezone.utc)
     session.current_question = start_index
-    db.update_session_status(session.session_id, SessionStatus.RUNNING,
-                             current_question=start_index)
+    db.save_session(session)
 
     # Target chat: if CHANNEL_ID is 'me', 'private', or unset, post directly to admin DM
-    target_chat = admin_chat_id if CHANNEL_ID in ("", "me", "private", str(admin_chat_id)) else CHANNEL_ID
+    target_chat = (session.learner_user_id or admin_chat_id) if CHANNEL_ID in ("", "me", "private", str(admin_chat_id)) else CHANNEL_ID
 
     for i in range(start_index, session.total_questions):
+        current = db.load_session(session.session_id)
+        if current is None or current.status != SessionStatus.RUNNING:
+            return
         q = session.questions[i]
 
         # Skip already-published questions (restart recovery)
@@ -147,6 +159,15 @@ async def publish_quiz(bot: Bot, session: QuizSession,
         if i < session.total_questions - 1:
             await asyncio.sleep(QUESTION_DELAY)
 
+    # Answers can arrive while publishing; finish only when the whole set is posted.
+    current = db.load_session(session.session_id)
+    if current is None or current.status == SessionStatus.CANCELLED:
+        return
+    if current and check_completion(current) and mark_completed(current):
+        from app.services.statistics import format_result
+        await bot.send_message(chat_id=current.learner_user_id or admin_chat_id, text=format_result(current))
+        return
+
     # All questions published — wait for answers before marking complete
     await bot.send_message(
         chat_id=admin_chat_id,
@@ -200,7 +221,7 @@ async def _send_quiz_poll_with_retry(
 # ─── Answer recording ─────────────────────────────────────────────────────────
 
 def record_poll_answer(session_id: str, poll_id: str,
-                       option_ids: list[int]) -> Optional[QuizSession]:
+                       option_ids: list[int], user_id: Optional[int] = None) -> Optional[QuizSession]:
     """
     Record an answer from a poll_answer update.
     Returns the updated session.  Returns None if the session is not found.
@@ -225,32 +246,31 @@ def record_poll_answer(session_id: str, poll_id: str,
     if question.user_answer is not None:
         return session
 
+    if not 0 <= chosen < len(question.options):
+        return None
     is_correct = chosen == question.correct_option
-    db.record_answer(session_id, poll_id, chosen, is_correct)
-    question.user_answer = chosen
-    question.is_correct = is_correct
-
-    return session
+    if not db.record_answer(session_id, poll_id, chosen, is_correct, user_id=user_id):
+        return None
+    return db.load_session(session_id)
 
 
 # ─── Completion check ─────────────────────────────────────────────────────────
 
 def check_completion(session: QuizSession) -> bool:
-    """Return True if all published questions have been answered."""
-    published = [q for q in session.questions if q.telegram_poll_id is not None]
-    if not published:
+    """Return True only after the entire quiz is published and answered."""
+    return (session.status == SessionStatus.RUNNING
+            and session.current_question == session.total_questions
+            and bool(session.questions)
+            and all(q.telegram_poll_id is not None and q.user_answer is not None for q in session.questions))
+
+
+def mark_completed(session: QuizSession) -> bool:
+    if not db.complete_session(session.session_id):
         return False
-    return all(q.user_answer is not None for q in published)
-
-
-def mark_completed(session: QuizSession) -> None:
-    session.status = SessionStatus.COMPLETED
-    session.completed_at = datetime.utcnow()
-    db.update_session_status(
-        session.session_id, SessionStatus.COMPLETED,
-        completed_at=session.completed_at
-    )
-    db.save_history(session)
+    refreshed = db.load_session(session.session_id)
+    session.status = refreshed.status
+    session.completed_at = refreshed.completed_at
+    return True
 
 
 # ─── Reset ────────────────────────────────────────────────────────────────────

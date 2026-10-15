@@ -14,23 +14,6 @@ os.environ.setdefault("CHANNEL_ID", "-100123")
 import importlib
 
 
-@pytest.fixture(autouse=True)
-def reset_in_memory_state():
-    """Reset the global in-memory state before each test."""
-    from app import state
-    state._sessions.clear()
-    state._history.clear()
-    state._poll_index.clear()
-    state._overall.update({
-        "quizzes_completed": 0,
-        "questions_attempted": 0,
-        "total_correct": 0,
-        "total_wrong": 0,
-        "best_accuracy": 0.0,
-    })
-    yield
-
-
 from app.models import QuizQuestion, QuizSession, SessionStatus
 from app.services.statistics import format_result, format_status, format_review_page
 

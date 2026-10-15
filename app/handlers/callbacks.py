@@ -21,6 +21,7 @@ from app import state as db
 from app.services import quiz_service
 from app.services.statistics import format_review_page, format_history_page
 from app.utils.helpers import is_admin
+from app.models import SessionStatus
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     # ── Review pagination ─────────────────────────────────────────────────
     elif data.startswith("review:page:"):
         page = int(data.split(":")[2])
-        session = db.load_active_session()
+        session = db.load_active_session() or db.load_latest_session()
         if session is None:
             await query.edit_message_text("ℹ️ No active quiz.")
             return
@@ -77,6 +78,8 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         kb = _history_keyboard(page, total_pages)
         await query.edit_message_text(text, reply_markup=kb)
 
+    elif data == "noop":
+        return
     else:
         logger.warning("Unknown callback data: %s", data)
 
@@ -100,6 +103,7 @@ async def _handle_start(query, context):
         return
 
     session = quiz_service.create_session(pending)
+    db.update_session_status(session.session_id, SessionStatus.RUNNING)
     context.user_data.pop(PENDING_KEY, None)
 
     await query.edit_message_text(
@@ -108,7 +112,7 @@ async def _handle_start(query, context):
     )
 
     admin_chat_id = query.from_user.id
-    asyncio.create_task(
+    context.application.create_task(
         quiz_service.publish_quiz(query.get_bot(), session, admin_chat_id)
     )
 
@@ -121,19 +125,20 @@ async def _handle_test(query, context):
         )
         return
 
-    session = quiz_service.create_session(pending)
-    # Don't clear pending — user may still want to start the full quiz
-
-    await query.edit_message_text(
-        f"🧪 Sending the first question as a test…\n\nQuiz: {session.quiz_title}\n\n"
-        "After confirming, upload the JSON again and press 🚀 Start Quiz to publish all."
-    )
-
-    admin_chat_id = query.from_user.id
-    asyncio.create_task(
-        quiz_service.publish_quiz(query.get_bot(), session, admin_chat_id,
-                                  start_index=0)
-    )
+    if db.load_active_session():
+        await query.edit_message_text("A quiz is active. Finish or /reset it first.")
+        return
+    # A preview must not create a scored session or publish the entire set.
+    from app.config import CHANNEL_ID, LEARNER_USER_ID
+    q = pending["questions"][0]
+    target = (LEARNER_USER_ID or query.from_user.id) if CHANNEL_ID in ("", "me", "private") else CHANNEL_ID
+    message, error = await quiz_service._send_quiz_poll_with_retry(
+        query.get_bot(), target, q["question"], q["options"], q["correct_option"], q.get("explanation"))
+    if message is None:
+        await query.edit_message_text(f"Preview failed: {error}")
+        return
+    await query.edit_message_text("First-question preview sent (not scored). Start the full quiz when ready.",
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Start full quiz", callback_data="quiz:start")]]))
 
 
 async def _handle_reset_confirm(query):

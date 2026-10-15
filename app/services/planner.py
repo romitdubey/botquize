@@ -1,0 +1,54 @@
+"""The book-based Oct-Dec plan, without changing a learner's completion status."""
+import json
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+from zoneinfo import ZoneInfo
+from app.config import STUDY_TIMEZONE
+
+REVISION = [
+    'Biochemistry: enzymes, energetics and central pathways',
+    'Biochemistry integration + Cell Biology: organelles, cycle and signaling',
+    'Developmental Biology: gametes, fertilization, germ layers and organogenesis',
+    'Genetics: inheritance, nucleic acids, replication, transcription and translation',
+    'Genetics: chromatin, gene regulation, repair and genetic engineering',
+    'Immunology: innate/adaptive, antibodies, antigen presentation and development',
+    'Immunology: complement, hypersensitivity, vaccines, clinical topics and methods',
+    'Weakest two topics from PYQ/mock errors + recurring wrong answers',
+    'All five parts: diagrams, comparison tables and experimental interpretation',
+    'Final closure: due re-tests, flagged questions and one-page summaries',
+]
+
+
+def today():
+    return datetime.now(ZoneInfo(STUDY_TIMEZONE)).date()
+
+
+def plan_rows():
+    topics=json.loads((Path(__file__).parent.parent/'data'/'study_topics.json').read_text())
+    day=date(2026,10,16); end=date(2026,12,10); index=0; rev=0; rows=[]
+    while day<=end:
+        row={'key':day.isoformat(),'date':day.isoformat(),'week':(day-timedelta(days=day.weekday())).isoformat()}
+        if day.weekday()==5:
+            row.update(topic='Full PYQ test + analysis',part='Mixed',kind='PYQ',pages=0)
+        elif day.weekday()==6:
+            row.update(topic='Paid mock + analysis',part='Mixed',kind='Mock',pages=0)
+        elif index<len(topics):
+            row.update(topics[index]);row.update(kind='Study',pages=row['page_end']-row['page_start']+1);index+=1
+        else:
+            row.update(topic=REVISION[rev],part='Revision',kind='Revision',pages=0);rev+=1
+        rows.append(row);day+=timedelta(days=1)
+    return rows
+
+
+def date_window(selector='today',reference=None):
+    """Return [start,end) in UTC; weeks are local Monday through Sunday."""
+    day=reference or today();monday=day-timedelta(days=day.weekday())
+    if selector=='today': first,last=day,day+timedelta(days=1)
+    elif selector=='yesterday':first,last=day-timedelta(days=1),day
+    elif selector=='week':first,last=monday,monday+timedelta(days=7)
+    elif selector=='lastweek':first,last=monday-timedelta(days=7),monday
+    else:
+        first=date.fromisoformat(selector);last=first+timedelta(days=1)
+    tz=ZoneInfo(STUDY_TIMEZONE)
+    return (datetime.combine(first,datetime.min.time(),tz).astimezone(timezone.utc),
+            datetime.combine(last,datetime.min.time(),tz).astimezone(timezone.utc))

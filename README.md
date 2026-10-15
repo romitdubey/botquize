@@ -1,3 +1,9 @@
+> **Study tracking update:** SQLite persistence, topic/date labels, explicit Notion
+> sync, daily wrong-question JSON and Monday retries are implemented.
+> Start with [TRACKING_SETUP.md](TRACKING_SETUP.md) for the new commands and hosting
+> requirements. A durable database volume is required for reliable deployed storage.
+> Older channel/free-hosting instructions below should be read with these updates.
+
 # 📚 Personal Telegram MCQ Quiz Bot
 
 A **personal, single-user** Telegram bot that posts quiz questions from your study books to a Telegram channel as native Quiz Polls, tracks your answers, and gives you detailed statistics — all for free on Render with SQLite.

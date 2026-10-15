@@ -3,7 +3,7 @@ models.py – Plain dataclass models for the quiz bot.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 
@@ -24,6 +24,11 @@ class QuizQuestion:
     correct_option: int          # 0-based
     explanation: Optional[str] = None
     image_url: Optional[str] = None
+
+    source_id: str = ""
+    source_topic: str = ""
+    answered_at: Optional[datetime] = None
+    answer_user_id: Optional[int] = None
 
     # Set after publishing to Telegram
     telegram_poll_id: Optional[str] = None
@@ -46,6 +51,12 @@ class QuizSession:
     status: SessionStatus = SessionStatus.READY
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
+
+    topic: str = ""
+    study_date: str = ""
+    quiz_kind: str = "book"
+    learner_user_id: Optional[int] = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     # ── Computed helpers ──────────────────────────────────────────────────────
 

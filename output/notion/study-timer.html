@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Study timer</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#242722;--muted:#687168;--soft:#f3f6f0;--accent:#3f6d51;--line:#e2e8dd}@media(prefers-color-scheme:dark){:root{--bg:#191b19;--fg:#ebeee8;--muted:#b3bcb0;--soft:#242a24;--accent:#8fbea0;--line:#3b4239}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}main{max-width:680px;margin:auto;padding:28px 22px}h1{font-size:21px;margin:0 0 8px}p{margin:4px 0;color:var(--muted)}label{display:block;margin-top:22px;font-size:14px}input{width:100%;padding:12px;margin-top:7px;font:inherit;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--fg)}.clock{text-align:center;font-variant-numeric:tabular-nums;font-size:clamp(40px,12vw,68px);letter-spacing:1px;margin-top:26px;line-height:1.3}.label{text-align:center;color:var(--muted);font-size:14px}.buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0}button{font:600 15px system-ui;padding:12px 22px;min-height:46px;border:1px solid var(--line);border-radius:9px;cursor:pointer;background:var(--soft);color:var(--fg)}button.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}button:disabled{opacity:.5;cursor:default}button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.today{padding:20px;background:var(--soft);border-radius:12px;text-align:center}.today strong{display:block;font-size:28px;font-variant-numeric:tabular-nums}h2{font-size:17px;margin:28px 0 10px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:11px 0;border-bottom:1px solid var(--line)}td:last-child,th:last-child{text-align:right}.note{font-size:13px;margin-top:16px}.saved{font-size:13px;text-align:center;min-height:22px}#announcement{min-height:24px;color:var(--muted);font-size:14px;text-align:center}.download{margin-top:16px;font-size:14px}.empty{color:var(--muted)}
+</style></head><body><main>
+<h1>Study timer</h1><p>One focused session at a time.</p>
+<label for="topic">What are you studying?</label><input id="topic" maxlength="200" placeholder="e.g. Enzyme kinetics" autocomplete="off">
+<div class="clock" id="clock" role="timer" aria-label="Current study session">00:00:00</div><div class="label" id="mode">Ready when you are</div>
+<div class="buttons"><button class="primary" id="toggle">Start studying</button><button id="finish" disabled>Finish session</button></div>
+<div id="announcement" aria-live="polite"></div>
+<div class="today"><span id="today-date">Today</span><strong id="today-total">0 min</strong><span>Total study time today</span></div>
+<p class="saved" id="saved"></p>
+<h2>Your study days</h2><table><thead><tr><th>Day</th><th>Study time</th></tr></thead><tbody id="history"></tbody></table>
+<button class="download" id="download">Download study log</button>
+<p class="note">Pause when you take a break. Daily totals use India time.</p>
+<p class="note">Time is saved on this device when storage is available. It does not automatically fill the Minutes column in Schedule.</p>
+</main>
+<script>
+'use strict';
+const OFFSET=19800000, DAY=86400000, KEY='csir-study-timer-v1';
+function dayKey(ms){return new Date(ms+OFFSET).toISOString().slice(0,10)}
+function addInterval(days,start,end,topic){
+ if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start)return;
+ while(start<end){
+  const boundary=(Math.floor((start+OFFSET)/DAY)+1)*DAY-OFFSET;
+  const stop=Math.min(end,boundary),key=dayKey(start),delta=stop-start;
+  const entry=days[key]||(days[key]={ms:0,topics:{}});
+  entry.ms+=delta;entry.topics[topic]=(entry.topics[topic]||0)+delta;start=stop;
+ }
+}
+function formatClock(ms){const s=Math.floor(ms/1000);return [Math.floor(s/3600),Math.floor(s/60)%60,s%60].map(n=>String(n).padStart(2,'0')).join(':')}
+function formatMinutes(ms){const minutes=Math.floor(ms/60000);return minutes>=60?`${Math.floor(minutes/60)} hr ${minutes%60} min`:`${minutes} min`}
+const el=id=>document.getElementById(id), owner=Math.random().toString(36).slice(2);
+let state={days:{},sessionMs:0,topic:'',since:null,owner:null},persistent=true,otherWindow=false;
+try{const loaded=JSON.parse(localStorage.getItem(KEY)||'null');if(loaded&&loaded.days&&typeof loaded.sessionMs==='number')state=loaded;localStorage.setItem(KEY,JSON.stringify(state));}
+catch(_){persistent=false;}
+// A reopened page starts paused. Only previously checkpointed time is kept.
+if(state.since&&state.owner!==owner){otherWindow=Date.now()-(state.heartbeat||0)<15000;}
+if(!otherWindow){state.since=null;state.owner=null;}
+el('topic').value=state.topic||'';
+function save(){if(!persistent)return;try{localStorage.setItem(KEY,JSON.stringify(state));}catch(_){persistent=false;}}
+function tick(now=Date.now()){
+ if(state.since!==null&&!otherWindow){const elapsed=Math.max(0,now-state.since);addInterval(state.days,state.since,now,state.topic||'Study');state.sessionMs+=elapsed;state.since=now;state.heartbeat=now;save();}
+ render();
+}
+function render(){
+ const running=state.since!==null&&!otherWindow;
+ el('clock').textContent=formatClock(state.sessionMs);
+ el('mode').textContent=otherWindow?'Running in another window':running?'Focus time':state.sessionMs?'Paused':'Ready when you are';
+ el('toggle').textContent=running?'Pause':state.sessionMs?'Resume studying':'Start studying';
+ el('toggle').disabled=otherWindow;el('finish').disabled=otherWindow||(!state.sessionMs&&!running);el('topic').disabled=running||otherWindow;
+ const key=dayKey(Date.now());el('today-total').textContent=formatMinutes(state.days[key]?.ms||0);
+ el('today-date').textContent=new Date(key+'T12:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kolkata'});
+ el('saved').textContent=persistent?'Saved on this device':'Keep this page open; saving is unavailable here. Download your log before leaving.';
+ const history=el('history');history.replaceChildren();
+ const keys=Object.keys(state.days).sort().reverse();
+ for(const day of keys){const tr=document.createElement('tr'),dateCell=document.createElement('td'),timeCell=document.createElement('td');dateCell.textContent=new Date(day+'T12:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Kolkata'});timeCell.textContent=formatMinutes(state.days[day].ms);tr.append(dateCell,timeCell);history.append(tr);}
+ if(!keys.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=2;td.className='empty';td.textContent='Your first study session will appear here.';tr.append(td);history.append(tr);}
+}
+function pause(){if(state.since!==null&&!otherWindow){tick();state.since=null;state.owner=null;save();}render();}
+el('toggle').addEventListener('click',()=>{
+ if(state.since!==null){pause();el('announcement').textContent='Paused. Take a breather.';return;}
+ if(persistent){try{const shared=JSON.parse(localStorage.getItem(KEY)||'null');if(shared?.since&&shared.owner!==owner&&Date.now()-(shared.heartbeat||0)<15000){state=shared;otherWindow=true;render();return;}}catch(_){}}
+ state.topic=el('topic').value.trim()||'Study';state.since=Date.now();state.owner=owner;state.heartbeat=state.since;save();el('announcement').textContent='Session started.';render();
+});
+el('finish').addEventListener('click',()=>{pause();state.sessionMs=0;save();el('announcement').textContent='Session saved. Your daily total stays above.';render();});
+el('topic').addEventListener('change',()=>{state.topic=el('topic').value.trim();save();});
+el('download').addEventListener('click',()=>{
+ tick();const csv=['Date,Topic,Minutes'];
+ for(const key of Object.keys(state.days).sort())for(const [topic,ms] of Object.entries(state.days[key].topics)){const safe=/^[=+\-@\t\r]/.test(topic)?"'"+topic:topic;csv.push([key,'"'+safe.replaceAll('"','""')+'"',(ms/60000).toFixed(2)].join(','));}
+ const url=URL.createObjectURL(new Blob([csv.join('\r\n')],{type:'text/csv'})),a=document.createElement('a');a.href=url;a.download='study-time.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+window.addEventListener('storage',event=>{if(event.key!==KEY)return;try{const incoming=JSON.parse(event.newValue);if(incoming?.days){state=incoming;otherWindow=!!incoming.since&&incoming.owner!==owner;if(!otherWindow)state.since=null;el('topic').value=state.topic||'';render();}}catch(_){}});
+window.addEventListener('pagehide',()=>pause());
+setInterval(()=>tick(),1000);render();
+</script></body></html>

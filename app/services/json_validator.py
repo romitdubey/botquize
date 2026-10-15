@@ -4,6 +4,7 @@ json_validator.py – Validates the uploaded MCQ JSON file.
 
 import json
 import logging
+from datetime import date
 from dataclasses import dataclass
 from typing import Optional
 
@@ -67,11 +68,27 @@ def validate_json_bytes(raw: bytes) -> ValidationResult:
     errors: list[ValidationError] = []
 
     # ── 2. Top-level fields ──────────────────────────────────────────────────
-    quiz_title = str(data.get("quiz_title", "")).strip()
+    quiz_title = data.get("quiz_title", "")
+    quiz_title = quiz_title.strip() if isinstance(quiz_title, str) else ""
     if not quiz_title:
         errors.append(ValidationError(None, "quiz_title", "Field is missing or empty"))
 
-    description = str(data.get("description", "")).strip()
+    description = data.get("description", "")
+    if not isinstance(description, str):
+        errors.append(ValidationError(None, "description", "Must be text"))
+        description = ""
+    for field in ("topic", "study_date"):
+        if field in data and (not isinstance(data[field], str) or not data[field].strip()):
+            errors.append(ValidationError(None, field, "Must be non-empty text"))
+    if isinstance(data.get("study_date"), str):
+        try:
+            parsed_date = date.fromisoformat(data["study_date"])
+            if parsed_date.isoformat() != data["study_date"]:
+                raise ValueError
+        except ValueError:
+            errors.append(ValidationError(None, "study_date", "Use YYYY-MM-DD"))
+    if data.get("quiz_kind", "book") not in ("book", "revision"):
+        errors.append(ValidationError(None, "quiz_kind", "Use book or revision"))
 
     questions = data.get("questions")
     if questions is None:
@@ -93,6 +110,13 @@ def validate_json_bytes(raw: bytes) -> ValidationResult:
         if not isinstance(q, dict):
             errors.append(ValidationError(num, "question", "Must be a JSON object"))
             continue
+
+        for field in ("image_url", "explanation"):
+            if q.get(field) is not None and not isinstance(q[field], str):
+                errors.append(ValidationError(num, field, "Must be text or null"))
+        for field in ("source_id", "source_topic"):
+            if field in q and (not isinstance(q[field], str) or len(q[field]) > 500):
+                errors.append(ValidationError(num, field, "Must be text up to 500 characters"))
 
         # question text
         text = q.get("question", "")
@@ -144,7 +168,7 @@ def validate_json_bytes(raw: bytes) -> ValidationResult:
         if correct is None:
             errors.append(ValidationError(num, "correct_option", "Field is missing"))
             continue
-        if not isinstance(correct, int):
+        if type(correct) is not int:
             errors.append(ValidationError(
                 num, "correct_option",
                 f"Must be an integer; got {type(correct).__name__}"

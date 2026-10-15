@@ -11,16 +11,15 @@ Flow:
   User confirms → quiz_service.create_session + publish
 """
 
-import json
 import logging
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
 from app import state as db
-from app.config import ADMIN_USER_ID, MAX_JSON_SIZE_MB
+from app.config import MAX_JSON_SIZE_MB
 from app.services import json_validator
-from app.services.quiz_service import check_channel_permissions, create_session
+from app.services.quiz_service import check_channel_permissions
 from app.utils.helpers import admin_only
 
 logger = logging.getLogger(__name__)
@@ -79,12 +78,20 @@ async def document_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     ok, perm_msg = await check_channel_permissions(update.get_bot())
     perm_note = "" if ok else f"\n\n⚠️ {perm_msg}"
 
+    preferences = db.get_setting(f"topic:{update.effective_user.id}", {})
+    for key in ("topic", "study_date"):
+        if key not in data and key in preferences:
+            data[key] = preferences[key]
+    if "topic" in data:
+        data["quiz_title"] = data["topic"]
+
     # ── Store pending data in user_data ───────────────────────────────────
     context.user_data[PENDING_KEY] = data
 
     summary = (
         f"📄 JSON received.\n\n"
-        f"Quiz: {result.quiz_title}\n"
+        f"Quiz: {data['quiz_title']}\n"
+        f"Study date: {data.get('study_date', 'today')}\n"
         f"Questions: {result.question_count}\n"
         f"{f'Description: {result.description}' if result.description else ''}\n\n"
         f"✅ JSON validation successful.\n"

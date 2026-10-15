@@ -1,0 +1,15 @@
+{
+  "hub_id": "3fa16643-962f-811d-a7d2-ee7a062acb45",
+  "hub_url": "https://app.notion.com/p/3fa16643962f811da7d2ee7a062acb45",
+  "databases": {
+    "plan": "f2c3755c-22a7-46b8-a3c8-7b72c542c6eb",
+    "results": "663755de-b9f2-4e57-a7b2-91ec7bf3430a",
+    "questions": "adf24094-868e-4c68-825e-92371341340d"
+  },
+  "sources": {
+    "plan": "9fa88653-b60d-435d-8db6-070fa730b01b",
+    "results": "50be86f8-1e92-49ec-9930-05c71957332a",
+    "questions": "2d2aa5c0-3563-475e-af0e-0ae5d6820007"
+  },
+  "profile": "simple"
+}

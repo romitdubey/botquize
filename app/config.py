@@ -3,6 +3,7 @@ config.py – Central configuration loaded from environment variables.
 """
 
 import os
+import hashlib
 import logging
 
 try:
@@ -58,3 +59,15 @@ def validate_config() -> None:
         raise RuntimeError(
             "Missing required environment variables:\n" + "\n".join(f"  - {e}" for e in errors)
         )
+
+# Optional single learner; when absent each session binds to its first answerer.
+LEARNER_USER_ID: int = int(os.environ.get("LEARNER_USER_ID", "0"))
+STUDY_TIMEZONE: str = os.environ.get("STUDY_TIMEZONE", "Asia/Kolkata")
+NOTION_TOKEN: str = os.environ.get("NOTION_TOKEN", "")
+NOTION_PARENT_PAGE_ID: str = os.environ.get("NOTION_PARENT_PAGE_ID", "")
+NOTION_API_VERSION: str = "2025-09-03"
+
+# Telegram authenticates webhook deliveries with this token-derived secret by default.
+WEBHOOK_SECRET: str = os.environ.get("WEBHOOK_SECRET", "") or hashlib.sha256(
+    ("quizbot-webhook:" + BOT_TOKEN).encode()
+).hexdigest()

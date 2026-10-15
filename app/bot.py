@@ -9,9 +9,8 @@ Render maps $PORT → the FastAPI server.
 Telegram delivers updates via WEBHOOK_URL/webhook.
 """
 
-import asyncio
 import logging
-import os
+import secrets
 import sys
 
 import uvicorn
@@ -30,6 +29,7 @@ from app.config import (
     BOT_TOKEN,
     PORT,
     WEBHOOK_URL,
+    WEBHOOK_SECRET,
     validate_config,
 )
 from app import state as db
@@ -45,6 +45,8 @@ from app.handlers.commands import (
 from app.handlers.quiz import poll_answer_handler
 from app.handlers.start import help_command, start_command
 from app.handlers.upload import document_handler
+from app.handlers.tracking import (topic_command, plan_command, wrong_command, retryweek_command,
+    sync_command, notion_setup_command, backup_command)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,6 +54,7 @@ logging.basicConfig(
     stream=sys.stdout,
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # ─── Build the PTB Application ────────────────────────────────────────────────
 
@@ -70,6 +73,11 @@ def build_application() -> Application:
     app.add_handler(CommandHandler("review",  review_command))
     app.add_handler(CommandHandler("history", history_command))
     app.add_handler(CommandHandler("stats",   stats_command))
+
+    for name, handler in {"topic": topic_command, "plan": plan_command, "wrong": wrong_command,
+                          "retryweek": retryweek_command, "sync": sync_command,
+                          "notion_setup": notion_setup_command, "backup": backup_command}.items():
+        app.add_handler(CommandHandler(name, handler, block=name not in {"sync", "notion_setup"}))
 
     app.add_handler(MessageHandler(filters.Document.ALL, document_handler))
     app.add_handler(PollAnswerHandler(poll_answer_handler))
@@ -97,6 +105,8 @@ async def health():
 @fastapi_app.post("/webhook")
 async def webhook(request: Request):
     global ptb_app
+    if not secrets.compare_digest(request.headers.get("X-Telegram-Bot-Api-Secret-Token", ""), WEBHOOK_SECRET):
+        return Response(status_code=403)
     if ptb_app is None:
         return Response(status_code=503)
     data = await request.json()
@@ -117,6 +127,8 @@ async def startup():
         sys.exit(1)
 
     db.init_db()
+    # Published polls keep tracking after restart. For incomplete publication,
+    # operators can reset and upload again without silently duplicating polls.
 
     ptb_app = build_application()
     await ptb_app.initialize()
@@ -127,6 +139,7 @@ async def startup():
         try:
             await ptb_app.bot.set_webhook(
                 url=webhook_endpoint,
+                secret_token=WEBHOOK_SECRET,
                 allowed_updates=["message", "callback_query", "poll_answer"],
                 drop_pending_updates=False,
             )
