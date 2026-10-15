@@ -162,6 +162,12 @@ async def shutdown():
     logger.info("Bot shut down.")
 
 
+# Website administration is the default, including old Render/start commands.
+# Legacy poll behaviour is available only for explicitly opted-in old deployments.
+import os as _os
+if _os.getenv('LEGACY_TELEGRAM_POLLS', '').lower() != 'true':
+    from app.web.api import app as fastapi_app
+
 # ─── Entry point ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

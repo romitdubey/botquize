@@ -1,27 +1,23 @@
 services:
   - type: web
-    name: telegram-mcq-quiz-bot
+    name: study-grove
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.bot:fastapi_app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn app.web.api:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
     envVars:
       - key: BOT_TOKEN
-        sync: false          # Set manually in Render dashboard
+        sync: false
       - key: ADMIN_USER_ID
         sync: false
-      - key: CHANNEL_ID
+      - key: SUPABASE_URL
         sync: false
-      - key: WEBHOOK_URL
-        sync: false          # Set to https://<your-app-name>.onrender.com
-      - key: QUESTION_DELAY
-        value: "2"
-      - key: MAX_JSON_SIZE_MB
-        value: "10"
-      - key: REVIEW_PAGE_SIZE
-        value: "3"
-      - key: HISTORY_PAGE_SIZE
-        value: "5"
-    # Render free tier: service sleeps after inactivity.
-    # Consider using a free uptime service (e.g. UptimeRobot) to ping /health.
-    healthCheckPath: /health
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: STUDY_ALLOWED_EMAILS
+        sync: false
+      - key: APP_URL
+        sync: false

@@ -8,6 +8,8 @@ os.environ['CHANNEL_ID']='me'
 os.environ['LEARNER_USER_ID']='0'
 os.environ['NOTION_TOKEN']=''
 os.environ['NOTION_PARENT_PAGE_ID']=''
+# The historical handlers have regression tests; production defaults to the website.
+os.environ['LEGACY_TELEGRAM_POLLS']='true'
 
 
 @pytest.fixture(autouse=True)

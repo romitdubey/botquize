@@ -1,3 +1,11 @@
+# Mobile study website
+
+The current app is **Study Grove**: mobile study schedule, shared persistent timer, web tests/results/mistakes, and private Telegram administration backed by Supabase.
+
+**Start here: [WEBSITE_SETUP.md](WEBSITE_SETUP.md).** The configuration below documents the legacy Telegram-poll bot; use the new setup for this website.
+
+---
+
 > **Study tracking update:** SQLite persistence, topic/date labels, explicit Notion
 > sync, daily wrong-question JSON and Monday retries are implemented.
 > Start with [TRACKING_SETUP.md](TRACKING_SETUP.md) for the new commands and hosting
