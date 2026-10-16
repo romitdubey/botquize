@@ -1,14 +1,14 @@
 # Study Grove — mobile website + Telegram admin
 
-Everything is in this repository. The website replaces the Notion tracker and Telegram quiz polls. Supabase stores the questions, full explanations, attempts, study time and wrong-answer history. Vercel serves the frontend and Python API together.
+Everything is in this repository. The website replaces the Notion tracker and Telegram quiz polls. Supabase stores the questions, full explanations, attempts, quiz time and wrong-answer history. Vercel serves the frontend and Python API together.
 
 ## 1. Connect Supabase
 
-1. In your existing Supabase project, open **SQL Editor**, paste `supabase/schema.sql`, and run it. This creates three private tables and a private diagram bucket.
+1. In your existing Supabase project, open **SQL Editor**, paste `supabase/schema.sql`, and run it. This creates the private study tables and file buckets.
 2. Under **Authentication → Users**, create your friend's email/password account. Use the dashboard's create-user option with email confirmed. The website has sign-in only; no public sign-up screen.
 3. Copy the variables from `.env.web.example` into your local `.env`. Preserve your existing `BOT_TOKEN` and `ADMIN_USER_ID`.
 4. Get the project URL, public anon/publishable key, and server secret/service-role key from the Supabase project API settings. The server key must stay in `.env`/Vercel settings. It is never included in website JavaScript.
-5. Set `STUDY_ALLOWED_EMAILS` to your friend's exact login email. You can allow multiple emails separated by commas; each account has independent study records. For your own read-only mentor login, create a second Auth user, include both emails in `STUDY_ALLOWED_EMAILS`, set `STUDY_MENTOR_EMAIL` to your email and `STUDY_LEARNER_ID` to her Auth user UUID. You will see her timer, schedule and results while her login can study/take tests.
+5. Set `STUDY_ALLOWED_EMAILS` to your friend's exact login email. You can allow multiple emails separated by commas; each account has independent study records. For your own read-only mentor login, create a second Auth user, include both emails in `STUDY_ALLOWED_EMAILS`, set `STUDY_MENTOR_EMAIL` to your email and `STUDY_LEARNER_ID` to her Auth user UUID. You will see her quiz time, schedule and results while her login can study/take tests.
 
 The schema deliberately grants no direct anonymous/authenticated browser access to question keys or study tables. The API verifies the Supabase login and email allowlist before every request.
 
@@ -53,7 +53,6 @@ Upload the same JSON file as before:
 ```json
 {
   "quiz_title": "Enzymes and Coenzymes",
-  "duration_minutes": 45,
   "questions": [
     {
       "question": "Which statement is correct?",
@@ -66,11 +65,11 @@ Upload the same JSON file as before:
 }
 ```
 
-`correct_option` is **zero based**: 0=A, 1=B, 2=C, 3=D. `duration_minutes` is optional (default 90 seconds/question, minimum 10 minutes). Upload limits: 1–1,000 questions and 10 MB JSON, with bounded field lengths. Long questions/options/explanations remain intact.
+`correct_option` is **zero based**: 0=A, 1=B, 2=C, 3=D. Daily quizzes have **no deadline or question-count cap**. Upload limit: **10 MB per JSON file**, with bounded field lengths. An old `duration_minutes` field is accepted but ignored for daily practice. Long questions/options/explanations remain intact.
 
-The date labels the **study day**, not the date of upload. It is not an automatic release time. When she has studied the topic, use `/open` the following day. Until then the bank remains a private draft. No question is posted to a Telegram group/channel.
+The date labels the **study day**, not the date of upload. Use `/open` to approve the quiz. It becomes available no earlier than the following calendar day in India; you can approve it in advance. Until approval the bank remains a private draft. No question is posted to a Telegram group/channel.
 
-- `/image 12` → send the diagram/photo → it attaches to the **12th item in the uploaded array**. For best quality send as an image document. PNG/JPEG/WebP supported, max 10 MB. `/open` after adding diagrams.
+- `/image 12` → send the diagram/photo → it attaches to printed question **12** (use `/image #12` for the 12th array item). For best quality send as an image document. PNG/JPEG/WebP supported, max 10 MB. `/open` after adding diagrams.
 - A standalone diagram question: `/question {"question":"...","options":["A","B"],"correct_option":0,"explanation":"..."}` → send its image → `/open`. This creates a **separate one-question draft**, not an append to an already open test. Select `/topic` first.
 - `/tests` lists IDs. `/select ID` selects an older upload before `/image`, `/open` or `/close`.
 - `/close` prevents new attempts. An already started attempt can finish using its immutable question snapshot.
@@ -81,19 +80,20 @@ The date labels the **study day**, not the date of upload. It is not an automati
 
 Open the Vercel link, sign in, optionally **Add to Home Screen** from the phone browser.
 
-- **My day**: Start studying, choose the topic, pause when finished; mark today's study complete.
-- **Schedule**: all dates 16 October–10 December, with Saturday PYQ/Sunday mock and the original weekday topics. No book pages or implementation details in the study screens.
-- **Practice**: open tests, a live exam clock, question palette, review flags, autosaved answers, save-and-exit, and final submission.
-- **Results**: scores and every question's correct answer/explanation after submission. Score is 1 per correct answer and 0 otherwise. This is practice scoring, not the official variable CSIR section/negative-marking scheme.
-- **Mistakes**: all historically wrong submitted answers, with explanations and retry. Correct retries do not erase original mistakes or results.
+- **My day**: Vishu sees today's topic and can open its material. Marking studied asks “Vishu, padh liya na? 💚” before saving. There is no study timer.
+- **Schedule**: future days stay locked. Today and previous dates open their Material/Quiz tabs. PDFs/photos can be opened or downloaded; earlier material remains available. Only today's completion can be changed.
+- **Practice**: daily quizzes count active time upward, with no deadline or marks. Pause/Save & exit saves answers and time. Resume later, even another day. Completed quizzes open their saved result.
+- **Full PYQ exam**: a separate three-hour countdown, A/B/C section navigation, official attempt limits and negative marking. Leaving does not pause the deadline.
+- **Results**: daily accuracy/correct/wrong/skipped and active time; full exam marks out of 200 with section totals. Every submitted question retains its correct answer and explanation.
+- **Mistakes**: historical wrong answers and fresh practice retries. Retrying does not erase earlier results.
 
 The Monday retry is built automatically when the dashboard is first loaded for that week, using the previous **Monday through Friday in India time**, deduplicated by question. Saturday/Sunday test mistakes remain in the all-mistakes bank but are excluded from this weekday retry. Each Monday snapshot is created once; no Vercel paid cron is needed. No mistakes means no empty quiz.
 
-## Timer behaviour
+## Quiz timing
 
-Time saves to Supabase every 30 seconds and when paused, with time per topic recorded as well. Schedule → Study starts a focus session for that topic; the logged calendar day is always the actual day in India. It resumes from saved totals on another signed-in device. Hiding the tab/app pauses the study timer; reopening does not silently restart it. If a browser is killed/offline before a pause reaches the server, time is capped at the last successful heartbeat plus 90 seconds, and reconciled on the next visit. This avoids counting an abandoned timer all night. India-midnight sessions split into the correct daily totals. Marking 'studied' is separate from logged time.
+Daily practice saves active time every 20 seconds, on Pause, Save & exit, and submission. Hiding the tab/app pauses it; returning requires Resume. If a browser is killed/offline before the pause reaches the server, counting stops at the last successful heartbeat plus 60 seconds, reconciled on the next request. Multiple unfinished quizzes retain independent answers; starting/resuming another pauses the previous practice clock. Practice never auto-submits. Existing unfinished daily countdown attempts become resumable practice without losing answers; their previous active time cannot be reconstructed, so the new active clock starts at zero.
 
-Exam clocks continue when leaving a test. Only answers saved before its server deadline count; expired tests finalize on the next dashboard/attempt request. Submissions are idempotent. Answers and flags autosave; a failed save is visible and must be retried. Explanation keys never appear in active-test API responses.
+Full exams have a server-controlled **180-minute deadline** that continues outside the website. Expired attempts finalize on the next dashboard/attempt request, using saved answers only. An active full exam must finish before starting another test. Submissions are idempotent; correct keys and explanations remain private until submission.
 
 ## Notes
 
@@ -109,3 +109,90 @@ Validation:
 npm run check
 npm run build
 ```
+
+## Daily flow update: notes and date locks
+
+For an existing Supabase project, run **`supabase/002_daily_notes.sql`** once in the SQL Editor. New installations can use the full updated `schema.sql` instead. This adds a private notes table and a separate private PDF/photo bucket; it does not delete existing study data.
+
+In Telegram:
+
+```text
+/notes 2026-10-16 | Introduction to Biochemistry
+```
+
+Send one or more PDFs/photos (each up to 10 MB). They are attached to that study date. Then:
+
+```text
+/done
+/topic 2026-10-16 | Introduction to Biochemistry
+```
+
+Upload the normal quiz JSON, attach any diagrams with `/image NUMBER`, and use `/open`. `/open` approves publication; the quiz is hidden until **17 October India time**, the day after its study date. You may prepare notes and approve quizzes in advance. Correct answers/explanations are still hidden until submission.
+
+On the website, today's date opens Material and Quiz tabs, with a sweet study-completion confirmation. Future days are locked; earlier material and released quizzes remain accessible. No study timer is shown. The dashboard highlights yesterday's released topic quiz, today's PYQ and Monday retries. Older quizzes and results remain accessible.
+
+### If Telegram still targets Render
+
+Set local **and Vercel** `APP_URL=https://botquize.vercel.app` (or your production domain). Keep `BOT_TOKEN` and `WEBHOOK_SECRET` consistent locally and in Vercel. After redeploying:
+
+```bash
+.venv/bin/python scripts/check_webhook.py
+.venv/bin/python scripts/check_webhook.py --repair
+.venv/bin/python scripts/setup_webhook.py
+```
+
+The check validates the production endpoint with an empty authenticated update before switching. It reports delivery errors/pending updates without printing tokens and retains pending Telegram updates. `/start` and `/help` work even when the study database setup needs attention.
+
+## Bulk daily questions with any number of diagrams
+
+Your existing full-paper JSON uploads still work. `/bulk` explicitly enters JSON upload mode after setting `/topic DATE | Topic`. `correct_option` stays zero based; explanations remain intact. A sample is in `examples/diagram_paper.json`.
+
+For reliable image matching, include a **printed question number** in each question:
+
+```json
+{
+  "question_number": 12,
+  "question": "Identify X in the diagram.",
+  "options": ["A", "B", "C", "D"],
+  "correct_option": 2,
+  "explanation": "Full explanation.",
+  "image_url": ""
+}
+```
+
+After uploading the full JSON paper:
+
+```text
+/images
+```
+
+Send whichever diagram files your questions need as **documents** named `Q12.png`, `Q27.jpg`, `question_42.webp`, etc. Each filename identifies its question. You can send multiple individually named documents together. If sending compressed photos instead, put `Q12`, `Q27`, etc. in **each photo's caption**; one album caption does not label every image. `/image Q12` followed by a photo is another option.
+
+Numbering precedence is `question_number`, then `number`, then a numeric `id`, then a printed number such as `21. ...` at the beginning of the question text, otherwise the 1-based array position. If the printed number differs from its array position, use `Q59` for printed question 59 or `/image #12` for the 12th array item. Ambiguous duplicate numbers are rejected rather than guessing.
+
+Finish with `/done`, then `/open`. Only the questions that have images display a diagram between the question and its answer options. Unillustrated questions have no image placeholder. `/question {JSON}` creates a standalone draft question and attaches the next image to it.
+
+Run the **updated `supabase/002_daily_notes.sql`** once before using diagram attachments: it now also creates the private atomic image-attachment function. It is safe to rerun and preserves existing data. This prevents concurrent album uploads from replacing each other's question images. Existing attempts retain their original snapshots; attach diagrams before opening a test for learners.
+
+
+## Separate full PYQ upload
+
+Existing projects must run **`supabase/003_pyq_mode.sql`** after `002_daily_notes.sql`. It only extends the quiz type constraint; it does not remove study data. New projects can run the updated full `schema.sql` instead.
+
+```text
+/pyq 2026-10-17 | CSIR Life Sciences PYQ
+```
+
+Upload JSON in the **separate section format** shown in `examples/pyq_paper.json`:
+
+```json
+{"quiz_title":"Paper title","sections":{"A":["20 question objects"],"B":["50 question objects"],"C":["75 question objects"]}}
+```
+
+The strings above describe the arrays, not valid questions. The example file contains a complete, structurally valid **145-question sample template**; replace every sample with your actual paper. Each object uses `question_number`, `question`, four `options`, zero-based `correct_option`, and `explanation`, just like daily questions. Use unique numbers **1–145 across the whole paper**. Do not restart numbering at 1 in each section; this keeps diagram matching unambiguous.
+
+Then `/images` → send `Q7.png`, `Q83.jpg`, etc. (or captions Q7, Q83), `/done`, `/open`. The PYQ opens on its scheduled paper date, rather than the following day. Prepare/upload before opening so started attempts include every image. There is no image-count cap. Use `/topic DATE | Topic` to return to daily JSON format; `/bulk` preserves the current daily/PYQ upload selection.
+
+Official LS/BT pattern: A has 20 questions, evaluate first 15 answered (+2/−0.5); B has 50, first 35 (+2/−0.5); C has 75, first 25 (+4/−1). Total 200 marks, 180 minutes. Extra answered questions are excluded in **paper order**, not the order clicked. Unanswered/excluded questions earn zero; excluded answers are labelled separately and do not enter the wrong-answer bank. The UI shows answered/limit per section; review includes section scores. Daily and Monday retry quizzes have no marks/negative marking.
+
+Source: [NTA December 2026 Information Bulletin, scheme pp.18–19](https://cdnbbsr.s3waas.gov.in/s3efdf562ce2fb0ad460fd8e9d33e57f57/uploads/2026/10/202610071407707951.pdf). Verify future pattern changes against the relevant official bulletin before using this for another exam cycle. The sidebar counts down to the **10 December revision goal**, not an assumed exam date.

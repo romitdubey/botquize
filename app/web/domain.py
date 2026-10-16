@@ -5,6 +5,7 @@ import uuid
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from fastapi import HTTPException
+from app.web.attachments import question_number
 
 TZ = ZoneInfo('Asia/Kolkata')
 
@@ -18,8 +19,8 @@ def validate_bank(data, topic, study_date):
     except (ValueError, TypeError): raise HTTPException(400,'Use a study date like 2026-10-16.')
     if not isinstance(data,dict): raise HTTPException(400,'JSON must contain a questions array.')
     questions = data.get('questions')
-    if not isinstance(questions,list) or not 1 <= len(questions) <= 1000:
-        raise HTTPException(400,'Upload between 1 and 1,000 questions per test.')
+    if not isinstance(questions,list) or not questions:
+        raise HTTPException(400,'Upload a non-empty questions array.')
     title = topic or data.get('topic') or data.get('quiz_title') or 'Daily practice'
     if not isinstance(title,str) or not title.strip() or len(title)>500: raise HTTPException(400,'Invalid topic.')
     output=[]
@@ -37,13 +38,11 @@ def validate_bank(data, topic, study_date):
         if not isinstance(explanation,str) or len(explanation)>30000 or not isinstance(image,str) or len(image)>3000:
             raise HTTPException(400,f'Question {index}: invalid explanation/image.')
         identity=json.dumps([text,options,correct],ensure_ascii=False,separators=(',',':'))
-        output.append({'id':hashlib.sha256(identity.encode()).hexdigest()[:32], 'question':text,
+        output.append({'number':question_number(item,index-1),'id':hashlib.sha256(identity.encode()).hexdigest()[:32], 'question':text,
             'options':options,'correct_option':correct,'explanation':explanation,
             'image_url':image if image.startswith('https://') else '', 'image_path':'', 'topic':title.strip()})
-    duration=data.get('duration_minutes',max(10,len(output)*1.5))
-    if isinstance(duration,bool) or not isinstance(duration,(float,int)) or not 1<=duration<=360:
-        raise HTTPException(400,'duration_minutes must be between 1 and 360.')
-    key=json.dumps([day.isoformat(),title,[(q['id'],q['explanation'],q['image_url']) for q in output]],ensure_ascii=False)
+    duration=180  # Compatibility storage field; daily practice has no time limit.
+    key=json.dumps([day.isoformat(),title,[(q['id'],q['number'],q['explanation'],q['image_url']) for q in output]],ensure_ascii=False)
     return {'id':str(uuid.uuid5(uuid.NAMESPACE_URL,key)), 'study_date':day.isoformat(),
         'topic':title.strip(),'description':str(data.get('description',''))[:5000],
         'questions':output,'duration_seconds':int(duration*60),'status':'draft','kind':'daily','owner_id':None}
@@ -52,14 +51,77 @@ def visible_quiz(quiz):
     return {k:quiz.get(k) for k in ('id','study_date','topic','description','status','kind','duration_seconds')} | {'count':len(quiz['questions'])}
 
 def question_public(question):
-    return {k:question.get(k,'') for k in ('id','question','options','image_url','image_path','topic')}
+    return {k:question.get(k,'') for k in ('id','number','question','options','image_url','image_path','topic','section')}
+
+SECTIONS = {'A': {'count':20,'limit':15,'correct':2,'wrong':0.5},
+            'B': {'count':50,'limit':35,'correct':2,'wrong':0.5},
+            'C': {'count':75,'limit':25,'correct':4,'wrong':1}}
+
+def validate_pyq(data, topic, study_date):
+    if not isinstance(data,dict) or not isinstance(data.get('sections'),dict):
+        raise HTTPException(400,'PYQ JSON needs sections with arrays A (20), B (50), C (75).')
+    flattened=[]
+    for section,rules in SECTIONS.items():
+        items=data['sections'].get(section)
+        if not isinstance(items,list) or len(items)!=rules['count']:
+            raise HTTPException(400,f"Part {section} needs exactly {rules['count']} questions for a full CSIR paper.")
+        for item in items:
+            if not isinstance(item,dict):raise HTTPException(400,'Each PYQ question must be an object.')
+            flattened.append({**item,'number':item.get('question_number',item.get('number',len(flattened)+1)),'section':section})
+    bank=validate_bank({**data,'questions':flattened},topic,study_date)
+    for q,item in zip(bank['questions'],flattened):
+        if len(q['options'])!=4:raise HTTPException(400,'Each PYQ question needs four options and one correct_option.')
+        q['section']=item['section']
+    if len({q['number'] for q in bank['questions']})!=145:
+        raise HTTPException(400,'Use unique question numbers across all three sections (for example 1–145).')
+    bank.update(kind='pyq',duration_seconds=10800,id=str(uuid.uuid5(uuid.NAMESPACE_URL,'pyq:'+bank['id'])))
+    return bank
+
+def practice_clock(attempt, stamp, pause=False):
+    """Persist active time only; an abandoned tab cannot accumulate hours."""
+    attempt.setdefault('elapsed_seconds',0)
+    start=attempt.get('running_since')
+    if start:
+        end=min(stamp,parsed(attempt.get('heartbeat_at',start))+timedelta(seconds=60))
+        attempt['elapsed_seconds']+=max(0,(end-parsed(start)).total_seconds())
+        attempt['running_since']=None if pause else iso(stamp)
+        attempt['heartbeat_at']=iso(stamp)
+    return attempt
+
+def reconcile_attempt(attempt,stamp):
+    if attempt.get('submitted_at'):return
+    if attempt.get('kind')=='pyq':
+        if parsed(attempt['deadline'])<=stamp:finish(attempt,parsed(attempt['deadline']))
+    else:
+        # Upgrade existing daily attempts without losing their answers; old countdowns no longer apply.
+        attempt['deadline']=None
+        attempt.setdefault('elapsed_seconds',0)
+        if attempt.get('running_since') and stamp>parsed(attempt.get('heartbeat_at',attempt['running_since']))+timedelta(seconds=60):
+            practice_clock(attempt,stamp,pause=True)
 
 def finish(attempt, stamp):
     if attempt.get('submitted_at'): return
+    exam=attempt.get('kind')=='pyq'
+    if not exam:practice_clock(attempt,stamp,pause=True)
+    else:attempt['elapsed_seconds']=max(0,(stamp-parsed(attempt['started_at'])).total_seconds())
     attempt['submitted_at']=iso(stamp)
-    attempt['correct']=sum(attempt['answers'].get(str(i))==q['correct_option'] for i,q in enumerate(attempt['questions']))
-    attempt['wrong']=sum(str(i) in attempt['answers'] and attempt['answers'][str(i)]!=q['correct_option'] for i,q in enumerate(attempt['questions']))
-    attempt['skipped']=len(attempt['questions'])-attempt['correct']-attempt['wrong']
+    selected={i for i in range(len(attempt['questions'])) if str(i) in attempt['answers']}
+    evaluated=set(selected); sections={};score=0
+    if exam:
+        evaluated=set()
+        for section,rules in SECTIONS.items():
+            indices=[i for i,q in enumerate(attempt['questions']) if q.get('section')==section]
+            answered=[i for i in indices if i in selected]
+            chosen=answered[:rules['limit']];evaluated.update(chosen)
+            correct=sum(attempt['answers'][str(i)]==attempt['questions'][i]['correct_option'] for i in chosen)
+            wrong=len(chosen)-correct
+            marks=correct*rules['correct']-wrong*rules['wrong'];score+=marks
+            sections[section]={'answered':len(answered),'evaluated':len(chosen),'correct':correct,'wrong':wrong,'score':marks,'excluded':len(answered)-len(chosen),'limit':rules['limit']}
+        attempt.update(score=score,max_score=200,section_results=sections,excluded_indices=sorted(selected-evaluated))
+    attempt['correct']=sum(attempt['answers'][str(i)]==attempt['questions'][i]['correct_option'] for i in evaluated)
+    attempt['wrong']=len(evaluated)-attempt['correct']
+    attempt['skipped']=len(attempt['questions'])-len(selected)
+    attempt['excluded']=len(selected-evaluated)
 
 def mistakes(data, start=None, end=None):
     result={}
@@ -69,7 +131,7 @@ def mistakes(data, start=None, end=None):
         if start and not start<=stamp.date()<end: continue
         for index, q in enumerate(attempt['questions']):
             answer=attempt['answers'].get(str(index))
-            if answer is not None and answer!=q['correct_option']:
+            if index not in attempt.get('excluded_indices',[]) and answer is not None and answer!=q['correct_option']:
                 previous=result.get(q['id'],{})
                 result[q['id']]={**q,'your_answer':answer,'last_wrong':attempt['submitted_at'],
                     'times_wrong':previous.get('times_wrong',0)+1}

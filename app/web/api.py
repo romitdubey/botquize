@@ -4,7 +4,7 @@ import logging
 import os
 import secrets
 import uuid
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -13,8 +13,9 @@ from pydantic import BaseModel, Field
 from app.config import BOT_TOKEN, WEBHOOK_SECRET
 from app.services.planner import plan_rows
 from app.web.store import Store
+from app.web.daily import scheduled_day, today_topic, require_today, release_day, is_released
 from app.web.domain import (now, iso, parsed, today, visible_quiz, question_public, finish,
-                           mistakes, monday_window, settle_timer)
+                           mistakes, monday_window, TZ, practice_clock, reconcile_attempt)
 
 app=FastAPI(title='Life Science Study', docs_url=None, redoc_url=None)
 store=Store()
@@ -75,11 +76,7 @@ async def reconcile(user_id):
     stamp=now()
     def action(data):
         for attempt in data.get('attempts',{}).values():
-            if not attempt.get('submitted_at') and parsed(attempt['deadline'])<=stamp:
-                finish(attempt,parsed(attempt['deadline']))
-        timer=data.get('timer',{})
-        if timer.get('running_since') and stamp>parsed(timer['heartbeat_at'])+timedelta(seconds=90):
-            settle_timer(data,stamp)
+            reconcile_attempt(attempt,stamp)
         return copy.deepcopy(data)
     return await store.mutate(user_id,action)
 
@@ -94,23 +91,33 @@ async def dashboard(user=Depends(learner)):
     data=await reconcile(user['id'])
     await weekly(user['id'],data)
     quizzes=await store.quizzes()
-    quizzes=[q for q in quizzes if (not q.get('owner_id') or q['owner_id']==user['id']) and q['status']=='open']
+    quizzes=[q for q in quizzes if (not q.get('owner_id') or q['owner_id']==user['id']) and is_released(q,today())]
     attempts=[{k:v for k,v in a.items() if k not in ('questions','answers','flags')} | {'count':len(a['questions'])}
               for a in data.get('attempts',{}).values()]
     schedule=[{k:v for k,v in r.items() if k not in ('pages','page_start','page_end','key','week')} for r in plan_rows()]
-    return {'user':{'email':user.get('email'),'id':user['id'],'read_only':user.get('read_only',False)}, 'today':today().isoformat(),
-        'schedule':schedule,'days':data.get('days',{}),'timer':data.get('timer',{}),
-        'quizzes':[visible_quiz(q) for q in quizzes], 'attempts':attempts,
+    return {'user':{'email':user.get('email'),'id':user['id'],'name':'Vishu','read_only':user.get('read_only',False)}, 'today':today().isoformat(),
+        'schedule':schedule,'days':data.get('days',{}),
+        'quizzes':[visible_quiz(q) | {'release_date':release_day(q).isoformat()} for q in quizzes], 'attempts':attempts,
         'mistake_count':len(mistakes(data))}
+
+@app.get('/api/days/{day}')
+async def day_detail(day:str,user=Depends(learner)):
+    row=scheduled_day(day)
+    if day>today().isoformat():raise HTTPException(403,'This study day opens on its scheduled date.')
+    notes=await store.notes(day)
+    urls=await store.signed_urls('study-notes',[n['path'] for n in notes])
+    notes=[{k:v for k,v in n.items() if k!='path'} | {'url':urls.get(n['path'],'')} for n in notes]
+    banks=await store.quizzes(study_date='eq.'+day)
+    quizzes=[visible_quiz(q) | {'release_date':release_day(q).isoformat(),'available':is_released(q,today())}
+             for q in banks if q['status']=='open' and not q.get('owner_id')]
+    return {'day':row,'notes':notes,'quizzes':quizzes,'editable':day==today().isoformat() and not user.get('read_only')}
 
 class DayUpdate(BaseModel):
     studied: bool
 
 @app.put('/api/days/{day}')
 async def update_day(day:str, payload:DayUpdate,user=Depends(participant)):
-    from datetime import date
-    try: date.fromisoformat(day)
-    except ValueError: raise HTTPException(400,'Invalid date.')
+    require_today(day,today())
     def action(data):
         record=data.setdefault('days',{}).setdefault(day,{})
         record['studied']=payload.studied
@@ -123,26 +130,11 @@ class TimerUpdate(BaseModel):
 
 @app.post('/api/timer')
 async def timer(payload:TimerUpdate,user=Depends(participant)):
-    if payload.action not in ('start','pause','heartbeat'): raise HTTPException(400,'Invalid timer action.')
-    stamp=now()
-    def action(data):
-        timer=data.setdefault('timer',{})
-        if payload.action=='heartbeat':
-            if timer.get('running_since'):
-                if stamp>parsed(timer['heartbeat_at'])+timedelta(seconds=90):
-                    settle_timer(data,stamp)
-                else:
-                    settle_timer(data,stamp)
-                    timer.update(running_since=iso(stamp),heartbeat_at=iso(stamp))
-        elif payload.action=='pause': settle_timer(data,stamp)
-        elif not timer.get('running_since'):
-            timer.update(running_since=iso(stamp),heartbeat_at=iso(stamp),topic=payload.topic)
-        return {'timer':timer,'days':data.get('days',{})}
-    return await store.mutate(user['id'],action)
+    raise HTTPException(410,'Study timers have been removed. Practice time is saved inside each quiz.')
 
 async def accessible_quiz(quiz_id,user_id):
     quiz=await store.quiz(quiz_id)
-    if quiz['status']!='open' or (quiz.get('owner_id') and quiz['owner_id']!=user_id):
+    if not is_released(quiz,today()) or (quiz.get('owner_id') and quiz['owner_id']!=user_id):
         raise HTTPException(403,'This test has not been opened yet.')
     return quiz
 
@@ -160,14 +152,18 @@ async def start_attempt(quiz_id:str,user=Depends(participant)):
     stamp=now(); attempt_id=str(uuid.uuid4())
     def action(data):
         attempts=data.setdefault('attempts',{})
+        for old in attempts.values():reconcile_attempt(old,stamp)
+        matching=[a for a in attempts.values() if a['quiz_id']==quiz_id]
+        if matching:
+            return copy.deepcopy(next((a for a in matching if not a.get('submitted_at')),matching[-1]))
         for old in attempts.values():
             if not old.get('submitted_at'):
-                if parsed(old['deadline'])<=stamp: finish(old,parsed(old['deadline']))
-                elif old['quiz_id']==quiz_id: return copy.deepcopy(old)
-                else: raise HTTPException(409,'Finish your current test before starting another.')
+                if old.get('kind')=='pyq':raise HTTPException(409,'Your full exam is running. Finish it before opening another quiz.')
+                practice_clock(old,stamp,pause=True)
         record={'id':attempt_id,'quiz_id':quiz_id,'topic':quiz['topic'],'kind':quiz['kind'],
             'study_date':quiz['study_date'],'started_at':iso(stamp),
-            'deadline':iso(stamp+timedelta(seconds=quiz['duration_seconds'])),
+            'deadline':iso(stamp+timedelta(seconds=10800)) if quiz['kind']=='pyq' else None,
+            'elapsed_seconds':0,'running_since':iso(stamp) if quiz['kind']!='pyq' else None,'heartbeat_at':iso(stamp),
             'questions':copy.deepcopy(quiz['questions']),'answers':{},'flags':[],'submitted_at':None}
         attempts[attempt_id]=record
         return copy.deepcopy(record)
@@ -181,7 +177,7 @@ async def get_attempt(attempt_id:str,user=Depends(learner)):
     return await present_attempt(attempt)
 
 class AnswerUpdate(BaseModel):
-    index: int=Field(ge=0,le=1000)
+    index: int=Field(ge=0)
     answer: int | None=None
     flagged: bool=False
 
@@ -191,9 +187,11 @@ async def save_answer(attempt_id:str,payload:AnswerUpdate,user=Depends(participa
     def action(data):
         a=data.get('attempts',{}).get(attempt_id)
         if not a: raise HTTPException(404,'Attempt not found.')
+        reconcile_attempt(a,stamp)
         if a.get('submitted_at'): return {'submitted':True}
-        if stamp>=parsed(a['deadline']):
+        if a.get('kind')=='pyq' and stamp>=parsed(a['deadline']):
             finish(a,parsed(a['deadline']));return {'submitted':True}
+        if a.get('kind')!='pyq' and not a.get('running_since'):raise HTTPException(409,'Resume your quiz before answering.')
         if payload.index>=len(a['questions']): raise HTTPException(400,'Invalid question number.')
         if payload.answer is not None and not 0<=payload.answer<len(a['questions'][payload.index]['options']):
             raise HTTPException(400,'Invalid answer.')
@@ -213,7 +211,31 @@ async def submit_attempt(attempt_id:str,user=Depends(participant)):
     def action(data):
         a=data.get('attempts',{}).get(attempt_id)
         if not a: raise HTTPException(404,'Attempt not found.')
-        finish(a,min(stamp,parsed(a['deadline'])))
+        finish(a,min(stamp,parsed(a['deadline'])) if a.get('kind')=='pyq' else stamp)
+        return copy.deepcopy(a)
+    return await present_attempt(await store.mutate(user['id'],action))
+
+class ClockUpdate(BaseModel):
+    action:str
+
+@app.post('/api/attempts/{attempt_id}/clock')
+async def attempt_clock(attempt_id:str,payload:ClockUpdate,user=Depends(participant)):
+    if payload.action not in ('pause','resume','heartbeat'):raise HTTPException(400,'Invalid clock action.')
+    stamp=now()
+    def action(data):
+        attempts=data.get('attempts',{});a=attempts.get(attempt_id)
+        if not a:raise HTTPException(404,'Attempt not found.')
+        if a.get('kind')=='pyq':raise HTTPException(400,'Full exams cannot be paused. The three-hour clock continues.')
+        reconcile_attempt(a,stamp)
+        if a.get('submitted_at'):return copy.deepcopy(a)
+        if payload.action=='resume':
+            for other in attempts.values():
+                if other is a or other.get('submitted_at'):continue
+                reconcile_attempt(other,stamp)
+                if other.get('kind')=='pyq' and not other.get('submitted_at'):raise HTTPException(409,'Finish your running full exam first.')
+                practice_clock(other,stamp,pause=True)
+            if not a.get('running_since'):a.update(running_since=iso(stamp),heartbeat_at=iso(stamp))
+        else:practice_clock(a,stamp,pause=payload.action=='pause')
         return copy.deepcopy(a)
     return await present_attempt(await store.mutate(user['id'],action))
 
@@ -256,5 +278,5 @@ WEB_ROOT=Path(__file__).resolve().parents[2]/'web'
 async def index(): return FileResponse(WEB_ROOT/'index.html')
 @app.get('/{asset}')
 async def asset(asset:str):
-    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg'): raise HTTPException(404)
+    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg','sample-notes.svg','sample-diagram.svg'): raise HTTPException(404)
     return FileResponse(WEB_ROOT/asset)

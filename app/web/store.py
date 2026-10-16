@@ -23,7 +23,26 @@ class Store:
                                             params=params, json=body, headers=auth)
         if response.status_code >= 400:
             # Never return upstream messages/credentials to clients or Telegram.
-            raise HTTPException(503, 'Study storage is temporarily unavailable. Check the database setup.')
+            try:
+                error = response.json()
+                code = error.get('code', '') if isinstance(error, dict) else ''
+            except ValueError:
+                code = ''
+            if code == 'PGRST202':
+                detail = 'The database update is missing. Run supabase/002_daily_notes.sql in the Supabase SQL Editor.'
+            elif code in ('PGRST205', '42P01'):
+                detail = 'Study tables are missing. Run supabase/schema.sql in the Supabase SQL Editor for this project.'
+            elif response.status_code == 401 and code != '42501':
+                detail = 'The backend database key was rejected. Check SUPABASE_SERVICE_ROLE_KEY and SUPABASE_URL in Vercel, then redeploy.'
+            elif response.status_code == 403 or code == '42501':
+                detail = 'The backend cannot access study tables. Use the server secret/service-role key and run supabase/schema.sql; do not disable RLS.'
+            elif code == '23514' and resource=='study_quizzes' and isinstance(body,dict) and body.get('kind')=='pyq':
+                detail = 'Full exam mode needs the database update. Run supabase/003_pyq_mode.sql in the Supabase SQL Editor.'
+            elif code == '23503':
+                detail = 'The learner account ID is not in this Supabase project. Check STUDY_LEARNER_ID against Authentication > Users.'
+            else:
+                detail = 'Study storage is temporarily unavailable. Check the database setup.'
+            raise HTTPException(503, detail)
         return response.json() if response.content else None
 
     async def quizzes(self, **filters):
@@ -73,11 +92,34 @@ class Store:
         return path
 
     async def image_urls(self, paths):
+        return await self.signed_urls('question-images', paths)
+
+    async def signed_urls(self, bucket, paths):
         paths=list(set(paths))
         if not paths: return {}
         async with httpx.AsyncClient(timeout=20) as client:
-            response=await client.post(self.url+'/storage/v1/object/sign/question-images',
+            response=await client.post(self.url+'/storage/v1/object/sign/'+bucket,
                 json={'expiresIn':28800,'paths':paths}, headers=self.headers())
         if response.status_code >= 400: raise HTTPException(503, 'Could not load question diagrams. Please try again.')
         return {item['path']:self.url+'/storage/v1'+item['signedURL']
                 for item in response.json() if item.get('path') and item.get('signedURL')}
+
+    async def notes(self, day):
+        return await self.request('GET','study_notes',params={'select':'*','study_date':'eq.'+day,'order':'created_at.asc'})
+
+    async def put_note(self, row):
+        return await self.request('POST','study_notes',body=row,params={'on_conflict':'id'},
+            headers={'Prefer':'resolution=ignore-duplicates,return=representation'})
+
+    async def upload_note(self, path, content, mime):
+        async with httpx.AsyncClient(timeout=25) as client:
+            response=await client.post(self.url+'/storage/v1/object/study-notes/'+path,
+                content=content,headers={**self.headers(),'Content-Type':mime,'x-upsert':'true'})
+        if response.status_code>=400:
+            raise HTTPException(503,'Notes storage is unavailable. Run supabase/002_daily_notes.sql in the SQL Editor.')
+        return path
+
+    async def attach_image(self, quiz_id, index, path):
+        updated=await self.request('POST','rpc/study_attach_image',body={
+            'p_quiz_id':quiz_id,'p_index':index,'p_path':path})
+        if not updated:raise HTTPException(404,'The selected question no longer exists in this test.')

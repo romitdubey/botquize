@@ -1,0 +1,20 @@
+{
+  "quiz_title": "Example paper with a diagram question",
+  "questions": [
+    {
+      "question_number": 1,
+      "question": "Which organelle contains the electron transport chain in a eukaryotic cell?",
+      "options": ["Golgi apparatus", "Mitochondrion", "Lysosome", "Nucleus"],
+      "correct_option": 1,
+      "explanation": "The respiratory electron transport chain is located in the inner mitochondrial membrane."
+    },
+    {
+      "question_number": 12,
+      "question": "Identify the structure marked X in the attached diagram.",
+      "options": ["Structure A", "Structure B", "Structure C", "Structure D"],
+      "correct_option": 2,
+      "explanation": "Replace this example question and explanation with the actual diagram and answer.",
+      "image_url": ""
+    }
+  ]
+}

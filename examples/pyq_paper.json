@@ -1,0 +1,1896 @@
+{
+  "quiz_title": "SAMPLE TEMPLATE \u2014 replace all questions and answer keys",
+  "sections": {
+    "A": [
+      {
+        "question_number": 1,
+        "question": "REPLACE SAMPLE 1: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 2,
+        "question": "REPLACE SAMPLE 2: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 3,
+        "question": "REPLACE SAMPLE 3: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 4,
+        "question": "REPLACE SAMPLE 4: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 5,
+        "question": "REPLACE SAMPLE 5: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 6,
+        "question": "REPLACE SAMPLE 6: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 7,
+        "question": "REPLACE SAMPLE 7: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 8,
+        "question": "REPLACE SAMPLE 8: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 9,
+        "question": "REPLACE SAMPLE 9: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 10,
+        "question": "REPLACE SAMPLE 10: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 11,
+        "question": "REPLACE SAMPLE 11: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 12,
+        "question": "REPLACE SAMPLE 12: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 13,
+        "question": "REPLACE SAMPLE 13: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 14,
+        "question": "REPLACE SAMPLE 14: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 15,
+        "question": "REPLACE SAMPLE 15: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 16,
+        "question": "REPLACE SAMPLE 16: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 17,
+        "question": "REPLACE SAMPLE 17: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 18,
+        "question": "REPLACE SAMPLE 18: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 19,
+        "question": "REPLACE SAMPLE 19: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 20,
+        "question": "REPLACE SAMPLE 20: insert actual Part A question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      }
+    ],
+    "B": [
+      {
+        "question_number": 21,
+        "question": "REPLACE SAMPLE 21: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 22,
+        "question": "REPLACE SAMPLE 22: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 23,
+        "question": "REPLACE SAMPLE 23: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 24,
+        "question": "REPLACE SAMPLE 24: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 25,
+        "question": "REPLACE SAMPLE 25: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 26,
+        "question": "REPLACE SAMPLE 26: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 27,
+        "question": "REPLACE SAMPLE 27: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 28,
+        "question": "REPLACE SAMPLE 28: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 29,
+        "question": "REPLACE SAMPLE 29: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 30,
+        "question": "REPLACE SAMPLE 30: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 31,
+        "question": "REPLACE SAMPLE 31: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 32,
+        "question": "REPLACE SAMPLE 32: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 33,
+        "question": "REPLACE SAMPLE 33: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 34,
+        "question": "REPLACE SAMPLE 34: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 35,
+        "question": "REPLACE SAMPLE 35: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 36,
+        "question": "REPLACE SAMPLE 36: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 37,
+        "question": "REPLACE SAMPLE 37: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 38,
+        "question": "REPLACE SAMPLE 38: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 39,
+        "question": "REPLACE SAMPLE 39: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 40,
+        "question": "REPLACE SAMPLE 40: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 41,
+        "question": "REPLACE SAMPLE 41: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 42,
+        "question": "REPLACE SAMPLE 42: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 43,
+        "question": "REPLACE SAMPLE 43: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 44,
+        "question": "REPLACE SAMPLE 44: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 45,
+        "question": "REPLACE SAMPLE 45: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 46,
+        "question": "REPLACE SAMPLE 46: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 47,
+        "question": "REPLACE SAMPLE 47: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 48,
+        "question": "REPLACE SAMPLE 48: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 49,
+        "question": "REPLACE SAMPLE 49: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 50,
+        "question": "REPLACE SAMPLE 50: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 51,
+        "question": "REPLACE SAMPLE 51: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 52,
+        "question": "REPLACE SAMPLE 52: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 53,
+        "question": "REPLACE SAMPLE 53: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 54,
+        "question": "REPLACE SAMPLE 54: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 55,
+        "question": "REPLACE SAMPLE 55: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 56,
+        "question": "REPLACE SAMPLE 56: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 57,
+        "question": "REPLACE SAMPLE 57: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 58,
+        "question": "REPLACE SAMPLE 58: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 59,
+        "question": "REPLACE SAMPLE 59: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 60,
+        "question": "REPLACE SAMPLE 60: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 61,
+        "question": "REPLACE SAMPLE 61: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 62,
+        "question": "REPLACE SAMPLE 62: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 63,
+        "question": "REPLACE SAMPLE 63: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 64,
+        "question": "REPLACE SAMPLE 64: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 65,
+        "question": "REPLACE SAMPLE 65: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 66,
+        "question": "REPLACE SAMPLE 66: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 67,
+        "question": "REPLACE SAMPLE 67: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 68,
+        "question": "REPLACE SAMPLE 68: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 69,
+        "question": "REPLACE SAMPLE 69: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 70,
+        "question": "REPLACE SAMPLE 70: insert actual Part B question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      }
+    ],
+    "C": [
+      {
+        "question_number": 71,
+        "question": "REPLACE SAMPLE 71: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 72,
+        "question": "REPLACE SAMPLE 72: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 73,
+        "question": "REPLACE SAMPLE 73: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 74,
+        "question": "REPLACE SAMPLE 74: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 75,
+        "question": "REPLACE SAMPLE 75: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 76,
+        "question": "REPLACE SAMPLE 76: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 77,
+        "question": "REPLACE SAMPLE 77: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 78,
+        "question": "REPLACE SAMPLE 78: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 79,
+        "question": "REPLACE SAMPLE 79: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 80,
+        "question": "REPLACE SAMPLE 80: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 81,
+        "question": "REPLACE SAMPLE 81: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 82,
+        "question": "REPLACE SAMPLE 82: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 83,
+        "question": "REPLACE SAMPLE 83: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 84,
+        "question": "REPLACE SAMPLE 84: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 85,
+        "question": "REPLACE SAMPLE 85: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 86,
+        "question": "REPLACE SAMPLE 86: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 87,
+        "question": "REPLACE SAMPLE 87: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 88,
+        "question": "REPLACE SAMPLE 88: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 89,
+        "question": "REPLACE SAMPLE 89: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 90,
+        "question": "REPLACE SAMPLE 90: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 91,
+        "question": "REPLACE SAMPLE 91: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 92,
+        "question": "REPLACE SAMPLE 92: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 93,
+        "question": "REPLACE SAMPLE 93: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 94,
+        "question": "REPLACE SAMPLE 94: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 95,
+        "question": "REPLACE SAMPLE 95: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 96,
+        "question": "REPLACE SAMPLE 96: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 97,
+        "question": "REPLACE SAMPLE 97: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 98,
+        "question": "REPLACE SAMPLE 98: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 99,
+        "question": "REPLACE SAMPLE 99: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 100,
+        "question": "REPLACE SAMPLE 100: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 101,
+        "question": "REPLACE SAMPLE 101: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 102,
+        "question": "REPLACE SAMPLE 102: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 103,
+        "question": "REPLACE SAMPLE 103: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 104,
+        "question": "REPLACE SAMPLE 104: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 105,
+        "question": "REPLACE SAMPLE 105: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 106,
+        "question": "REPLACE SAMPLE 106: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 107,
+        "question": "REPLACE SAMPLE 107: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 108,
+        "question": "REPLACE SAMPLE 108: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 109,
+        "question": "REPLACE SAMPLE 109: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 110,
+        "question": "REPLACE SAMPLE 110: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 111,
+        "question": "REPLACE SAMPLE 111: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 112,
+        "question": "REPLACE SAMPLE 112: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 113,
+        "question": "REPLACE SAMPLE 113: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 114,
+        "question": "REPLACE SAMPLE 114: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 115,
+        "question": "REPLACE SAMPLE 115: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 116,
+        "question": "REPLACE SAMPLE 116: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 117,
+        "question": "REPLACE SAMPLE 117: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 118,
+        "question": "REPLACE SAMPLE 118: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 119,
+        "question": "REPLACE SAMPLE 119: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 120,
+        "question": "REPLACE SAMPLE 120: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 121,
+        "question": "REPLACE SAMPLE 121: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 122,
+        "question": "REPLACE SAMPLE 122: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 123,
+        "question": "REPLACE SAMPLE 123: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 124,
+        "question": "REPLACE SAMPLE 124: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 125,
+        "question": "REPLACE SAMPLE 125: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 126,
+        "question": "REPLACE SAMPLE 126: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 127,
+        "question": "REPLACE SAMPLE 127: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 128,
+        "question": "REPLACE SAMPLE 128: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 129,
+        "question": "REPLACE SAMPLE 129: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 130,
+        "question": "REPLACE SAMPLE 130: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 131,
+        "question": "REPLACE SAMPLE 131: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 132,
+        "question": "REPLACE SAMPLE 132: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 133,
+        "question": "REPLACE SAMPLE 133: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 134,
+        "question": "REPLACE SAMPLE 134: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 135,
+        "question": "REPLACE SAMPLE 135: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 136,
+        "question": "REPLACE SAMPLE 136: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 137,
+        "question": "REPLACE SAMPLE 137: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 138,
+        "question": "REPLACE SAMPLE 138: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 139,
+        "question": "REPLACE SAMPLE 139: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 140,
+        "question": "REPLACE SAMPLE 140: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 141,
+        "question": "REPLACE SAMPLE 141: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 142,
+        "question": "REPLACE SAMPLE 142: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 143,
+        "question": "REPLACE SAMPLE 143: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 144,
+        "question": "REPLACE SAMPLE 144: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      },
+      {
+        "question_number": 145,
+        "question": "REPLACE SAMPLE 145: insert actual Part C question.",
+        "options": [
+          "Replace option A",
+          "Replace option B",
+          "Replace option C",
+          "Replace option D"
+        ],
+        "correct_option": 0,
+        "explanation": "REPLACE with the actual explanation.",
+        "image_url": ""
+      }
+    ]
+  }
+}
