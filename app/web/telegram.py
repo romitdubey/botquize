@@ -7,12 +7,19 @@ from datetime import date
 import httpx
 from fastapi import HTTPException
 from app.config import BOT_TOKEN, ADMIN_USER_IDS
+from app.web.accounts import scoped_quiz, copy_content
 from app.web.domain import validate_bank, validate_pyq, today
 from app.web.daily import scheduled_day, release_day
 from app.web.attachments import attachment_number, resolve_question, question_number
 from app.services.planner import plan_rows
 
 HELP='''🌿 Study desk — admin controls
+
+/account me your@email.com — bind/select your test login
+/account vishu her@email.com — bind/select Vishu’s login
+/account me or /account vishu — switch upload destination
+/copyto vishu — copy selected quiz + that day’s notes as drafts, without results
+Select the destination BEFORE uploading. Switching clears the current selection.
 
 /topic 2026-10-16 | Enzymes
 Set the study day + topic for your next JSON upload. Then send your usual JSON file. It is saved as a draft; all explanations are preserved.
@@ -75,6 +82,42 @@ async def handle_update(update,store):
             def action(data): data.update(fields)
             await store.mutate(user,action,admin=True)
             state.update(fields)
+        async def selected_quiz(quiz_id=None):
+            if not (quiz_id or state.get('quiz_id')):raise HTTPException(400,'Upload a JSON file or /select a test first.')
+            quiz=await store.quiz(quiz_id or state['quiz_id'])
+            if quiz.get('kind') not in ('daily','pyq'):raise HTTPException(400,'Personal mistake retries cannot be edited or copied.')
+            target=state.get('target_user_id')
+            if target and quiz.get('owner_id')!=target and not (not quiz.get('owner_id') and state.get('target_alias')=='vishu'):raise HTTPException(403,'This quiz belongs to another account. Switch /account first.')
+            if not target and quiz.get('owner_id'):raise HTTPException(403,'Select its /account first.')
+            return quiz
+        if command=='/account':
+            args=arg.split();alias=args[0].lower() if args else ''
+            if not args:
+                await reply('Selected account: '+state.get('target_alias','not selected')+'\nUse /account me EMAIL or /account vishu EMAIL once; then /account me or /account vishu to switch.');return
+            if alias not in ('me','vishu') or len(args)>2:raise HTTPException(400,'Use /account me EMAIL or /account vishu EMAIL. After setup, omit the email to switch.')
+            accounts=dict(state.get('accounts',{}))
+            if len(args)==2:
+                resolved=await store.find_auth_user(args[1].lower())
+                if accounts.get(alias) and accounts[alias]['id']!=resolved['id']:raise HTTPException(400,'This alias is already bound to another login. Keep existing bindings to protect saved progress.')
+                if any(v['id']==resolved['id'] for k,v in accounts.items() if k!=alias):raise HTTPException(400,'Use different logins for me and vishu.')
+                def profile(data):
+                    if data.get('account_alias') not in (None,alias):raise HTTPException(400,'This login is already assigned to another account role.')
+                    data['account_alias']=alias
+                await store.mutate(resolved['id'],profile)
+                accounts[alias]=resolved
+            if alias not in accounts:raise HTTPException(400,f'First bind /account {alias} EMAIL using that Supabase login email.')
+            target=accounts[alias]
+            await change(accounts=accounts,target_alias=alias,target_user_id=target['id'],quiz_id=None,pending_image=None,upload_mode='quiz',study_date=None,topic=None,notes_date=None,notes_title=None,quiz_kind='daily')
+            await reply(f'Account selected: {alias} · {target["email"]}\nNew quizzes, notes and diagrams stay in this account. Use /topic or /notes next. Existing answers/results are unchanged.');return
+        if command=='/copyto':
+            alias=arg.lower();accounts=state.get('accounts',{})
+            if alias not in accounts:raise HTTPException(400,'Bind the destination first with /account vishu EMAIL (or /account me EMAIL), then select the source account and quiz.')
+            quiz=await selected_quiz();target=accounts[alias]
+            if target['id']==quiz.get('owner_id'):raise HTTPException(400,'Choose a different destination account.')
+            copied,count=await copy_content(store,quiz,target['id'])
+            await reply(f'Copied to {alias}: {copied["topic"]} + {count} notes.\nCopy ID: {copied["id"]}\nQuiz status: {copied["status"]}. Results, time and studied marks were not copied.\nTo release: /account {alias} then /select {copied["id"]} then /open.');return
+        if not state.get('target_user_id') and (command in ('/topic','/pyq','/notes','/bulk','/question','/images','/image','/open','/close') or message.get('document') or message.get('photo')):
+            raise HTTPException(400,'Select an account first: /account me EMAIL or /account vishu EMAIL. This keeps test uploads away from Vishu.')
         if command in ('/topic','/pyq'):
             if '|' not in arg: await reply(f'Use {command} YYYY-MM-DD | Topic or paper title');return
             day,topic=map(str.strip,arg.split('|',1))
@@ -88,7 +131,7 @@ async def handle_update(update,store):
             await reply(('PYQ mode: send JSON sections A (20), B (50), C (75).' if state.get('quiz_kind')=='pyq' else 'Daily mode: send JSON with a questions array; any question count (10 MB file limit).')+' Include question_number, question, options, correct_option and explanation. /topic DATE | Topic selects daily mode; /pyq DATE | Title selects full exam. Then /images to attach named diagrams.');return
         if command=='/images':
             if not state.get('quiz_id'):await reply('Upload a JSON paper or /select a test first.');return
-            quiz=await store.quiz(state['quiz_id'])
+            quiz=await selected_quiz()
             await change(upload_mode='images',pending_image=None)
             await reply(f'Diagram mode: {quiz["topic"]}\nSend files named Q12.png / Q27.jpg, or photos captioned Q12 / Q27. You can send an album with individually named files. Only those questions get images. Send /done when finished.');return
         if command=='/notes':
@@ -102,28 +145,29 @@ async def handle_update(update,store):
             await change(upload_mode='quiz',pending_image=None)
             await reply('Uploads finished. Use /bulk for a JSON paper, /images for diagrams, or /notes for study material.');return
         if command=='/select':
-            quiz=await store.quiz(arg)
-            if quiz.get('owner_id'): await reply('Select a daily test, not a personal retry.');return
+            quiz=await selected_quiz(arg)
             await change(quiz_id=quiz['id'],study_date=quiz['study_date'],topic=quiz['topic'],quiz_kind=quiz['kind'],pending_image=None,upload_mode='quiz')
             await reply(f'Selected {quiz["topic"]}.');return
         if command in ('/open','/close'):
             if not state.get('quiz_id'): await reply('Upload a JSON file or /select a test first.');return
+            await selected_quiz()
             await store.update_quiz(state['quiz_id'],{'status':'open' if command=='/open' else 'closed'})
             link=os.getenv('APP_URL','').rstrip('/')
             await reply((f'Test approved. Opens on {release_day(await store.quiz(state["quiz_id"])):%d %b %Y}. ' if command=='/open' else 'Test closed for new attempts. ')+link);return
         if command=='/tests':
-            rows=await store.quizzes(kind='in.(daily,pyq)',order='created_at.desc',limit='12')
+            rows=await store.quizzes(kind='in.(daily,pyq)',owner_id='eq.'+state['target_user_id'] if state.get('target_user_id') else 'is.null',order='created_at.desc',limit='12')
+            rows=[q for q in rows if q.get('owner_id')==state.get('target_user_id')]
             await reply('\n\n'.join(f'{q["study_date"]} · {q["topic"]}\n{q["status"]} · {len(q["questions"])} questions\n{q["id"]}' for q in rows) or 'No uploads yet.');return
         if command=='/status':
-            quiz=await store.quiz(state['quiz_id']) if state.get('quiz_id') else None
-            await reply(f'Upload label: {state.get("study_date","not set")} · {state.get("topic","not set")}\n'+
+            quiz=await selected_quiz() if state.get('quiz_id') else None
+            await reply(f'Account: {state.get("target_alias","legacy shared")}\nUpload label: {state.get("study_date","not set")} · {state.get("topic","not set")}\n'+
                 (f'Selected: {quiz["topic"]}\n{quiz["status"]} · {len(quiz["questions"])} questions\nID: {quiz["id"]}' if quiz else 'No test selected.'));return
         if command=='/plan':
             row=next((r for r in plan_rows() if r['date']==today().isoformat()),None)
             await reply(f'{today()}: '+(row['topic'] if row else 'No scheduled topic today.'));return
         if command=='/image':
             if not state.get('quiz_id'): await reply('Upload or select a test first.');return
-            quiz=await store.quiz(state['quiz_id'])
+            quiz=await selected_quiz()
             index=resolve_question(quiz['questions'],arg)
             label=question_number(quiz['questions'][index],index)
             await change(upload_mode='quiz',pending_image={'quiz_id':quiz['id'],'index':index})
@@ -141,12 +185,12 @@ async def handle_update(update,store):
             else:await reply('Notes accept PDF, PNG, JPEG and WebP files. Use /done before uploading quiz JSON.');return
             day=state['notes_date'];scheduled_day(day)
             source=file.get('file_unique_id') or file.get('file_id')
-            note_id=str(uuid.uuid5(uuid.NAMESPACE_URL,f'study-note:{day}:{source}'))
+            note_id=str(uuid.uuid5(uuid.NAMESPACE_URL,f'study-note:{state.get("target_user_id","shared")}:{day}:{source}'))
             path=f'{day}/{note_id}.{extension}'
             filename=Path(file.get('file_name') or f'Notes.{extension}').name[:240]
             await store.upload_note(path,content,mime)
             await store.put_note({'id':note_id,'study_date':day,'title':state.get('notes_title') or filename,
-                'filename':filename,'mime':mime,'path':path})
+                'filename':filename,'mime':mime,'path':path,'owner_id':state.get('target_user_id')})
             await reply(f'Notes saved for {day}: {filename}\nYou can send another PDF/photo, or /done.');return
         if is_photo:
             pending=state.get('pending_image')
@@ -154,7 +198,7 @@ async def handle_update(update,store):
                 label=attachment_number(message.get('caption',''),document.get('file_name',''))
                 if not state.get('quiz_id') or not label:
                     await reply('Use /image Q12 first, or send a file named Q12.png / a photo captioned Q12 after selecting your JSON paper.');return
-                bank=await store.quiz(state['quiz_id'])
+                bank=await selected_quiz()
                 pending={'quiz_id':bank['id'],'index':resolve_question(bank['questions'],label)}
             file=message['photo'][-1] if message.get('photo') else document
             content=await download(file['file_id'],10*1024*1024)
@@ -162,7 +206,7 @@ async def handle_update(update,store):
             elif content.startswith(b'\x89PNG\r\n\x1a\n'):mime,extension='image/png','png'
             elif content[:4]==b'RIFF' and content[8:12]==b'WEBP':mime,extension='image/webp','webp'
             else: await reply('Please send a PNG, JPEG or WebP image.');return
-            quiz=await store.quiz(pending['quiz_id']);index=pending['index']
+            quiz=await selected_quiz(pending['quiz_id']);index=pending['index']
             path=f'{quiz["id"]}/{index+1}-{file.get("file_unique_id",str(update.get("update_id",0)))}.{extension}'
             await store.upload_image(path,content,mime)
             await store.attach_image(quiz['id'],index,path)
@@ -181,6 +225,7 @@ async def handle_update(update,store):
                 try:data=json.loads(raw.decode('utf-8-sig'))
                 except (ValueError,UnicodeError):await reply('This file is not valid UTF-8 JSON.');return
             bank=(validate_pyq if state.get('quiz_kind')=='pyq' and command!='/question' else validate_bank)(data,state['topic'],state['study_date'])
+            if state.get('target_user_id'):bank=scoped_quiz(bank,state['target_user_id'])
             await store.put_quiz(bank)
             fields={'upload_mode':'quiz','quiz_id':bank['id'],'pending_image':{'quiz_id':bank['id'],'index':0} if command=='/question' else None}
             await change(**fields)

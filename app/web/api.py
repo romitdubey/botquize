@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from app.config import BOT_TOKEN, WEBHOOK_SECRET
 from app.services.planner import plan_rows
 from app.web.store import Store
+from app.web.accounts import content_visible
 from app.web.daily import scheduled_day, today_topic, require_today, release_day, is_released
 from app.web.domain import (now, iso, parsed, today, visible_quiz, question_public, finish,
                            mistakes, monday_window, TZ, practice_clock, reconcile_attempt)
@@ -47,9 +48,11 @@ async def learner(request: Request):
     allowed={s.strip().lower() for s in os.getenv('STUDY_ALLOWED_EMAILS','').split(',') if s.strip()}
     if not allowed or user.get('email','').lower() not in allowed:
         raise HTTPException(403,'This private study space is only for its invited learners.')
+    profile=(await store.state(user['id']))['data']
+    user['account_alias']=profile.get('account_alias')
     mentor=os.getenv('STUDY_MENTOR_EMAIL','').strip().lower()
     learner_id=os.getenv('STUDY_LEARNER_ID','').strip()
-    if mentor and user.get('email','').lower()==mentor:
+    if mentor and user.get('email','').lower()==mentor and user.get('account_alias')!='me':
         if not learner_id: raise HTTPException(503,'Mentor access needs the learner account ID.')
         user={**user,'viewer_id':user['id'],'id':learner_id,'read_only':True}
     return user
@@ -91,11 +94,11 @@ async def dashboard(user=Depends(learner)):
     data=await reconcile(user['id'])
     await weekly(user['id'],data)
     quizzes=await store.quizzes()
-    quizzes=[q for q in quizzes if (not q.get('owner_id') or q['owner_id']==user['id']) and is_released(q,today())]
+    quizzes=[q for q in quizzes if content_visible(q,user) and is_released(q,today())]
     attempts=[{k:v for k,v in a.items() if k not in ('questions','answers','flags')} | {'count':len(a['questions'])}
               for a in data.get('attempts',{}).values()]
     schedule=[{k:v for k,v in r.items() if k not in ('pages','page_start','page_end','key','week')} for r in plan_rows()]
-    return {'user':{'email':user.get('email'),'id':user['id'],'name':'Vishu','read_only':user.get('read_only',False)}, 'today':today().isoformat(),
+    return {'user':{'email':user.get('email'),'id':user['id'],'name':'Romit' if user.get('account_alias')=='me' else 'Vishu','account_alias':user.get('account_alias'),'read_only':user.get('read_only',False)}, 'today':today().isoformat(),
         'schedule':schedule,'days':data.get('days',{}),
         'quizzes':[visible_quiz(q) | {'release_date':release_day(q).isoformat()} for q in quizzes], 'attempts':attempts,
         'mistake_count':len(mistakes(data))}
@@ -104,12 +107,12 @@ async def dashboard(user=Depends(learner)):
 async def day_detail(day:str,user=Depends(learner)):
     row=scheduled_day(day)
     if day>today().isoformat():raise HTTPException(403,'This study day opens on its scheduled date.')
-    notes=await store.notes(day)
+    notes=[n for n in await store.notes(day) if content_visible(n,user)]
     urls=await store.signed_urls('study-notes',[n['path'] for n in notes])
     notes=[{k:v for k,v in n.items() if k!='path'} | {'url':urls.get(n['path'],'')} for n in notes]
     banks=await store.quizzes(study_date='eq.'+day)
     quizzes=[visible_quiz(q) | {'release_date':release_day(q).isoformat(),'available':is_released(q,today())}
-             for q in banks if q['status']=='open' and not q.get('owner_id')]
+             for q in banks if q['status']=='open' and content_visible(q,user)]
     return {'day':row,'notes':notes,'quizzes':quizzes,'editable':day==today().isoformat() and not user.get('read_only')}
 
 class DayUpdate(BaseModel):
@@ -132,9 +135,9 @@ class TimerUpdate(BaseModel):
 async def timer(payload:TimerUpdate,user=Depends(participant)):
     raise HTTPException(410,'Study timers have been removed. Practice time is saved inside each quiz.')
 
-async def accessible_quiz(quiz_id,user_id):
+async def accessible_quiz(quiz_id,user):
     quiz=await store.quiz(quiz_id)
-    if not is_released(quiz,today()) or (quiz.get('owner_id') and quiz['owner_id']!=user_id):
+    if not is_released(quiz,today()) or not content_visible(quiz,user):
         raise HTTPException(403,'This test has not been opened yet.')
     return quiz
 
@@ -148,7 +151,7 @@ async def present_attempt(attempt):
 
 @app.post('/api/quizzes/{quiz_id}/start')
 async def start_attempt(quiz_id:str,user=Depends(participant)):
-    quiz=await accessible_quiz(quiz_id,user['id'])
+    quiz=await accessible_quiz(quiz_id,user)
     stamp=now(); attempt_id=str(uuid.uuid4())
     def action(data):
         attempts=data.setdefault('attempts',{})

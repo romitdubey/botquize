@@ -28,7 +28,9 @@ class Store:
                 code = error.get('code', '') if isinstance(error, dict) else ''
             except ValueError:
                 code = ''
-            if code == 'PGRST202':
+            if code == 'PGRST204' and resource=='study_notes':
+                detail = 'Account-specific notes need the database update. Run supabase/004_account_notes.sql in the Supabase SQL Editor.'
+            elif code == 'PGRST202':
                 detail = 'The database update is missing. Run supabase/002_daily_notes.sql in the Supabase SQL Editor.'
             elif code in ('PGRST205', '42P01'):
                 detail = 'Study tables are missing. Run supabase/schema.sql in the Supabase SQL Editor for this project.'
@@ -123,3 +125,21 @@ class Store:
         updated=await self.request('POST','rpc/study_attach_image',body={
             'p_quiz_id':quiz_id,'p_index':index,'p_path':path})
         if not updated:raise HTTPException(404,'The selected question no longer exists in this test.')
+
+
+    async def find_auth_user(self,email):
+        """Resolve an already-created, allowlisted account; never create credentials in chat."""
+        allowed={v.strip().lower() for v in os.getenv('STUDY_ALLOWED_EMAILS','').split(',') if v.strip()}
+        if email.lower() not in allowed:
+            raise HTTPException(400,'Add both account emails to STUDY_ALLOWED_EMAILS in Vercel and redeploy first.')
+        async with httpx.AsyncClient(timeout=20) as client:
+            page=1
+            while True:
+                response=await client.get(self.url+'/auth/v1/admin/users',params={'page':page,'per_page':100},headers=self.headers())
+                if response.status_code!=200:raise HTTPException(503,'Could not look up accounts. Check the backend service-role/secret key.')
+                rows=response.json().get('users',[])
+                for user in rows:
+                    if user.get('email','').lower()==email.lower():return {'id':user['id'],'email':user['email']}
+                if len(rows)<100:break
+                page+=1
+        raise HTTPException(400,'Create this email account in Supabase Authentication > Users first, then retry /account.')

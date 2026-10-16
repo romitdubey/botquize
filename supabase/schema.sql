@@ -38,6 +38,7 @@ allowed_mime_types=array['image/jpeg','image/png','image/webp'];
 create table if not exists public.study_notes (
  id uuid primary key,
  study_date date not null,
+ owner_id uuid references auth.users(id) on delete cascade,
  title text not null,
  filename text not null,
  mime text not null check(mime in ('application/pdf','image/jpeg','image/png','image/webp')),

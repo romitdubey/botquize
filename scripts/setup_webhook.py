@@ -23,7 +23,7 @@ async def main():
             'url':url+'/api/telegram/webhook','secret_token':WEBHOOK_SECRET,
             'allowed_updates':['message'],'drop_pending_updates':False})
         if not result.is_success or not result.json().get('ok'):raise SystemExit('Could not update webhook. Check your bot credentials.')
-        commands=[('start','Admin guide'),('topic','Set study day and upload topic'),('open','Open the selected test'),
+        commands=[('start','Admin guide'),('account','Select my test account or Vishu'),('copyto','Copy quiz and notes to another account'),('topic','Set study day and upload topic'),('open','Open the selected test'),
             ('close','Close the selected test'),('tests','List uploaded tests'),('select','Select a test by ID'),
             ('bulk','Upload daily quiz JSON'),('pyq','Upload a full CSIR exam paper'),('images','Attach named diagrams in bulk'),('image','Attach a diagram to a question'),('question','Add a single question'),('status','Selected test status'),
             ('plan','Today’s study topic'),('notes','Upload PDFs/photos for a study date'),('done','Finish uploading notes'),('help','Admin guide')]

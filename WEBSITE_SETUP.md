@@ -196,3 +196,41 @@ Then `/images` → send `Q7.png`, `Q83.jpg`, etc. (or captions Q7, Q83), `/done`
 Official LS/BT pattern: A has 20 questions, evaluate first 15 answered (+2/−0.5); B has 50, first 35 (+2/−0.5); C has 75, first 25 (+4/−1). Total 200 marks, 180 minutes. Extra answered questions are excluded in **paper order**, not the order clicked. Unanswered/excluded questions earn zero; excluded answers are labelled separately and do not enter the wrong-answer bank. The UI shows answered/limit per section; review includes section scores. Daily and Monday retry quizzes have no marks/negative marking.
 
 Source: [NTA December 2026 Information Bulletin, scheme pp.18–19](https://cdnbbsr.s3waas.gov.in/s3efdf562ce2fb0ad460fd8e9d33e57f57/uploads/2026/10/202610071407707951.pdf). Verify future pattern changes against the relevant official bulletin before using this for another exam cycle. The sidebar counts down to the **10 December revision goal**, not an assumed exam date.
+
+## Two separate accounts: test first, then copy to Vishu
+
+1. In **Supabase → Authentication → Users**, create two confirmed email/password users: your own and Vishu's. Keep passwords out of Telegram/chat.
+2. Set `STUDY_ALLOWED_EMAILS=your@email.com,her@email.com` in Vercel and redeploy. Run **`supabase/004_account_notes.sql`** for an existing project (after the earlier migrations). Fresh projects can use the updated full schema.
+3. Bind the existing logins once in your private admin bot:
+
+```text
+/account me your@email.com
+/account vishu her@email.com
+/account me
+```
+
+After binding, just `/account me` or `/account vishu` switches the upload destination. Account selection persists across server restarts. Switching clears the selected quiz, pending diagram, topic/date and notes upload mode so an image cannot accidentally land in the previous account. Select your destination before `/topic`, `/notes` or uploads. Both aliases must use different logins. Account commands do not create Auth users or change their passwords.
+
+Use the usual `/topic DATE | Topic`, JSON, `/images`, `/open` flow while `me` is selected. Sign in to the website with your own login to test. There is a **Your test account** banner. Practice answers, results, studied days, timers, mistakes and Monday retry snapshots stay under your own user ID. Even if your email used to be configured as a read-only mentor, binding it as `me` gives it its own independent test progress; it no longer maps to Vishu's learner ID. Vishu's UI and schedule remain the same.
+
+Daily release rules still apply to your test login: a quiz labelled with yesterday's study date opens today. PYQ papers open on their labelled date. Switching accounts does not bypass date locks.
+
+When satisfied, keep the source quiz selected in your account:
+
+```text
+/copyto vishu
+```
+
+The bot returns a **Copy ID**. Questions, full explanations, attached diagrams and all your notes from that study date are copied to Vishu. The quiz is a draft; no attempt, score, wrong-answer history, timer or studied-day mark is copied. The original study date is preserved, including its release rule. Copied files reuse the same private immutable storage objects; the banks/notes have separate rows and do not expose public buckets. Later diagram replacements on the source quiz do not modify the copied quiz or existing attempts.
+
+```text
+/account vishu
+/select COPY-ID-FROM-BOT
+/open
+```
+
+Repeated copies of the same question snapshot are idempotent: they reuse the same destination copy and preserve its current open/closed status and any learner attempts. An altered source question/diagram snapshot creates a new draft. Notes are immediately available to their destination on accessible study dates; copying does not wait for `/open` to release notes. You can instead select `/account vishu` before uploading a fresh normal bank directly.
+
+Older unscoped uploads remain legacy content for Vishu; your `me` login hides those old shared quizzes/notes. Selecting Vishu allows management of legacy banks. New uploads require an explicit selected account. **A whole-database reset is unnecessary and would remove both accounts' study data.**
+
+After deploying these command changes, run `scripts/setup_webhook.py` locally once to refresh Telegram's command menu. Typed commands work after redeployment even before the menu refresh.

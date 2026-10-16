@@ -14,7 +14,10 @@ class MemoryStore:
     async def quizzes(self,**filters):
         result=list(self.banks.values())
         for key,val in filters.items():
-            if key in ('id','kind','study_date'):result=[q for q in result if str(q[key])==val.removeprefix('eq.')]
+            if key in ('id','kind','study_date','owner_id'):
+                if val.startswith('in.('):result=[q for q in result if str(q.get(key)) in val[4:-1].split(',')]
+                elif val=='is.null':result=[q for q in result if q.get(key) is None]
+                else:result=[q for q in result if str(q.get(key))==val.removeprefix('eq.')]
         return copy.deepcopy(result)
     async def quiz(self,key):
         if key not in self.banks:raise HTTPException(404,'Test not found.')
@@ -38,7 +41,7 @@ class MemoryStore:
 
 @pytest.fixture
 def cloud(monkeypatch):
-    store=MemoryStore();monkeypatch.setattr(api,'store',store)
+    store=MemoryStore();store.admins[123456789]={'target_user_id':'learner-1','target_alias':'vishu'};monkeypatch.setattr(api,'store',store)
     monkeypatch.setattr(api,'today',lambda:date(2026,10,21))
     async def identity(): return {'id':'learner-1','email':'friend@example.com'}
     api.app.dependency_overrides[api.learner]=identity
@@ -215,10 +218,14 @@ async def test_auth_checks_real_user_allowlist_and_maps_mentor(monkeypatch):
             assert headers['Authorization']=='Bearer user-jwt'
             return httpx.Response(200,json={'id':'mentor-uuid','email':email})
     monkeypatch.setattr(api.httpx,'AsyncClient',Client)
+    monkeypatch.setattr(api.store,'state',AsyncMock(return_value={'data':{}}))
     with pytest.raises(HTTPException) as error:await api.learner(request)
     assert error.value.status_code==403
     email='mentor@example.com';user=await api.learner(request)
     assert user['id']=='friend-uuid' and user['viewer_id']=='mentor-uuid' and user['read_only']
+    api.store.state.return_value={'data':{'account_alias':'me'}}
+    user=await api.learner(request)
+    assert user['id']=='mentor-uuid' and user['account_alias']=='me' and not user.get('read_only')
 
 @pytest.mark.asyncio
 async def test_store_compare_and_swap_retries_conflict_without_losing_data(monkeypatch):
@@ -503,3 +510,85 @@ async def test_large_practice_saves_answers_beyond_old_limit(cloud):
         a=(await c.post(f'/api/quizzes/{bank["id"]}/start')).json()
         result=await c.put('/api/attempts/'+a['id']+'/answer',json={'index':1201,'answer':0})
         assert result.status_code==200 and result.json()=={'saved':True}
+
+@pytest.mark.asyncio
+async def test_account_switch_copy_only_content_and_keep_progress_separate(cloud,monkeypatch):
+    import json
+    from app.web import telegram as tg
+    calls=[]
+    async def send(method,body=None,files=None):calls.append((method,body));return {}
+    monkeypatch.setattr(tg,'telegram',send)
+    users={'me@example.com':{'id':'test-user','email':'me@example.com'},'vishu@example.com':{'id':'vishu-user','email':'vishu@example.com'}}
+    cloud.find_auth_user=AsyncMock(side_effect=lambda email:users[email])
+    async def update(text=None,**extra):
+        await tg.handle_update({'update_id':901,'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},**({'text':text} if text else {}),**extra}},cloud)
+    await update('/account me me@example.com')
+    await update('/account vishu vishu@example.com')
+    await update('/account me')
+    assert cloud.admins[123456789]['quiz_id'] is None
+    await update('/topic 2026-10-16 | Enzymes')
+    monkeypatch.setattr(tg,'download',AsyncMock(return_value=json.dumps({'questions':[{'question':'Diagram Q?','options':['A','B'],'correct_option':0,'explanation':'Explanation'}]}).encode()))
+    await update(document={'file_id':'json','file_name':'paper.json'})
+    source=copy.deepcopy(next(iter(cloud.banks.values())))
+    assert source['owner_id']=='test-user'
+    await cloud.attach_image(source['id'],0,'private/source-diagram.png')
+    await update('/notes 2026-10-16 | Notes')
+    monkeypatch.setattr(tg,'download',AsyncMock(return_value=b'%PDF-1.7 test'))
+    await update(document={'file_id':'pdf','file_unique_id':'note-file','file_name':'notes.pdf'})
+    await update('/done');await update('/open')
+    assert next(iter(cloud.note_rows.values()))['owner_id']=='test-user'
+    cloud.states['test-user'].update(days={'2026-10-16':{'studied':True}},attempts={'test-result':{'submitted_at':'2026-10-17T01:00:00Z','questions':[],'answers':{}}})
+    before=copy.deepcopy(cloud.states)
+    await update('/copyto vishu')
+    copied=next(q for q in cloud.banks.values() if q.get('owner_id')=='vishu-user')
+    assert copied['id']!=source['id'] and copied['status']=='draft'
+    assert copied['questions'][0]['image_path']=='private/source-diagram.png'
+    assert copied['questions'][0]['explanation']=='Explanation'
+    assert cloud.states==before  # Includes both independent account roles and existing progress.
+    assert len(cloud.note_rows)==2
+    await update('/copyto vishu')
+    assert len(cloud.banks)==2 and len(cloud.note_rows)==2
+    await update('/account vishu')
+    assert cloud.admins[123456789]['quiz_id'] is None and cloud.admins[123456789]['pending_image'] is None
+    await update('/select '+source['id'])
+    assert 'another account' in calls[-1][1]['text']
+    await update('/select '+copied['id']);await update('/open')
+    assert cloud.banks[copied['id']]['status']=='open'
+    # Editing the source after copying cannot mutate the destination snapshot.
+    await cloud.attach_image(source['id'],0,'private/replacement.png')
+    assert cloud.banks[copied['id']]['questions'][0]['image_path']=='private/source-diagram.png'
+
+@pytest.mark.asyncio
+async def test_account_content_api_does_not_leak_notes_quizzes_or_attempts(cloud,bank):
+    legacy={**bank,'id':'legacy','owner_id':None,'status':'open'}
+    mine={**bank,'id':'mine','owner_id':'me','status':'open'}
+    hers={**bank,'id':'hers','owner_id':'vishu','status':'open'}
+    for q in (legacy,mine,hers):await cloud.put_quiz(q)
+    for owner in (None,'me','vishu'):
+        key=str(owner);cloud.note_rows[key]={'id':key,'study_date':'2026-10-16','owner_id':owner,'path':key+'.pdf','title':key,'filename':key+'.pdf','mime':'application/pdf'}
+    current={'id':'me','email':'me@example.com','account_alias':'me'}
+    async def identity():return current
+    api.app.dependency_overrides[api.learner]=identity
+    async with connection() as c:
+        dash=(await c.get('/api/dashboard')).json()
+        assert [q['id'] for q in dash['quizzes']]==['mine'] and dash['user']['account_alias']=='me'
+        detail=(await c.get('/api/days/2026-10-16')).json()
+        assert [n['id'] for n in detail['notes']]==['me'] and [q['id'] for q in detail['quizzes']]==['mine']
+        assert (await c.post('/api/quizzes/hers/start')).status_code==403
+        assert (await c.post('/api/quizzes/legacy/start')).status_code==403
+        attempt=(await c.post('/api/quizzes/mine/start')).json()
+        await c.put('/api/days/2026-10-21',json={'studied':True})
+        current={'id':'vishu','email':'vishu@example.com','account_alias':'vishu'}
+        dash=(await c.get('/api/dashboard')).json()
+        assert {q['id'] for q in dash['quizzes']}=={'legacy','hers'} and dash['attempts']==[] and dash['days']=={}
+        assert (await c.get('/api/attempts/'+attempt['id'])).status_code==404
+        assert (await c.post('/api/quizzes/mine/start')).status_code==403
+        detail=(await c.get('/api/days/2026-10-16')).json()
+        assert {n['id'] for n in detail['notes']}=={'None','vishu'}
+
+@pytest.mark.asyncio
+async def test_unselected_account_blocks_new_uploads(cloud,monkeypatch):
+    from app.web import telegram as tg
+    cloud.admins.clear();send=AsyncMock();monkeypatch.setattr(tg,'telegram',send)
+    await tg.handle_update({'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},'text':'/topic 2026-10-16 | Demo'}},cloud)
+    assert 'Select an account first' in send.call_args.args[1]['text'] and not cloud.banks
