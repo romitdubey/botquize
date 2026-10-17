@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from fastapi import HTTPException
 from app.web.attachments import question_number
+from app.web.richtext import scientific_text
 
 TZ = ZoneInfo('Asia/Kolkata')
 
@@ -37,10 +38,20 @@ def validate_bank(data, topic, study_date):
         image=item.get('image_url') or ''
         if not isinstance(explanation,str) or len(explanation)>30000 or not isinstance(image,str) or len(image)>3000:
             raise HTTPException(400,f'Question {index}: invalid explanation/image.')
-        identity=json.dumps([text,options,correct],ensure_ascii=False,separators=(',',':'))
+        rich={}
+        for field in ('question_html','explanation_html'):
+            if field in item:
+                if not isinstance(item[field],str) or len(item[field])>150000:raise HTTPException(400,f'Question {index}: invalid formatted content.')
+                rich[field]=scientific_text(item[field])['html']
+        if 'options_html' in item:
+            values=item['options_html']
+            if not isinstance(values,list) or len(values)!=len(options) or any(not isinstance(v,str) or len(v)>50000 for v in values):raise HTTPException(400,f'Question {index}: formatted options must match options.')
+            rich['options_html']=[scientific_text(v)['html'] for v in values]
+        if item.get('source_id'):rich['source_id']=str(item['source_id'])[:200]
+        identity=json.dumps([text,options,correct]+([rich] if rich else []),ensure_ascii=False,separators=(',',':'))
         output.append({'number':question_number(item,index-1),'id':hashlib.sha256(identity.encode()).hexdigest()[:32], 'question':text,
             'options':options,'correct_option':correct,'explanation':explanation,
-            'image_url':image if image.startswith('https://') else '', 'image_path':'', 'topic':title.strip()})
+            'image_url':image if image.startswith('https://') else '', 'image_path':'', 'topic':title.strip(),**rich})
     duration=180  # Compatibility storage field; daily practice has no time limit.
     key=json.dumps([day.isoformat(),title,[(q['id'],q['number'],q['explanation'],q['image_url']) for q in output]],ensure_ascii=False)
     return {'id':str(uuid.uuid5(uuid.NAMESPACE_URL,key)), 'study_date':day.isoformat(),
@@ -51,7 +62,7 @@ def visible_quiz(quiz):
     return {k:quiz.get(k) for k in ('id','study_date','topic','description','status','kind','duration_seconds')} | {'count':len(quiz['questions'])}
 
 def question_public(question):
-    return {k:question.get(k,'') for k in ('id','number','question','options','image_url','image_path','topic','section')}
+    return {k:question.get(k,'') for k in ('id','number','question','options','image_url','image_path','topic','section','question_html','options_html')}
 
 SECTIONS = {'A': {'count':20,'limit':15,'correct':2,'wrong':0.5},
             'B': {'count':50,'limit':35,'correct':2,'wrong':0.5},

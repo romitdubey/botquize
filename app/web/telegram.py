@@ -8,6 +8,7 @@ import httpx
 from fastapi import HTTPException
 from app.config import BOT_TOKEN, ADMIN_USER_IDS
 from app.web.accounts import scoped_quiz, copy_content
+from app.web.importer import export_part, merge_exports
 from app.web.domain import validate_bank, validate_pyq, today
 from app.web.daily import scheduled_day, release_day
 from app.web.attachments import attachment_number, resolve_question, question_number
@@ -22,7 +23,7 @@ HELP='''🌿 Study desk — admin controls
 Select the destination BEFORE uploading. Switching clears the current selection.
 
 /topic 2026-10-16 | Enzymes
-Set the study day + topic for your next JSON upload. Then send your usual JSON file. It is saved as a draft; all explanations are preserved.
+Set the study day + topic for your next JSON upload. Bilingual question + answer exports can be sent as two files, in either order (.json / .json4); they merge automatically by question ID. Then send your usual JSON file. It is saved as a draft; all explanations are preserved.
 
 /notes 2026-10-16 | Topic notes — send PDFs/photos for that study day
 /done — finish notes uploads and return to JSON mode
@@ -107,7 +108,7 @@ async def handle_update(update,store):
                 accounts[alias]=resolved
             if alias not in accounts:raise HTTPException(400,f'First bind /account {alias} EMAIL using that Supabase login email.')
             target=accounts[alias]
-            await change(accounts=accounts,target_alias=alias,target_user_id=target['id'],quiz_id=None,pending_image=None,upload_mode='quiz',study_date=None,topic=None,notes_date=None,notes_title=None,quiz_kind='daily')
+            await change(accounts=accounts,target_alias=alias,target_user_id=target['id'],quiz_id=None,pending_image=None,upload_mode='quiz',study_date=None,topic=None,notes_date=None,notes_title=None,quiz_kind='daily',import_parts={})
             await reply(f'Account selected: {alias} · {target["email"]}\nNew quizzes, notes and diagrams stay in this account. Use /topic or /notes next. Existing answers/results are unchanged.');return
         if command=='/copyto':
             alias=arg.lower();accounts=state.get('accounts',{})
@@ -124,7 +125,7 @@ async def handle_update(update,store):
             try: date.fromisoformat(day)
             except ValueError: await reply('Use a date like 2026-10-16.');return
             if not topic or len(topic)>500: await reply('Please provide a topic under 500 characters.');return
-            await change(study_date=day,topic=topic,upload_mode='quiz',quiz_kind='pyq' if command=='/pyq' else 'daily',pending_image=None)
+            await change(study_date=day,topic=topic,upload_mode='quiz',quiz_kind='pyq' if command=='/pyq' else 'daily',quiz_id=None,pending_image=None,import_parts={})
             await reply(f'Next upload: {topic}\nStudy day: {day}\n'+('Send full PYQ JSON with sections A (20 questions), B (50), C (75). Four options per question; correct_option is zero based. Use unique question_number values 1–145.' if command=='/pyq' else 'Send daily JSON with a questions array. Any question count; 10 MB file limit. Practice has no deadline.')+'\nThen /images for diagrams, /open when ready.');return
         if command=='/bulk':
             await change(upload_mode='quiz',pending_image=None)
@@ -219,16 +220,34 @@ async def handle_update(update,store):
                 try: data={'questions':[json.loads(arg)]}
                 except (ValueError,TypeError): await reply('Send /question followed by one JSON object with question, options, correct_option and explanation.');return
             else:
-                if not document.get('file_name','').lower().endswith('.json'):await reply('Upload a .json file, or use /image for a diagram.');return
+                if Path(document.get('file_name','')).suffix.lower() not in ('.json','.json4'):await reply('Upload a .json or .json4 file, or use /image for a diagram.');return
                 if document.get('file_size',0)>10*1024*1024:await reply('JSON limit is 10 MB.');return
                 raw=await download(document['file_id'],10*1024*1024)
                 try:data=json.loads(raw.decode('utf-8-sig'))
                 except (ValueError,UnicodeError):await reply('This file is not valid UTF-8 JSON.');return
+            part=export_part(data)
+            if part:
+                context={k:state.get(k) for k in ('target_user_id','study_date','topic','quiz_kind')}
+                def stage(current):
+                    if any(current.get(k)!=v for k,v in context.items()):raise HTTPException(409,'Account/topic changed during upload. Select the intended topic and resend.')
+                    current.update(quiz_id=None,pending_image=None,upload_mode='quiz')
+                    staged=current.setdefault('import_parts',{})
+                    staged[part[0]]=part[1]
+                    return dict(staged)
+                staged=await store.mutate(user,stage,admin=True)
+                if 'questions' not in staged or 'answers' not in staged:
+                    missing='answer export (.json or .json4)' if part[0]=='questions' else 'question export (.json)'
+                    await reply(f'{part[0].capitalize()} file received for {state.get("target_alias","selected account")}. Send the matching {missing} next. Nothing is published yet.');return
+                data=merge_exports(staged['questions'],staged['answers'],pyq=state.get('quiz_kind')=='pyq')
             bank=(validate_pyq if state.get('quiz_kind')=='pyq' and command!='/question' else validate_bank)(data,state['topic'],state['study_date'])
+            upload_context={k:state.get(k) for k in ('target_user_id','study_date','topic','quiz_kind')}
             if state.get('target_user_id'):bank=scoped_quiz(bank,state['target_user_id'])
             await store.put_quiz(bank)
-            fields={'upload_mode':'quiz','quiz_id':bank['id'],'pending_image':{'quiz_id':bank['id'],'index':0} if command=='/question' else None}
-            await change(**fields)
+            fields={'upload_mode':'quiz','quiz_id':bank['id'],'import_parts':{},'pending_image':{'quiz_id':bank['id'],'index':0} if command=='/question' else None}
+            def select_import(current):
+                if any(current.get(k)!=v for k,v in upload_context.items()):raise HTTPException(409,'Account/topic changed. The completed draft stays in the original account; switch back and use /tests to select it.')
+                current.update(fields)
+            await store.mutate(user,select_import,admin=True)
             await reply(f'Saved {len(bank["questions"])} questions with explanations.\n{bank["topic"]} · {bank["study_date"]}\nID: {bank["id"]}\n'+
                 ('Send its diagram now, then /open.' if command=='/question' else 'Use /images to send named diagrams, or /image Q12 for one. Use /open when ready. Daily practice opens the next day; PYQs open on their paper date.'));return
         await reply('Use /help for website admin commands. Questions are answered on the website.')

@@ -234,3 +234,24 @@ Repeated copies of the same question snapshot are idempotent: they reuse the sam
 Older unscoped uploads remain legacy content for Vishu; your `me` login hides those old shared quizzes/notes. Selecting Vishu allows management of legacy banks. New uploads require an explicit selected account. **A whole-database reset is unnecessary and would remove both accounts' study data.**
 
 After deploying these command changes, run `scripts/setup_webhook.py` locally once to refresh Telegram's command menu. Typed commands work after redeployment even before the menu refresh.
+
+## Upload question and answer exports as two files
+
+Bilingual exports such as `response.json` (paper) and `answer.json4` (answer/solution map) now import directly. `.json4` is accepted as a filename extension, but its contents must still be valid JSON; it is not JSON5/JSON-with-comments syntax.
+
+```text
+/account me
+/pyq 2026-10-17 | CSIR Life Science — July 2025
+```
+
+Send `response.json`, then `answer.json4` as two document uploads. Either order works. Wait for the bot's “file received” reply after the first, and its “Saved 145 questions” reply after the second. Then `/open`. Use `/topic DATE | Topic` instead of `/pyq` when intentionally importing the same source format as untimed daily practice.
+
+The bot joins each question's `_id` with the answer map's matching key. It selects only `en.value`, English options and `sol.en.value`. `correctOption` is matched to the original option's `prompt`, then converted into the website's zero-based correct index; it never uses `studentResponse`. Source personal scores, responses and analytics are excluded. Full PYQs retain Part A/B/C counts and the existing exam rules.
+
+Encoded HTML is decoded and sanitized. Paragraphs, tables, superscripts, subscripts, inline diagram images and illustrated options are retained. Protocol-relative image links become HTTPS. Formula rendering uses pinned MathJax 3.2.2 from jsDelivr, with base/AMS TeX; if that CDN is unavailable, the original TeX text remains. Source image URLs must remain accessible to the learner's browser; images are linked rather than copied to Supabase. Tapping an image enlarges it. Explanations (including their images and formatted formulas) remain hidden until submission.
+
+The first document is staged privately in the admin state; no playable incomplete bank is created. Missing answers, extra question IDs, duplicate question IDs, invalid answer labels or missing English options stop the merge. Resend the matching file to correct the pair. Selecting a new `/topic`, `/pyq` or `/account` clears pending files to avoid mixing papers/accounts. Completed staging is cleared after a successful merge. The quiz remains a draft until `/open`; your original upload files are unchanged.
+
+No new database migration is required for this two-file importer beyond the previously documented account/notes/PYQ migrations. Redeploy Vercel to use the new importer and formatting assets. Old single-file question JSON uploads continue to work.
+
+The supplied July 2025 paper has also been converted locally into `output/imports/csir-life-science-2025-merged.json`, which can be uploaded directly as a single PYQ JSON. It contains all 145 English questions and solutions, with inline question/option images.
