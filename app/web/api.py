@@ -281,5 +281,5 @@ WEB_ROOT=Path(__file__).resolve().parents[2]/'web'
 async def index(): return FileResponse(WEB_ROOT/'index.html')
 @app.get('/{asset}')
 async def asset(asset:str):
-    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg','sample-notes.svg','sample-diagram.svg','science-math.js'): raise HTTPException(404)
+    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg','sample-notes.svg','sample-diagram.svg','science-math.js','answer-saver.mjs'): raise HTTPException(404)
     return FileResponse(WEB_ROOT/asset)

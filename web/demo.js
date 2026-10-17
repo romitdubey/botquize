@@ -15,7 +15,7 @@ export function createDemo(){
  function present(a){const copy=clone(a);if(!copy.submitted_at)copy.questions=copy.questions.map(({correct_option,explanation,...q})=>q);return copy}
  function settle(a,pause=false){if(a.running_since){a.elapsed_seconds+=(Date.now()-new Date(a.running_since))/1000;a.running_since=pause?null:new Date().toISOString();a.heartbeat_at=new Date().toISOString()}}
  return async(path,method='GET',body)=>{
-  await new Promise(r=>setTimeout(r,90));
+  await new Promise(r=>setTimeout(r,path.endsWith('/answer')&&new URLSearchParams(location.search).get('slow')==='1'?2000:90));
   if(path==='/dashboard')return summary();
   if(path.startsWith('/days/')&&method==='GET'){const d=path.split('/').pop();const row=state.schedule.find(r=>r.date===d);if(!row||d>day)throw Error('This study day is not open yet.');return {day:clone(row),editable:d===day,notes:[{id:'demo-note',title:'Today’s revision checklist',filename:'Revision photo',mime:'image/svg+xml',url:'/sample-notes.svg'}],quizzes:state.quizzes.filter(q=>q.study_date===d&&q.kind==='daily').map(q=>({...clone(q),available:true,release_date:day}))}}
   if(path.startsWith('/days/')){const d=path.split('/').pop();state.days[d]={...state.days[d],studied:body.studied};return clone(state.days[d])}

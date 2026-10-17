@@ -255,3 +255,12 @@ The first document is staged privately in the admin state; no playable incomplet
 No new database migration is required for this two-file importer beyond the previously documented account/notes/PYQ migrations. Redeploy Vercel to use the new importer and formatting assets. Old single-file question JSON uploads continue to work.
 
 The supplied July 2025 paper has also been converted locally into `output/imports/csir-life-science-2025-merged.json`, which can be uploaded directly as a single PYQ JSON. It contains all 145 English questions and solutions, with inline question/option images.
+
+
+## Responsive answer saving
+
+Selecting, clearing or flagging an answer updates the existing question immediately. Options stay enabled and navigation does not wait for the server. Saves run in the background, with sequential writes and coalescing of rapid edits to the same waiting question. Older successes/failures cannot overwrite a newer choice. The question and math/images are not redrawn just because a save finishes.
+
+The normal indicator stays quiet (“Autosave on”). On failure, selections remain visible, dirty responses are retained locally by account/attempt, and Retry sync appears. Pending local selections are restored when reopening that same unfinished attempt and resynced. Submit, Save & exit and explicit pause/resume wait for outstanding responses; a failed sync blocks normal submission/exit until retried. Exam deadlines still apply, and only responses received by the server before the deadline can be graded. Quiz clock heartbeats continue independently of the answer backlog.
+
+For an isolated preview with a simulated two-second answer save, open `/?demo=1&slow=1`. It never writes real study data. Queue regression checks: `npm run test:saves`.

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": ".venv/bin/python -m uvicorn app.web.api:app --host 0.0.0.0 --port 8080",
-    "check": "node --check web/app.js && node --check web/demo.js"
+    "check": "node --check web/app.js && node --check web/demo.js && node --check web/answer-saver.mjs",
+    "test:saves": "node --test tests/answer-saver.test.mjs"
   }
 }
