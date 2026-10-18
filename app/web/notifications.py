@@ -9,6 +9,7 @@ from datetime import datetime,timedelta,timezone
 from urllib.parse import urlsplit
 import httpx
 from app.web.daily import release_day
+from app.web.email_html import clean_email_html
 
 logger=logging.getLogger(__name__)
 # Only Vishu receives notifications, independently of the selected login email.
@@ -34,6 +35,9 @@ def main_url():
 
 
 def event_data(kind,row):
+    if kind=='custom' and row.get('html_body'):
+        body,text=clean_email_html(row['html_body'])
+        return {'id':f'custom:{row["id"]}','kind':kind,'subject':row['subject'],'html_body':body,'text_body':text}
     if kind=='custom':
         return {'id':f'custom:{row["id"]}','kind':kind,'subject':row['subject'],'title':row['subject'],'intro':'A little message for you.','detail':'','stats':[],'message':row['body'],'url':main_url()}
     if kind=='result':
@@ -64,6 +68,7 @@ def event_data(kind,row):
 
 
 def render_email(event):
+    if event.get('html_body'):return clean_email_html(event['html_body'])
     esc=lambda value:html.escape(str(value),quote=True)
     cells=[]
     for label,value in event['stats']:

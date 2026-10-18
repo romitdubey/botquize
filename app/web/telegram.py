@@ -7,6 +7,7 @@ from datetime import date
 import httpx
 from fastapi import HTTPException
 from app.config import BOT_TOKEN, ADMIN_USER_IDS
+from app.web.email_html import clean_email_html
 from app.web.accounts import scoped_quiz, copy_content
 from app.web.importer import export_part, merge_exports
 from app.web.notifications import configuration as email_configuration, FIXED_RECIPIENTS
@@ -39,6 +40,7 @@ Set the study day + topic for your next JSON upload. Bilingual question + answer
 /image #12 — attach to the 12th item in the JSON array
 /question {JSON} — add one question as a new draft, then send its diagram
 /email Subject | Body — preview a custom email to Vishu (Vishu account only)
+/emailhtml Subject — upload an HTML email file, preview, then confirm
 /status — selected test and upload label
 /plan — today's study topic
 
@@ -119,6 +121,15 @@ async def handle_update(update,store,notify=None):
             # Same draft UUID on every tap; the persistent outbox prevents duplicate sends.
             if notify:notify('vishu','custom',{**draft,'reply_chat_id':chat_id})
             await reply('Email queued for Vishu. I’ll confirm when Resend accepts it.');return
+        async def email_preview(draft):
+            await change(email_draft=draft)
+            await telegram('sendMessage',{'chat_id':chat_id,'text':('HTML email preview — open your HTML file to see the design.\n' if draft.get('html_body') else 'Email preview — not sent yet\n')+'To: '+', '.join(FIXED_RECIPIENTS)+'\n\nSubject: '+draft['subject']+'\n\n'+draft['body'][:3000],
+                'reply_markup':{'inline_keyboard':[[{'text':'Send to Vishu 💚','callback_data':'mail:send:'+draft['id']},{'text':'Cancel','callback_data':'mail:cancel:'+draft['id']}]]}})
+        if command=='/emailhtml':
+            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. HTML emails go only to Vishu.');return
+            if not arg or len(arg)>180 or any(c in arg for c in ('\r','\n')):await reply('Use /emailhtml Your subject (1–180 characters), then attach an .html file.');return
+            await change(upload_mode='emailhtml',email_subject=arg,email_draft=None)
+            await reply('Send your .html file (up to 100 KB). I’ll prepare a preview and wait for Send to Vishu. /done cancels upload mode.');return
         if command=='/email':
             if state.get('target_alias')!='vishu':await reply('Use /account vishu first. Custom emails go only to Vishu.');return
             if not arg or ('|' not in arg and '\n' not in arg):
@@ -128,9 +139,8 @@ async def handle_update(update,store,notify=None):
             if not subject or len(subject)>180 or any(c in subject for c in ('\r','\n')) or not body or len(body)>3000:
                 await reply('Use a subject of 1–180 characters and a message of 1–3,000 characters.');return
             draft={'id':str(uuid.uuid4()),'subject':subject,'body':body}
-            await change(email_draft=draft)
-            await telegram('sendMessage',{'chat_id':chat_id,'text':'Email preview — not sent yet\nTo: '+', '.join(FIXED_RECIPIENTS)+'\n\nSubject: '+subject+'\n\n'+body,
-                'reply_markup':{'inline_keyboard':[[{'text':'Send to Vishu 💚','callback_data':'mail:send:'+draft['id']},{'text':'Cancel','callback_data':'mail:cancel:'+draft['id']}]]}});return
+            await change(upload_mode='quiz')
+            await email_preview(draft);return
         if command=='/account':
             args=arg.split();alias=args[0].lower() if args else ''
             if not args:
@@ -215,6 +225,17 @@ async def handle_update(update,store,notify=None):
             await change(upload_mode='quiz',pending_image={'quiz_id':quiz['id'],'index':index})
             await reply(f'Send a photo or PNG/JPEG/WebP file for question {label} (array item {index+1}):\n{quiz["questions"][index]["question"][:500]}');return
         document=message.get('document',{})
+        if state.get('upload_mode')=='emailhtml' and document:
+            if state.get('target_alias')!='vishu':await reply('Use /account vishu first.');return
+            if Path(document.get('file_name','')).suffix.lower() not in ('.html','.htm'):await reply('Please attach an .html file, or /done to cancel.');return
+            if document.get('file_size',0)>100_000:await reply('HTML email limit is 100 KB.');return
+            try:
+                raw=(await download(document['file_id'],100_000)).decode('utf-8-sig')
+                body,plain=clean_email_html(raw)
+            except (ValueError,UnicodeError) as exc:await reply(str(exc));return
+            draft={'id':str(uuid.uuid4()),'subject':state['email_subject'],'body':plain,'html_body':body}
+            await change(upload_mode='quiz',email_subject=None)
+            await email_preview(draft);return
         is_photo=bool(message.get('photo')) or document.get('mime_type','').startswith('image/') or Path(document.get('file_name','')).suffix.lower() in ('.png','.jpg','.jpeg','.webp')
         if state.get('upload_mode')=='notes' and (document or message.get('photo')):
             file=message['photo'][-1] if message.get('photo') else document

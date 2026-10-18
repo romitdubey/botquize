@@ -323,3 +323,10 @@ After deploying, run:
 ```
 
 This refreshes the command menu and enables `callback_query` webhook updates for the Send/Cancel buttons. `scripts/check_webhook.py --repair` also retains callback updates when repairing the webhook. A matching production webhook secret and a configured Resend sender (with the matching Vishu account for resend.dev testing) are still required. No real custom emails are sent by the test suite.
+
+## Send a designed HTML email
+
+After redeploying, select `/account vishu`, then send `/emailhtml Meri pyaari Vishu 💚`.
+Attach `output/emails/for-vishu.html` as a document. Open that file in a browser first to inspect its design. The bot shows a text preview, then waits for **Send to Vishu 💚** or Cancel. No mail is sent on upload. `/done` exits upload mode.
+
+HTML emails accept UTF-8 `.html`/`.htm` files up to 100 KB. Tables, text, HTTPS buttons and basic inline colors/spacing are preserved. Scripts, forms, embeds, remote images and style blocks are removed. Use inline styles for email designs; actual rendering varies by email client. Plain-text `/email` continues to use the existing Study Grove template. Recipient, account restrictions and duplicate prevention are the same for both commands. Run the webhook setup script after deploying if you want the new command in Telegram’s menu; typed commands work without refreshing the menu.

@@ -238,3 +238,45 @@ async def test_old_two_recipient_outbox_never_replays_removed_address(mail_confi
     assert await mail.deliver(store,event)=='failed'
     assert not calls
     assert store.rows[event['id']]['last_error']=='resend_recipient_configuration_changed'
+
+
+def test_html_email_keeps_design_but_removes_active_content():
+    from app.web.email_html import clean_email_html
+    body,text=clean_email_html('<html><head><script>secret()</script></head><body><p style="color:#244c3e;padding:20px;background:url(https://bad.test)">Hello Vishu ❤️</p><script>bad()</script><img src="https://bad.test/pixel"><a href="javascript:bad()" onclick="bad()">Hi</a></body></html>')
+    assert 'color:#244c3e' in body and 'padding:20px' in body
+    assert 'Hello Vishu ❤️' in text
+    assert all(v not in body+text for v in ('bad()', 'secret()', 'bad.test', 'onclick', 'javascript:'))
+    event=mail.event_data('custom',{'id':'html','subject':'For Vishu','html_body':body})
+    rendered,plain=mail.render_email(event)
+    assert 'Hello Vishu ❤️' in rendered+plain
+    assert 'color:#244c3e' in rendered
+
+
+@pytest.mark.asyncio
+async def test_html_upload_previews_and_requires_explicit_send(mail_config,monkeypatch):
+    from app.web import telegram as tg
+    store=MemoryStore();store.admins[123456789]={'target_alias':'vishu','target_user_id':'vishu'}
+    send=AsyncMock();events=[]
+    monkeypatch.setattr(tg,'telegram',send)
+    monkeypatch.setattr(tg,'download',AsyncMock(return_value=b'<html><body><p style="color:#244c3e">Hello Vishu</p></body></html>'))
+    async def update(**message):
+        await tg.handle_update({'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},**message}},store,notify=lambda *args:events.append(args))
+    await update(text='/emailhtml A letter for you')
+    await update(document={'file_id':'html','file_name':'letter.html','file_size':120})
+    draft=store.admins[123456789]['email_draft']
+    assert not events and draft['subject']=='A letter for you' and 'color:#244c3e' in draft['html_body']
+    assert store.admins[123456789]['upload_mode']=='quiz'
+    assert 'Hello Vishu' in send.call_args.args[1]['text']
+    await tg.handle_update({'callback_query':{'id':'click','from':{'id':123456789},'message':{'chat':{'id':123456789,'type':'private'}},'data':'mail:send:'+draft['id']}},store,notify=lambda *args:events.append(args))
+    assert len(events)==1 and events[0][2]['html_body']==draft['html_body']
+
+
+def test_romantic_email_artifact_remains_styled_after_cleaning():
+    from pathlib import Path
+    from app.web.email_html import clean_email_html
+    body,text=clean_email_html(Path('output/emails/for-vishu.html').read_text())
+    assert 'background-color:#244c3e' in body
+    assert 'Hi meri Vishu 🌷' in text
+    assert 'Abhi jo bhi hua, uske liye sorry.' in text
+    assert 'khane aur apni health' in text
+    assert text.endswith('Ab ek chhoti si smile, phir test? Main yahin hoon, tumhare saath. 💚')
