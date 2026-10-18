@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from app.config import BOT_TOKEN, ADMIN_USER_IDS
 from app.web.accounts import scoped_quiz, copy_content
 from app.web.importer import export_part, merge_exports
+from app.web.notifications import configuration as email_configuration, FIXED_RECIPIENTS
 from app.web.domain import validate_bank, validate_pyq, today
 from app.web.daily import scheduled_day, release_day
 from app.web.attachments import attachment_number, resolve_question, question_number
@@ -37,6 +38,7 @@ Set the study day + topic for your next JSON upload. Bilingual question + answer
 /image Q12 — attach the next photo to printed question 12
 /image #12 — attach to the 12th item in the JSON array
 /question {JSON} — add one question as a new draft, then send its diagram
+/email Subject | Body — preview a custom email to Vishu (Vishu account only)
 /status — selected test and upload label
 /plan — today's study topic
 
@@ -66,10 +68,11 @@ async def download(file_id,max_size):
                 chunks.append(chunk)
     return b''.join(chunks)
 
-async def handle_update(update,store):
-    message=update.get('message')
+async def handle_update(update,store,notify=None):
+    callback=update.get('callback_query')
+    message=callback.get('message') if callback else update.get('message')
     if not message: return # Old inline buttons/poll answers never publish anything.
-    user=message.get('from',{}).get('id');chat=message.get('chat',{})
+    user=(callback.get('from',{}) if callback else message.get('from',{})).get('id');chat=message.get('chat',{})
     if user not in ADMIN_USER_IDS or chat.get('type')!='private': return
     chat_id=chat['id']
     async def reply(text): await telegram('sendMessage',{'chat_id':chat_id,'text':text[:4000]})
@@ -91,6 +94,43 @@ async def handle_update(update,store):
             if target and quiz.get('owner_id')!=target and not (not quiz.get('owner_id') and state.get('target_alias')=='vishu'):raise HTTPException(403,'This quiz belongs to another account. Switch /account first.')
             if not target and quiz.get('owner_id'):raise HTTPException(403,'Select its /account first.')
             return quiz
+        if callback:
+            data=callback.get('data','')
+            if not data.startswith(('mail:send:','mail:cancel:')):return
+            await telegram('answerCallbackQuery',{'callback_query_id':callback['id']})
+            if data.count(':')!=2:return
+            operation,mail_id=data.split(':')[1:]
+            if state.get('target_alias')!='vishu':await reply('Select /account vishu before sending email.');return
+            draft=state.get('email_draft')
+            if not draft or draft.get('id')!=mail_id:await reply('This email preview is no longer current. Create a new draft with /email.');return
+            if operation=='cancel':
+                if draft.get('send_requested'):await reply('This email was already queued. Check the delivery acknowledgement; cancellation cannot recall a sent email.');return
+                def cancel(current):
+                    if (current.get('email_draft') or {}).get('id')==mail_id and not current['email_draft'].get('send_requested'):current['email_draft']=None
+                    elif (current.get('email_draft') or {}).get('send_requested'):raise HTTPException(400,'This email was already queued; cancellation cannot recall it.')
+                await store.mutate(user,cancel,admin=True)
+                await reply('Email draft cancelled. Nothing was sent.');return
+            if not email_configuration():await reply('Set RESEND_API_KEY and RESEND_FROM_EMAIL (Resend sender) in Vercel, then redeploy. This draft is kept.');return
+            def confirm(current):
+                pending=current.get('email_draft') or {}
+                if pending.get('id')!=mail_id or current.get('target_alias')!='vishu':raise HTTPException(400,'This email preview expired. Create a new /email draft.')
+                pending['send_requested']=True
+            await store.mutate(user,confirm,admin=True)
+            # Same draft UUID on every tap; the persistent outbox prevents duplicate sends.
+            if notify:notify('vishu','custom',{**draft,'reply_chat_id':chat_id})
+            await reply('Email queued for Vishu. I’ll confirm when Resend accepts it.');return
+        if command=='/email':
+            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. Custom emails go only to Vishu.');return
+            if not arg or ('|' not in arg and '\n' not in arg):
+                await reply('Use /email Subject | Your message\nOr put the subject on the first line and the message on the following lines.\nYou’ll get a preview before sending.');return
+            subject,body=(arg.split('\n',1) if '\n' in arg and ('|' not in arg.split('\n',1)[0]) else arg.split('|',1))
+            subject=subject.strip();body=body.strip()
+            if not subject or len(subject)>180 or any(c in subject for c in ('\r','\n')) or not body or len(body)>3000:
+                await reply('Use a subject of 1–180 characters and a message of 1–3,000 characters.');return
+            draft={'id':str(uuid.uuid4()),'subject':subject,'body':body}
+            await change(email_draft=draft)
+            await telegram('sendMessage',{'chat_id':chat_id,'text':'Email preview — not sent yet\nTo: '+', '.join(FIXED_RECIPIENTS)+'\n\nSubject: '+subject+'\n\n'+body,
+                'reply_markup':{'inline_keyboard':[[{'text':'Send to Vishu 💚','callback_data':'mail:send:'+draft['id']},{'text':'Cancel','callback_data':'mail:cancel:'+draft['id']}]]}});return
         if command=='/account':
             args=arg.split();alias=args[0].lower() if args else ''
             if not args:
@@ -108,7 +148,7 @@ async def handle_update(update,store):
                 accounts[alias]=resolved
             if alias not in accounts:raise HTTPException(400,f'First bind /account {alias} EMAIL using that Supabase login email.')
             target=accounts[alias]
-            await change(accounts=accounts,target_alias=alias,target_user_id=target['id'],quiz_id=None,pending_image=None,upload_mode='quiz',study_date=None,topic=None,notes_date=None,notes_title=None,quiz_kind='daily',import_parts={})
+            await change(accounts=accounts,target_alias=alias,target_user_id=target['id'],quiz_id=None,pending_image=None,upload_mode='quiz',study_date=None,topic=None,notes_date=None,notes_title=None,quiz_kind='daily',import_parts={},email_draft=None)
             await reply(f'Account selected: {alias} · {target["email"]}\nNew quizzes, notes and diagrams stay in this account. Use /topic or /notes next. Existing answers/results are unchanged.');return
         if command=='/copyto':
             alias=arg.lower();accounts=state.get('accounts',{})
@@ -151,8 +191,9 @@ async def handle_update(update,store):
             await reply(f'Selected {quiz["topic"]}.');return
         if command in ('/open','/close'):
             if not state.get('quiz_id'): await reply('Upload a JSON file or /select a test first.');return
-            await selected_quiz()
+            quiz=await selected_quiz()
             await store.update_quiz(state['quiz_id'],{'status':'open' if command=='/open' else 'closed'})
+            if command=='/open' and notify:notify(state.get('target_alias'),'quiz',quiz)
             link=os.getenv('APP_URL','').rstrip('/')
             await reply((f'Test approved. Opens on {release_day(await store.quiz(state["quiz_id"])):%d %b %Y}. ' if command=='/open' else 'Test closed for new attempts. ')+link);return
         if command=='/tests':
@@ -192,6 +233,7 @@ async def handle_update(update,store):
             await store.upload_note(path,content,mime)
             await store.put_note({'id':note_id,'study_date':day,'title':state.get('notes_title') or filename,
                 'filename':filename,'mime':mime,'path':path,'owner_id':state.get('target_user_id')})
+            if notify:notify(state.get('target_alias'),'notes',{'id':note_id,'study_date':day,'title':state.get('notes_title') or filename,'mime':mime})
             await reply(f'Notes saved for {day}: {filename}\nYou can send another PDF/photo, or /done.');return
         if is_photo:
             pending=state.get('pending_image')

@@ -7,11 +7,12 @@ import uuid
 from datetime import datetime, timedelta
 from pathlib import Path
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 from app.config import BOT_TOKEN, WEBHOOK_SECRET
 from app.services.planner import plan_rows
+from app.web.notifications import schedule as schedule_email
 from app.web.store import Store
 from app.web.accounts import content_visible
 from app.web.daily import scheduled_day, today_topic, require_today, release_day, is_released
@@ -173,10 +174,11 @@ async def start_attempt(quiz_id:str,user=Depends(participant)):
     return await present_attempt(await store.mutate(user['id'],action))
 
 @app.get('/api/attempts/{attempt_id}')
-async def get_attempt(attempt_id:str,user=Depends(learner)):
+async def get_attempt(attempt_id:str,background_tasks:BackgroundTasks,user=Depends(learner)):
     data=await reconcile(user['id'])
     attempt=data.get('attempts',{}).get(attempt_id)
     if not attempt: raise HTTPException(404,'Attempt not found.')
+    schedule_email(background_tasks,store,user.get('account_alias'),'result',attempt)
     return await present_attempt(attempt)
 
 class AnswerUpdate(BaseModel):
@@ -209,14 +211,16 @@ async def save_answer(attempt_id:str,payload:AnswerUpdate,user=Depends(participa
     return await store.mutate(user['id'],action)
 
 @app.post('/api/attempts/{attempt_id}/submit')
-async def submit_attempt(attempt_id:str,user=Depends(participant)):
+async def submit_attempt(attempt_id:str,background_tasks:BackgroundTasks,user=Depends(participant)):
     stamp=now()
     def action(data):
         a=data.get('attempts',{}).get(attempt_id)
         if not a: raise HTTPException(404,'Attempt not found.')
         finish(a,min(stamp,parsed(a['deadline'])) if a.get('kind')=='pyq' else stamp)
         return copy.deepcopy(a)
-    return await present_attempt(await store.mutate(user['id'],action))
+    result=await store.mutate(user['id'],action)
+    schedule_email(background_tasks,store,user.get('account_alias'),'result',result)
+    return await present_attempt(result)
 
 class ClockUpdate(BaseModel):
     action:str
@@ -265,11 +269,12 @@ async def retry_mistakes(user=Depends(participant)):
 
 @app.post('/api/telegram/webhook')
 @app.post('/webhook')
-async def telegram_webhook(request:Request):
+async def telegram_webhook(request:Request,background_tasks:BackgroundTasks):
     if not BOT_TOKEN or not secrets.compare_digest(request.headers.get('X-Telegram-Bot-Api-Secret-Token',''),WEBHOOK_SECRET):
         raise HTTPException(403,'Forbidden')
     from app.web.telegram import handle_update
-    await handle_update(await request.json(),store)
+    def notify(alias,kind,row):schedule_email(background_tasks,store,alias,kind,row)
+    await handle_update(await request.json(),store,notify=notify)
     return {'ok':True}
 
 @app.get('/api/health')

@@ -19,3 +19,10 @@ def isolated_database(tmp_path,monkeypatch):
     monkeypatch.setattr(notion_sync, 'WORKSPACE_CONFIG_PATH', tmp_path / 'notion-workspace.json')
     monkeypatch.setattr(database,'DATABASE_PATH',str(tmp_path/'quizbot.db'))
     database.init_db()
+
+
+@pytest.fixture(autouse=True)
+def disable_live_email_delivery(monkeypatch):
+    """A developer's local Resend key must never cause test emails to be sent."""
+    monkeypatch.delenv('RESEND_API_KEY',raising=False)
+    monkeypatch.delenv('RESEND_FROM_EMAIL',raising=False)

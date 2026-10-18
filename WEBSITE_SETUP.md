@@ -264,3 +264,62 @@ Selecting, clearing or flagging an answer updates the existing question immediat
 The normal indicator stays quiet (“Autosave on”). On failure, selections remain visible, dirty responses are retained locally by account/attempt, and Retry sync appears. Pending local selections are restored when reopening that same unfinished attempt and resynced. Submit, Save & exit and explicit pause/resume wait for outstanding responses; a failed sync blocks normal submission/exit until retried. Exam deadlines still apply, and only responses received by the server before the deadline can be graded. Quiz clock heartbeats continue independently of the answer backlog.
 
 For an isolated preview with a simulated two-second answer save, open `/?demo=1&slow=1`. It never writes real study data. Queue regression checks: `npm run test:saves`.
+
+## Optional Resend email notifications
+
+This is an additive integration. Quiz imports, account scoping, attempts, timers, grading and the frontend stay unchanged. Notifications run as response background tasks; email/storage failures are contained and cannot turn a successful study action into an API error.
+
+1. Run **`supabase/005_email_notifications.sql`** in Supabase SQL Editor. This adds only a private notification outbox table. If you already ran the earlier two-recipient version of 005, also run **`supabase/006_single_recipient_email.sql`**. Fresh projects can use the updated full schema.
+2. For this single-recipient testing setup, register and verify a Resend account using **`dhankarvishu293@gmail.com`**, then create its API key. `onboarding@resend.dev` is a testing sender restricted to the email associated with that Resend account; it is not a production sender for arbitrary recipients. See [Resend testing restrictions](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain). A verified domain sender can also be used.
+3. Set these backend-only variables locally and in Vercel:
+
+```env
+RESEND_API_KEY=your_resend_api_key
+RESEND_FROM_EMAIL=Study Grove <onboarding@resend.dev>
+```
+
+The only notification recipient is fixed in `app/web/notifications.py`: **`dhankarvishu293@gmail.com`**. Romit receives no notification emails. This is independent of login emails, and `STUDY_NOTIFICATION_EMAILS` cannot override it. Each event sends one email to Vishu. Missing API key/sender configuration disables sending. Never hardcode the API key. Redeploy Vercel after configuring.
+
+Events:
+
+- `/account vishu` → `/open`: sends a new daily quiz or full PYQ email. Draft uploads, questions/answer files, image attachments and `/close` do not send emails. The email states the actual opening date so advance approval does not falsely say the paper is playable today.
+- `/account vishu` → a successful PDF/photo note upload: sends a study material email (one event per uploaded file).
+- Vishu submits a quiz or opens a finalized result: sends a stats-only result summary and a button to the main website. It includes correct/wrong/skipped/accuracy/time/question count and PYQ marks when applicable. It contains no questions, answer keys, explanations, attachments or authentication tokens.
+- `/account me` changes and results never send email. Copying a test bank to Vishu while `me` is selected does not send email; switch to Vishu, select its copy and `/open` to announce it. Automatic Monday bank creation is unchanged and does not send an admin notification.
+
+Each event sends a one-message Resend batch addressed only to Vishu. Historical two-recipient outbox entries are preserved but cannot be retried to the old addresses; the delivery guard refuses them. A persistent unique event ID, an atomic database delivery lease and a [Resend idempotency key](https://resend.com/docs/dashboard/emails/idempotency-keys) prevent refreshes, webhook retries or concurrent result views from sending the same event repeatedly. A successful provider response means accepted by Resend, not guaranteed inbox delivery.
+
+Delivery status is in `study_email_events`. Failed result notifications retry when that result is opened again; failed quiz notifications retry when `/open` is repeated; repeating the same notes file can retry its event. No new scheduler or cron is added. Automatic retries stop after 23 hours because Resend idempotency retention is finite; inspect older failed events and the Resend dashboard before any manual resend. An API outage or missing outbox migration does not roll back study changes. If notifications were disabled when an event happened, no historical bulk backfill runs; opening a result or repeating `/open` after setup can announce that individual event.
+
+HTML previews with synthetic data are in `output/email-previews/`. They were checked in a mobile browser; actual inbox rendering can vary by email client. No live test emails were sent during development.
+
+
+## Send a custom email from Telegram
+
+Select Vishu's account, then compose a plain-text message:
+
+```text
+/account vishu
+/email A little reminder 💚 | Take a small break, Vishu. You’re doing well!
+```
+
+Or put the subject on the first line and the body on following lines:
+
+```text
+/email Tomorrow’s practice
+Your new quiz is ready for tomorrow.
+
+Take your time. You’ve got this 💚
+```
+
+The bot returns a preview with **Send to Vishu 💚** and **Cancel** buttons. It does not send on draft creation. Send delivers the subject/body only to Vishu’s fixed address using the Study Grove email design and main-website button. Bodies are plain text (HTML is displayed literally), with paragraph/line breaks preserved. Subject limit: 180 characters; body limit: 3,000. You cannot specify or override recipients in the command.
+
+Only configured Telegram admins in private chat can compose or confirm, and `/account vishu` must be selected. Changing accounts invalidates an old pending email draft. A newly created preview supersedes the older one. Cancel works before confirmation; it cannot recall an email already queued/sent. Repeated Send taps share the same draft UUID/outbox key and do not create duplicate emails. To deliberately send another message, create a new `/email` draft. A delivery acknowledgement appears in your private bot chat after the background send; “accepted by Resend” does not guarantee inbox delivery. If sending fails, retry the same Send button, respecting the outbox retry window.
+
+After deploying, run:
+
+```bash
+.venv/bin/python scripts/setup_webhook.py
+```
+
+This refreshes the command menu and enables `callback_query` webhook updates for the Send/Cancel buttons. `scripts/check_webhook.py --repair` also retains callback updates when repairing the webhook. A matching production webhook secret and a configured Resend sender (with the matching Vishu account for resend.dev testing) are still required. No real custom emails are sent by the test suite.

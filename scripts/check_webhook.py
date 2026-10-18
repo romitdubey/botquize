@@ -29,7 +29,7 @@ async def main():
             raise SystemExit('Webhook not changed. Check production URL, deployment protection and matching BOT_TOKEN/WEBHOOK_SECRET.')
         if '--repair' in sys.argv:
             result=await client.post(f'https://api.telegram.org/bot{BOT_TOKEN}/setWebhook',json={
-                'url':target,'secret_token':WEBHOOK_SECRET,'allowed_updates':['message'],
+                'url':target,'secret_token':WEBHOOK_SECRET,'allowed_updates':['message','callback_query'],
                 'drop_pending_updates':False})
             if not result.is_success or not result.json().get('ok'):raise SystemExit('Could not update webhook.')
             print('Webhook switched to the verified production backend. Existing pending updates retained.',flush=True)
