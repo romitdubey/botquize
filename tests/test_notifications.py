@@ -279,4 +279,5 @@ def test_romantic_email_artifact_remains_styled_after_cleaning():
     assert 'Hi meri Vishu 🌷' in text
     assert 'Abhi jo bhi hua, uske liye sorry.' in text
     assert 'khane aur apni health' in text
-    assert text.endswith('Ab ek chhoti si smile, phir test? Main yahin hoon, tumhare saath. 💚')
+    assert 'Ab ek chhoti si smile, phir test? Main yahin hoon, tumhare saath. 💚' in text
+    assert 'Tumhara bandar 🐒' in text and 'https://botquize.vercel.app/' in body
