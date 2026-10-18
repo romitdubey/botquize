@@ -12,7 +12,7 @@ from app.web import api
 
 @pytest.fixture
 def mail_config(monkeypatch):
-    monkeypatch.setattr(mail,'FIXED_RECIPIENTS',('first@example.com',))
+    monkeypatch.setattr(mail,'DEFAULT_RECIPIENTS',('first@example.com',))
     monkeypatch.setenv('RESEND_API_KEY','re_test_only')
     monkeypatch.setenv('RESEND_FROM_EMAIL','Study Grove <updates@example.com>')
     monkeypatch.setenv('STUDY_NOTIFICATION_EMAILS','first@example.com,second@example.com')
@@ -56,7 +56,7 @@ def mock_resend(monkeypatch,status=200):
 def test_never_infer_login_addresses_or_send_to_wrong_recipient_count(monkeypatch,emails):
     monkeypatch.setenv('RESEND_API_KEY','test');monkeypatch.setenv('RESEND_FROM_EMAIL','updates@example.com')
     monkeypatch.setenv('STUDY_ALLOWED_EMAILS','login1@example.com,login2@example.com')
-    monkeypatch.setattr(mail,'FIXED_RECIPIENTS',tuple(v for v in emails.split(',') if v))
+    monkeypatch.setattr(mail,'DEFAULT_RECIPIENTS',tuple(v for v in emails.split(',') if v))
     assert mail.configuration() is None
 
 
@@ -176,7 +176,7 @@ async def test_custom_email_preview_send_and_cancel_are_admin_only(mail_config,m
     await update('/email A little reminder | Take a break, Vishu.\nYou’ve got this 💚')
     draft=store.admins[123456789]['email_draft'];assert not events
     assert calls[-1][1]['reply_markup']['inline_keyboard'][0][0]['callback_data']=='mail:send:'+draft['id']
-    assert calls[-1][1]['reply_markup']['inline_keyboard'][0][0]['text']=='Send to Vishu 💚'
+    assert calls[-1][1]['reply_markup']['inline_keyboard'][0][0]['text']=='Send email 💚'
     assert 'romitbharadwaj1@gmail.com' not in calls[-1][1]['text']
     await update(callback='mail:send:'+draft['id'],user=999)
     assert events==[]
@@ -281,3 +281,60 @@ def test_romantic_email_artifact_remains_styled_after_cleaning():
     assert 'khane aur apni health' in text
     assert 'Ab ek chhoti si smile, phir test? Main yahin hoon, tumhare saath. 💚' in text
     assert 'Tumhara bandar 🐒' in text and 'https://botquize.vercel.app/' in body
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('code,migration',[('email_storage_schema','006_single_recipient_email.sql'),('email_storage_missing','005_email_notifications.sql')])
+async def test_manual_email_explains_storage_failure_before_outbox_exists(mail_config,monkeypatch,code,migration):
+    from fastapi import HTTPException
+    from app.web import telegram as tg
+    ack=AsyncMock();monkeypatch.setattr(tg,'telegram',ack)
+    store=Outbox();store.request=AsyncMock(side_effect=HTTPException(503,code))
+    await mail.deliver_manual(store,mail.event_data('result',result()),123456789)
+    assert migration in ack.call_args.args[1]['text']
+    assert code in ack.call_args.args[1]['text']
+
+
+@pytest.mark.asyncio
+async def test_provider_error_reports_safe_name_without_private_upstream_message(mail_config,monkeypatch):
+    from app.web import telegram as tg
+    original=httpx.AsyncClient
+    def transport(request):return httpx.Response(403,json={'name':'validation_error','message':'private upstream details with secret'})
+    monkeypatch.setattr(mail.httpx,'AsyncClient',lambda **kw:original(transport=httpx.MockTransport(transport),**kw))
+    ack=AsyncMock();monkeypatch.setattr(tg,'telegram',ack)
+    store=Outbox();event=mail.event_data('result',result())
+    await mail.deliver_manual(store,event,123456789)
+    assert 'resend_validation_error' in ack.call_args.args[1]['text']
+    assert 'private upstream' not in ack.call_args.args[1]['text']+str(store.rows)
+
+
+def test_recipient_environment_overrides_default_without_using_login_emails(monkeypatch):
+    monkeypatch.setenv('RESEND_API_KEY','re_test')
+    monkeypatch.setenv('RESEND_FROM_EMAIL','Study Grove <onboarding@resend.dev>')
+    monkeypatch.setenv('RESEND_TO_EMAIL',' custom@example.com ')
+    monkeypatch.setenv('STUDY_ALLOWED_EMAILS','login@example.com')
+    assert mail.configuration()[2]==('custom@example.com',)
+
+
+@pytest.mark.parametrize('value',['','invalid','a@example.com,b@example.com','a@example.com;b@example.com','Name <a@example.com>','a@example.com\nBcc: b@example.com'])
+def test_recipient_environment_rejects_blank_invalid_or_multiple_addresses(mail_config,monkeypatch,value):
+    monkeypatch.setenv('RESEND_TO_EMAIL',value)
+    assert mail.configuration() is None and mail.notification_recipients()==()
+
+
+@pytest.mark.asyncio
+async def test_recipient_change_requires_a_fresh_preview(mail_config,monkeypatch):
+    from app.web import telegram as tg
+    store=MemoryStore();store.admins[123456789]={'target_alias':'vishu','target_user_id':'vishu'}
+    send=AsyncMock();events=[];monkeypatch.setattr(tg,'telegram',send)
+    async def update(payload):await tg.handle_update(payload,store,notify=lambda *args:events.append(args))
+    envelope={'from':{'id':123456789},'chat':{'id':123456789,'type':'private'}}
+    await update({'message':{**envelope,'text':'/email Hello | Body'}})
+    draft=store.admins[123456789]['email_draft']
+    assert 'first@example.com' in send.call_args.args[1]['text']
+    monkeypatch.setenv('RESEND_TO_EMAIL','next@example.com')
+    await update({'callback_query':{'id':'click','from':envelope['from'],'message':{'chat':envelope['chat']},'data':'mail:send:'+draft['id']}})
+    assert not events and 'recipient changed' in send.call_args.args[1]['text']
+    await update({'message':{**envelope,'text':'/email New | Body'}})
+    assert store.admins[123456789]['email_draft']['recipients']==['next@example.com']
+    assert 'next@example.com' in send.call_args.args[1]['text']

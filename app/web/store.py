@@ -28,7 +28,11 @@ class Store:
                 code = error.get('code', '') if isinstance(error, dict) else ''
             except ValueError:
                 code = ''
-            if code == 'PGRST204' and resource=='study_notes':
+            if resource=='study_email_events' and code=='23514':
+                detail = 'email_storage_schema'
+            elif resource=='study_email_events' and code in ('PGRST205','42P01'):
+                detail = 'email_storage_missing'
+            elif code == 'PGRST204' and resource=='study_notes':
                 detail = 'Account-specific notes need the database update. Run supabase/004_account_notes.sql in the Supabase SQL Editor.'
             elif code == 'PGRST202':
                 detail = 'The database update is missing. Run supabase/002_daily_notes.sql in the Supabase SQL Editor.'

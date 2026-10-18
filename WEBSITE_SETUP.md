@@ -276,9 +276,10 @@ This is an additive integration. Quiz imports, account scoping, attempts, timers
 ```env
 RESEND_API_KEY=your_resend_api_key
 RESEND_FROM_EMAIL=Study Grove <onboarding@resend.dev>
+RESEND_TO_EMAIL=dhankarvishu293@gmail.com
 ```
 
-The only notification recipient is fixed in `app/web/notifications.py`: **`dhankarvishu293@gmail.com`**. Romit receives no notification emails. This is independent of login emails, and `STUDY_NOTIFICATION_EMAILS` cannot override it. Each event sends one email to Vishu. Missing API key/sender configuration disables sending. Never hardcode the API key. Redeploy Vercel after configuring.
+The sole recipient is configured with `RESEND_TO_EMAIL`; if the variable is absent, it defaults to `dhankarvishu293@gmail.com` for compatibility. An explicitly blank or invalid value disables sending; comma-separated recipient lists are rejected. Login emails and `STUDY_NOTIFICATION_EMAILS` are never used as recipients. With `onboarding@resend.dev`, the API key must belong to the Resend account registered with that exact recipient address. Set both the API key and recipient when switching accounts, then redeploy Vercel. Changing only the key cannot discover or change the recipient automatically. Missing API key/sender configuration disables sending. Never hardcode the API key.
 
 Events:
 
@@ -287,7 +288,7 @@ Events:
 - Vishu submits a quiz or opens a finalized result: sends a stats-only result summary and a button to the main website. It includes correct/wrong/skipped/accuracy/time/question count and PYQ marks when applicable. It contains no questions, answer keys, explanations, attachments or authentication tokens.
 - `/account me` changes and results never send email. Copying a test bank to Vishu while `me` is selected does not send email; switch to Vishu, select its copy and `/open` to announce it. Automatic Monday bank creation is unchanged and does not send an admin notification.
 
-Each event sends a one-message Resend batch addressed only to Vishu. Historical two-recipient outbox entries are preserved but cannot be retried to the old addresses; the delivery guard refuses them. A persistent unique event ID, an atomic database delivery lease and a [Resend idempotency key](https://resend.com/docs/dashboard/emails/idempotency-keys) prevent refreshes, webhook retries or concurrent result views from sending the same event repeatedly. A successful provider response means accepted by Resend, not guaranteed inbox delivery.
+Each event sends a one-message Resend batch addressed only to the configured recipient. Historical two-recipient outbox entries are preserved but cannot be retried to the old addresses; the delivery guard refuses them. A persistent unique event ID, an atomic database delivery lease and a [Resend idempotency key](https://resend.com/docs/dashboard/emails/idempotency-keys) prevent refreshes, webhook retries or concurrent result views from sending the same event repeatedly. A successful provider response means accepted by Resend, not guaranteed inbox delivery.
 
 Delivery status is in `study_email_events`. Failed result notifications retry when that result is opened again; failed quiz notifications retry when `/open` is repeated; repeating the same notes file can retry its event. No new scheduler or cron is added. Automatic retries stop after 23 hours because Resend idempotency retention is finite; inspect older failed events and the Resend dashboard before any manual resend. An API outage or missing outbox migration does not roll back study changes. If notifications were disabled when an event happened, no historical bulk backfill runs; opening a result or repeating `/open` after setup can announce that individual event.
 
@@ -312,7 +313,7 @@ Your new quiz is ready for tomorrow.
 Take your time. You’ve got this 💚
 ```
 
-The bot returns a preview with **Send to Vishu 💚** and **Cancel** buttons. It does not send on draft creation. Send delivers the subject/body only to Vishu’s fixed address using the Study Grove email design and main-website button. Bodies are plain text (HTML is displayed literally), with paragraph/line breaks preserved. Subject limit: 180 characters; body limit: 3,000. You cannot specify or override recipients in the command.
+The bot returns a preview with **Send email 💚** and **Cancel** buttons. It does not send on draft creation. Send delivers the subject/body only to the configured `RESEND_TO_EMAIL` address using the Study Grove email design and main-website button. Bodies are plain text (HTML is displayed literally), with paragraph/line breaks preserved. Subject limit: 180 characters; body limit: 3,000. You cannot specify or override recipients in the command.
 
 Only configured Telegram admins in private chat can compose or confirm, and `/account vishu` must be selected. Changing accounts invalidates an old pending email draft. A newly created preview supersedes the older one. Cancel works before confirmation; it cannot recall an email already queued/sent. Repeated Send taps share the same draft UUID/outbox key and do not create duplicate emails. To deliberately send another message, create a new `/email` draft. A delivery acknowledgement appears in your private bot chat after the background send; “accepted by Resend” does not guarantee inbox delivery. If sending fails, retry the same Send button, respecting the outbox retry window.
 
@@ -327,6 +328,9 @@ This refreshes the command menu and enables `callback_query` webhook updates for
 ## Send a designed HTML email
 
 After redeploying, select `/account vishu`, then send `/emailhtml Meri pyaari Vishu 💚`.
-Attach `output/emails/for-vishu.html` as a document. Open that file in a browser first to inspect its design. The bot shows a text preview, then waits for **Send to Vishu 💚** or Cancel. No mail is sent on upload. `/done` exits upload mode.
+Attach `output/emails/for-vishu.html` as a document. Open that file in a browser first to inspect its design. The bot shows a text preview, then waits for **Send email 💚** or Cancel. No mail is sent on upload. `/done` exits upload mode.
 
 HTML emails accept UTF-8 `.html`/`.htm` files up to 100 KB. Tables, text, HTTPS buttons and basic inline colors/spacing are preserved. Scripts, forms, embeds, remote images and style blocks are removed. Use inline styles for email designs; actual rendering varies by email client. Plain-text `/email` continues to use the existing Study Grove template. Recipient, account restrictions and duplicate prevention are the same for both commands. Run the webhook setup script after deploying if you want the new command in Telegram’s menu; typed commands work without refreshing the menu.
+
+
+Changing `RESEND_TO_EMAIL` invalidates old Telegram email previews. Compose a new `/email` or `/emailhtml` draft to review the new address before sending. An existing outbox payload is never silently rerouted to another recipient; create a fresh draft if a previous event contains the old address. Email notifications remain limited to actions/results for `/account vishu`, regardless of the recipient setting.

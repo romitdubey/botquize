@@ -26,3 +26,4 @@ def disable_live_email_delivery(monkeypatch):
     """A developer's local Resend key must never cause test emails to be sent."""
     monkeypatch.delenv('RESEND_API_KEY',raising=False)
     monkeypatch.delenv('RESEND_FROM_EMAIL',raising=False)
+    monkeypatch.delenv('RESEND_TO_EMAIL',raising=False)

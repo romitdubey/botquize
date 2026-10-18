@@ -8,17 +8,25 @@ import uuid
 from datetime import datetime,timedelta,timezone
 from urllib.parse import urlsplit
 import httpx
+from fastapi import HTTPException
 from app.web.daily import release_day
 from app.web.email_html import clean_email_html
 
 logger=logging.getLogger(__name__)
-# Only Vishu receives notifications, independently of the selected login email.
+# One configurable recipient, independently of the selected login email.
 # Never infer recipients from login accounts or STUDY_ALLOWED_EMAILS.
-FIXED_RECIPIENTS=('dhankarvishu293@gmail.com',)
+DEFAULT_RECIPIENTS=('dhankarvishu293@gmail.com',)
+
+
+def notification_recipients():
+    raw=os.getenv('RESEND_TO_EMAIL')
+    recipients=(raw.strip(),) if raw is not None else DEFAULT_RECIPIENTS
+    if len(recipients)!=1 or any(not re.fullmatch(r'[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+',v) for v in recipients):return ()
+    return recipients
 
 
 def configuration():
-    recipients=FIXED_RECIPIENTS
+    recipients=notification_recipients()
     key=os.getenv('RESEND_API_KEY','').strip();sender=os.getenv('RESEND_FROM_EMAIL','').strip()
     if not key or not sender or len(recipients)!=1:return None
     if any(not re.fullmatch(r'[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+',v) for v in recipients):return None
@@ -101,8 +109,8 @@ def schedule(background,store,alias,kind,row):
         logger.warning('Email notification could not be scheduled; study action is unaffected.')
 
 
-async def deliver(store,event):
-    """Send one message to Vishu once, after the study response. Failures never escape."""
+async def deliver(store,event,report=None):
+    """Send one message to the configured recipient once, after the study response. Failures never escape."""
     config=configuration()
     if not config:return 'disabled'
     key,sender,recipients=config;token=str(uuid.uuid4());claimed=False
@@ -128,30 +136,54 @@ async def deliver(store,event):
             raise RuntimeError('resend_recipient_configuration_changed')
         async with httpx.AsyncClient(timeout=8) as client:
             response=await client.post('https://api.resend.com/emails/batch',headers={'Authorization':'Bearer '+key,'Idempotency-Key':'study-'+hashlib.sha256(event['id'].encode()).hexdigest(),'Content-Type':'application/json'},json=frozen)
-        if not response.is_success:raise RuntimeError('resend_http_'+str(response.status_code))
+        if not response.is_success:
+            # Keep only an allowlisted provider error name; never echo upstream messages.
+            try:name=response.json().get('name','')
+            except (ValueError,AttributeError):name=''
+            known={'validation_error','missing_api_key','invalid_api_key','restricted_api_key','rate_limit_exceeded','daily_quota_exceeded','monthly_quota_exceeded','invalid_from_address','application_error','concurrent_idempotent_requests','invalid_idempotent_request'}
+            raise RuntimeError('resend_'+name if name in known else 'resend_http_'+str(response.status_code))
         ids=response.json().get('data',[])
         if len(ids)!=len(recipients) or any(not item.get('id') for item in ids):raise RuntimeError('resend_invalid_response')
         await store.request('PATCH','study_email_events',params={'id':'eq.'+event['id'],'lease_token':'eq.'+token},body={'status':'sent','sent_at':datetime.now(timezone.utc).isoformat(),'lease_until':None,'last_error':None})
         return 'sent'
     except Exception as exc:
-        logger.warning('Email delivery is pending or failed; study action is unaffected.')
+        safe=str(exc) if isinstance(exc,RuntimeError) and str(exc).startswith('resend_') else 'delivery_or_storage_error'
+        if isinstance(exc,HTTPException) and exc.detail in ('email_storage_schema','email_storage_missing'):safe=exc.detail
+        if isinstance(exc,httpx.TimeoutException):safe='resend_timeout'
+        if report is not None:report['error']=safe
+        logger.warning('Email delivery failed (%s); study action is unaffected.',safe)
         if claimed:
             try:
-                safe=str(exc) if isinstance(exc,RuntimeError) and str(exc).startswith('resend_') else 'delivery_or_storage_error'
                 await store.request('PATCH','study_email_events',params={'id':'eq.'+event['id'],'lease_token':'eq.'+token},body={'status':'failed','lease_until':None,'last_error':safe})
             except Exception:pass
         return 'failed'
 
 
 async def deliver_manual(store,event,chat_id):
-    status=await deliver(store,event)
+    report={}
+    status=await deliver(store,event,report=report)
     from app.config import ADMIN_USER_IDS
     if chat_id not in ADMIN_USER_IDS:return
     from app.web.telegram import telegram
-    messages={'sent':'Email accepted by Resend for Vishu ✅',
+    messages={'sent':'Email accepted by Resend ✅',
               'failed':'Email could not be confirmed. Check Resend settings/outbox, then tap Send again to retry this same email safely.',
-              'disabled':'Email is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL in Vercel and redeploy.',
+              'disabled':'Email is not configured. Set RESEND_API_KEY, RESEND_FROM_EMAIL and a valid RESEND_TO_EMAIL in Vercel and redeploy.',
               'review':'This older email needs manual review in Resend before resending.',
               'pending':'This email is already being processed. No duplicate email was created.'}
+    if status=='failed':
+        code=report.get('error','delivery_or_storage_error')
+        hints={
+            'email_storage_schema':'Run supabase/006_single_recipient_email.sql in Supabase SQL Editor. The old outbox still requires two recipients.',
+            'email_storage_missing':'Run supabase/005_email_notifications.sql in Supabase SQL Editor to create the notification outbox.',
+            'resend_http_403':'Resend rejected sender/recipient access. For onboarding@resend.dev, the API key must belong to the account registered with the RESEND_TO_EMAIL address. Otherwise use a verified sender domain.',
+            'resend_validation_error':'Check RESEND_FROM_EMAIL. For onboarding@resend.dev, use the Resend API key from the account registered with the RESEND_TO_EMAIL address. Check Resend logs for validation details.',
+            'resend_invalid_api_key':'Replace RESEND_API_KEY in Vercel with the correct Resend key, then redeploy.',
+            'resend_http_401':'Replace RESEND_API_KEY in Vercel with the correct Resend key, then redeploy.',
+            'resend_restricted_api_key':'The Resend API key cannot send using this sender. Check its sending permissions and sender domain.',
+            'resend_recipient_configuration_changed':'This old draft contains a previous recipient list. Create a new /email or /emailhtml preview; it will show the current RESEND_TO_EMAIL recipient.',
+            'resend_invalid_from_address':'Check RESEND_FROM_EMAIL in Vercel, then redeploy.',
+            'resend_http_429':'Resend is limiting sends. Wait before retrying the same Send button.',
+        }
+        messages['failed']='Email was not confirmed. '+hints.get(code,'Check the Resend dashboard and notification outbox, then retry this same Send button safely.')+'\nError code: '+code
     try:await telegram('sendMessage',{'chat_id':chat_id,'text':messages[status]})
     except Exception:logger.warning('Email delivery acknowledgement could not be sent to the admin.')

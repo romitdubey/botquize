@@ -10,7 +10,7 @@ from app.config import BOT_TOKEN, ADMIN_USER_IDS
 from app.web.email_html import clean_email_html
 from app.web.accounts import scoped_quiz, copy_content
 from app.web.importer import export_part, merge_exports
-from app.web.notifications import configuration as email_configuration, FIXED_RECIPIENTS
+from app.web.notifications import configuration as email_configuration, notification_recipients
 from app.web.domain import validate_bank, validate_pyq, today
 from app.web.daily import scheduled_day, release_day
 from app.web.attachments import attachment_number, resolve_question, question_number
@@ -39,7 +39,7 @@ Set the study day + topic for your next JSON upload. Bilingual question + answer
 /image Q12 — attach the next photo to printed question 12
 /image #12 — attach to the 12th item in the JSON array
 /question {JSON} — add one question as a new draft, then send its diagram
-/email Subject | Body — preview a custom email to Vishu (Vishu account only)
+/email Subject | Body — preview an email to RESEND_TO_EMAIL (Vishu account only)
 /emailhtml Subject — upload an HTML email file, preview, then confirm
 /status — selected test and upload label
 /plan — today's study topic
@@ -112,7 +112,8 @@ async def handle_update(update,store,notify=None):
                     elif (current.get('email_draft') or {}).get('send_requested'):raise HTTPException(400,'This email was already queued; cancellation cannot recall it.')
                 await store.mutate(user,cancel,admin=True)
                 await reply('Email draft cancelled. Nothing was sent.');return
-            if not email_configuration():await reply('Set RESEND_API_KEY and RESEND_FROM_EMAIL (Resend sender) in Vercel, then redeploy. This draft is kept.');return
+            if not email_configuration():await reply('Set RESEND_API_KEY, RESEND_FROM_EMAIL and a valid RESEND_TO_EMAIL in Vercel, then redeploy. This draft is kept.');return
+            if tuple(draft.get('recipients',[]))!=notification_recipients():await reply('The email recipient changed. Create a new /email or /emailhtml preview to confirm the new address. Nothing was sent.');return
             def confirm(current):
                 pending=current.get('email_draft') or {}
                 if pending.get('id')!=mail_id or current.get('target_alias')!='vishu':raise HTTPException(400,'This email preview expired. Create a new /email draft.')
@@ -120,18 +121,21 @@ async def handle_update(update,store,notify=None):
             await store.mutate(user,confirm,admin=True)
             # Same draft UUID on every tap; the persistent outbox prevents duplicate sends.
             if notify:notify('vishu','custom',{**draft,'reply_chat_id':chat_id})
-            await reply('Email queued for Vishu. I’ll confirm when Resend accepts it.');return
+            await reply('Email queued for '+', '.join(notification_recipients())+'. I’ll confirm when Resend accepts it.');return
         async def email_preview(draft):
+            recipients=notification_recipients()
+            if not recipients:await reply('Set RESEND_TO_EMAIL to one valid email address in Vercel, then redeploy. Nothing was sent.');return
+            draft={**draft,'recipients':list(recipients)}
             await change(email_draft=draft)
-            await telegram('sendMessage',{'chat_id':chat_id,'text':('HTML email preview — open your HTML file to see the design.\n' if draft.get('html_body') else 'Email preview — not sent yet\n')+'To: '+', '.join(FIXED_RECIPIENTS)+'\n\nSubject: '+draft['subject']+'\n\n'+draft['body'][:3000],
-                'reply_markup':{'inline_keyboard':[[{'text':'Send to Vishu 💚','callback_data':'mail:send:'+draft['id']},{'text':'Cancel','callback_data':'mail:cancel:'+draft['id']}]]}})
+            await telegram('sendMessage',{'chat_id':chat_id,'text':('HTML email preview — open your HTML file to see the design.\n' if draft.get('html_body') else 'Email preview — not sent yet\n')+'To: '+', '.join(recipients)+'\n\nSubject: '+draft['subject']+'\n\n'+draft['body'][:3000],
+                'reply_markup':{'inline_keyboard':[[{'text':'Send email 💚','callback_data':'mail:send:'+draft['id']},{'text':'Cancel','callback_data':'mail:cancel:'+draft['id']}]]}})
         if command=='/emailhtml':
-            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. HTML emails go only to Vishu.');return
+            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. HTML emails use the configured RESEND_TO_EMAIL.');return
             if not arg or len(arg)>180 or any(c in arg for c in ('\r','\n')):await reply('Use /emailhtml Your subject (1–180 characters), then attach an .html file.');return
             await change(upload_mode='emailhtml',email_subject=arg,email_draft=None)
             await reply('Send your .html file (up to 100 KB). I’ll prepare a preview and wait for Send to Vishu. /done cancels upload mode.');return
         if command=='/email':
-            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. Custom emails go only to Vishu.');return
+            if state.get('target_alias')!='vishu':await reply('Use /account vishu first. Custom emails use the configured RESEND_TO_EMAIL.');return
             if not arg or ('|' not in arg and '\n' not in arg):
                 await reply('Use /email Subject | Your message\nOr put the subject on the first line and the message on the following lines.\nYou’ll get a preview before sending.');return
             subject,body=(arg.split('\n',1) if '\n' in arg and ('|' not in arg.split('\n',1)[0]) else arg.split('|',1))
