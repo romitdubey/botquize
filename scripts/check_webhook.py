@@ -17,6 +17,10 @@ async def main():
         status=info['result'];target=url+'/api/telegram/webhook'
         print('Registered webhook:',status.get('url') or '(none)',flush=True)
         print('Expected webhook:',target,flush=True)
+        allowed=status.get('allowed_updates',[])
+        print('Allowed update types:',allowed or '(Telegram default)',flush=True)
+        callbacks='callback_query' in allowed
+        if allowed and not callbacks:print('Button clicks are disabled. Run with --repair to enable Send/Cancel buttons.',flush=True)
         print('Pending updates:',status.get('pending_update_count',0),flush=True)
         print('Last delivery error:',status.get('last_error_message') or 'none',flush=True)
         print('Admin IDs configured:',bool(ADMIN_USER_IDS-{0}),flush=True)
@@ -33,6 +37,6 @@ async def main():
                 'drop_pending_updates':False})
             if not result.is_success or not result.json().get('ok'):raise SystemExit('Could not update webhook.')
             print('Webhook switched to the verified production backend. Existing pending updates retained.',flush=True)
-        elif status.get('url')!=target:
-            print('Run this script with --repair to switch from the old host.',flush=True)
+        elif status.get('url')!=target or (allowed and not callbacks):
+            print('Run this script with --repair to fix the host or enable button-click updates.',flush=True)
 if __name__=='__main__':asyncio.run(main())
