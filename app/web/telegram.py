@@ -287,11 +287,12 @@ async def handle_update(update,store,notify=None):
                 try: data={'questions':[json.loads(arg)]}
                 except (ValueError,TypeError): await reply('Send /question followed by one JSON object with question, options, correct_option and explanation.');return
             else:
-                if Path(document.get('file_name','')).suffix.lower() not in ('.json','.json4'):await reply('Upload a .json or .json4 file, or use /image for a diagram.');return
                 if document.get('file_size',0)>10*1024*1024:await reply('JSON limit is 10 MB.');return
                 raw=await download(document['file_id'],10*1024*1024)
                 try:data=json.loads(raw.decode('utf-8-sig'))
-                except (ValueError,UnicodeError):await reply('This file is not valid UTF-8 JSON.');return
+                except (ValueError,UnicodeError):
+                    name=Path(document.get('file_name') or 'this attachment').name[:150]
+                    await reply(f'Could not read {name}: its contents are not valid UTF-8 JSON. Send the question JSON file; the filename extension does not matter. Use /notes for PDFs or /image for diagrams.');return
             part=export_part(data)
             if part:
                 context={k:state.get(k) for k in ('target_user_id','study_date','topic','quiz_kind')}

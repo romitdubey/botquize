@@ -44,9 +44,9 @@ export default [
   },
   {
     "date": "2026-10-23",
-    "part": "Biochemistry",
-    "topic": "Citric Acid Cycle; Vitamins and Minerals",
-    "kind": "Study"
+    "part": "Unit 1: Biomolecules",
+    "kind": "Study",
+    "topic": "Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis - Light and Dark Reactions; remaining gaps: biomolecule structures, pH/buffers, protein folding and nucleic acid conformations"
   },
   {
     "date": "2026-10-24",
@@ -62,32 +62,32 @@ export default [
   },
   {
     "date": "2026-10-26",
-    "part": "Biochemistry",
-    "topic": "Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis - Light and Dark Reactions",
+    "part": "Unit 2: Cellular Organization",
+    "topic": "Membranes, cell walls, transport, ion channels and electrical properties; organelles, protein sorting, cytoskeleton and motility",
     "kind": "Study"
   },
   {
     "date": "2026-10-27",
-    "part": "Biochemistry",
-    "topic": "Signal Transduction; Biochemical Pathway Interconnections",
+    "part": "Unit 2: Cellular Organization",
+    "topic": "Chromatin, chromosomes and transposons; cell division and cycle control; apoptosis, necrosis, autophagy; microbial growth, stress and antimicrobial resistance",
     "kind": "Study"
   },
   {
     "date": "2026-10-28",
-    "part": "Cell Biology",
-    "topic": "Cellular Organization; Cell Divisions",
+    "part": "Unit 3: Fundamental Processes",
+    "topic": "DNA replication, fidelity, extrachromosomal replicons, DNA damage and repair; homologous and site-specific recombination",
     "kind": "Study"
   },
   {
     "date": "2026-10-29",
-    "part": "Cell Biology",
-    "topic": "Cell Cycle; Cell Organelles",
+    "part": "Unit 3: Fundamental Processes",
+    "topic": "Transcription machinery and regulation; RNA capping, splicing, editing, polyadenylation and transport; ribozymes, riboswitches and non-coding RNA",
     "kind": "Study"
   },
   {
     "date": "2026-10-30",
-    "part": "Cell Biology",
-    "topic": "Cytoskeleton",
+    "part": "Unit 3: Fundamental Processes",
+    "topic": "Genetic code and translation; inhibitors, protein modification, trafficking and degradation; phage, viral, prokaryotic and eukaryotic gene regulation; epigenetics",
     "kind": "Study"
   },
   {
@@ -104,32 +104,32 @@ export default [
   },
   {
     "date": "2026-11-02",
-    "part": "Cell Biology",
-    "topic": "Cell Signaling and Communication",
+    "part": "Unit 4: Cell Communication and Signaling",
+    "topic": "Receptors, hormones, GPCRs and second messengers; plant and bacterial signaling, chemotaxis and quorum sensing; adhesion, ECM, junctions and neurotransmission",
     "kind": "Study"
   },
   {
     "date": "2026-11-03",
-    "part": "Developmental Biology",
-    "topic": "Gametes and Gametogenesis",
+    "part": "Unit 4: Cell Communication and Signaling",
+    "topic": "Innate and adaptive immunity; antigens, antibodies and antibody diversity; MHC and antigen presentation; B/T-cell development, receptors and effector responses",
     "kind": "Study"
   },
   {
     "date": "2026-11-04",
-    "part": "Developmental Biology",
-    "topic": "Fertilization and Zygote Formation; Early Development and Germ Layers",
+    "part": "Unit 4: Cell Communication and Signaling",
+    "topic": "Complement, cytokines, inflammation, hypersensitivity, autoimmunity and immunodeficiency; vaccines and transplantation; host-pathogen interactions, oncogenes, tumor suppressors and cancer",
     "kind": "Study"
   },
   {
     "date": "2026-11-05",
-    "part": "Developmental Biology",
-    "topic": "Organogenesis - first half",
+    "part": "Unit 5: Developmental Biology",
+    "topic": "Potency, specification, induction, cell fate, stem cells and imprinting; animal gametogenesis, fertilization and germ layers; model-organism patterning, organogenesis, regeneration and sex determination",
     "kind": "Study"
   },
   {
     "date": "2026-11-06",
-    "part": "Developmental Biology",
-    "topic": "Organogenesis - second half; Sex Determination",
+    "part": "Unit 5: Developmental Biology",
+    "topic": "Plant gametogenesis, double fertilization, embryo/endosperm and germination; meristems, roots, shoots, phyllotaxy and flowering; metamorphosis, programmed cell death, aging and senescence",
     "kind": "Study"
   },
   {
@@ -146,32 +146,32 @@ export default [
   },
   {
     "date": "2026-11-09",
-    "part": "Genetics & Molecular Biology",
-    "topic": "Discoveries in Genetics and Molecular Biology",
+    "part": "Unit 6: Plant Physiology",
+    "topic": "Photosystems, photoprotection, C3/C4/CAM and photorespiration; plant respiration and alternate oxidase; nitrogen assimilation and biological nitrogen fixation",
     "kind": "Study"
   },
   {
     "date": "2026-11-10",
-    "part": "Genetics & Molecular Biology",
-    "topic": "Mendelian and Non-Mendelian Inheritances",
+    "part": "Unit 6: Plant Physiology",
+    "topic": "Plant hormone synthesis and action; phytochromes, cryptochromes and phototropins; stomata, photoperiodism, biological clocks and flowering responses",
     "kind": "Study"
   },
   {
     "date": "2026-11-11",
-    "part": "Genetics & Molecular Biology",
-    "topic": "Nucleic Acids; DNA Replication",
+    "part": "Unit 6: Plant Physiology",
+    "topic": "Water, mineral and solute transport; xylem, phloem and transpiration; secondary metabolites and metabolic engineering; biotic/abiotic stress and plant immunity",
     "kind": "Study"
   },
   {
     "date": "2026-11-12",
-    "part": "Genetics & Molecular Biology",
-    "topic": "RNA Transcription; Central Dogma - Genetic Code/Translation",
+    "part": "Unit 7: Animal Physiology",
+    "topic": "Blood, haemostasis and circulation; heart, ECG and blood-pressure control; respiration, gas transport and regulation; digestion, absorption, energy balance and BMR",
     "kind": "Study"
   },
   {
     "date": "2026-11-13",
-    "part": "Genetics & Molecular Biology",
-    "topic": "DNA Condensation and Structural Organization; Prokaryotic Genetics",
+    "part": "Unit 7: Animal Physiology",
+    "topic": "Neurons, action potentials, CNS/PNS, muscle and posture; vision, hearing and touch; kidney, urine formation, osmoregulation, electrolytes and acid-base balance",
     "kind": "Study"
   },
   {
@@ -188,32 +188,32 @@ export default [
   },
   {
     "date": "2026-11-16",
-    "part": "Genetics & Molecular Biology",
-    "topic": "Regulation of Gene Expression; Mutations and DNA Repair Mechanisms",
+    "part": "Unit 7: Animal Physiology",
+    "topic": "Endocrinology and reproduction; thermoregulation, stress and adaptation; gut microbiome, holobionts, gut-brain axis and dysbiosis; interorgan communication and metabolic disorders",
     "kind": "Study"
   },
   {
     "date": "2026-11-17",
-    "part": "Genetics & Molecular Biology",
-    "topic": "rDNA and Genetic Engineering",
+    "part": "Unit 8: Inheritance Biology",
+    "topic": "Mendelian and non-Mendelian inheritance, gene interactions and imprinting; linkage, crossing-over, tetrads and mapping; bacterial gene transfer and mapping populations",
     "kind": "Study"
   },
   {
     "date": "2026-11-18",
-    "part": "Immunology",
-    "topic": "Introduction; History; Innate Immune System; Adaptive Immune System",
+    "part": "Unit 8: Inheritance Biology",
+    "topic": "Mutation and complementation; pedigree, LOD and human genetic disorders; quantitative/polygenic inheritance, heritability and Hardy-Weinberg; chromosomal alterations and ploidy",
     "kind": "Study"
   },
   {
     "date": "2026-11-19",
-    "part": "Immunology",
-    "topic": "Antigens; Immunoglobulins; Antigen-Antibody Interactions; Humoral Immune Mechanisms",
+    "part": "Unit 9: Evolution and Diversity",
+    "topic": "Origin of life, multicellularity and evolutionary mechanisms; speciation, extinction, adaptive radiation, coevolution and human evolution; species concepts, taxonomy and nomenclature",
     "kind": "Study"
   },
   {
     "date": "2026-11-20",
-    "part": "Immunology",
-    "topic": "Cell Mediated Immune Mechanisms; Immunoglobulin Genes; Major Histocompatibility Complex; Antigen Processing and Presentation",
+    "part": "Unit 9: Evolution and Diversity",
+    "topic": "Bacteria, archaea and viruses; protists, algae and fungi; plant groups, morphology, anatomy and reproduction; invertebrate/vertebrate diversity and evolutionary relationships",
     "kind": "Study"
   },
   {
@@ -230,33 +230,33 @@ export default [
   },
   {
     "date": "2026-11-23",
-    "part": "Immunology",
-    "topic": "B Cell and T Cell Development; Cytokines; Complement System",
+    "part": "Unit 10: Ecology and Behaviour",
+    "topic": "Ecological factors and adaptations; population models, life tables and metapopulations; species interactions, succession, food webs, productivity, energy flow and biogeochemical cycles",
     "kind": "Study"
   },
   {
     "date": "2026-11-24",
-    "part": "Immunology",
-    "topic": "Hypersensitive Reactions; Vaccines; Autoimmunity",
+    "part": "Unit 10: Ecology and Behaviour",
+    "topic": "Climate change, pollution and invasive species; biodiversity, conservation, PVA, IUCN and seed banks; biodiversity/PPVFR policies; foraging, communication, migration, social and reproductive behaviour",
     "kind": "Study"
   },
   {
     "date": "2026-11-25",
-    "part": "Immunology",
-    "topic": "Immunodeficiency; Hematopoiesis; Transplantation Immunology; Antibody Engineering",
+    "part": "Unit 11: Bioinformatics and Computational Biology",
+    "topic": "Sequence, structure and expression databases; BLAST/FASTA, homology, scoring matrices and pairwise/multiple alignments; gene annotation, variation, comparative genomics and phylogenetics",
     "kind": "Study"
   },
   {
     "date": "2026-11-26",
-    "part": "Immunology",
-    "topic": "Experimental Immunology/Immunotechniques; Immunological Discoveries",
+    "part": "Unit 11: Bioinformatics and Computational Biology",
+    "topic": "Molecular modelling, dynamics and force fields; protein structure prediction and AlphaFold; drug design, QSAR, pharmacophores and ADMET; systems biology, data science and pathway modelling",
     "kind": "Study"
   },
   {
     "date": "2026-11-27",
-    "topic": "Biochemistry: enzymes, energetics and central pathways",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 12: Biochemical Engineering and Industrial Biotechnology",
+    "topic": "Calculus, differential equations, linear algebra and numerical methods; material/energy balances, heat/mass/momentum transfer; biological thermodynamics, flux, entropy and coupled reactions",
+    "kind": "Study"
   },
   {
     "date": "2026-11-28",
@@ -272,33 +272,33 @@ export default [
   },
   {
     "date": "2026-11-30",
-    "topic": "Biochemistry integration + Cell Biology: organelles, cycle and signaling",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 12: Biochemical Engineering and Industrial Biotechnology",
+    "topic": "Microbial growth and substrate kinetics; batch, fed-batch and continuous reactors; sterilization, oxygen transfer, aeration and agitation; industrial fermentation, biotransformation and process economics",
+    "kind": "Study"
   },
   {
     "date": "2026-12-01",
-    "topic": "Developmental Biology: gametes, fertilization, germ layers and organogenesis",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 12: Biochemical Engineering and Industrial Biotechnology",
+    "topic": "Enzyme/protein engineering, immobilization and Thiele modulus; downstream recovery and purification; plant design and scale-up; metabolic engineering and synthetic biology",
+    "kind": "Study"
   },
   {
     "date": "2026-12-02",
-    "topic": "Genetics: inheritance, nucleic acids, replication, transcription and translation",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 13: Advances in Biotechnology",
+    "topic": "Recombinant DNA, cloning, expression, mutagenesis, knockout and genome editing; sequencing and expression analysis; diagnostics, immunotherapy, vaccines, phage display and biosensors",
+    "kind": "Study"
   },
   {
     "date": "2026-12-03",
-    "topic": "Genetics: chromatin, gene regulation, repair and genetic engineering",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 13: Advances in Biotechnology",
+    "topic": "Stem cells, iPSCs, organoids, cell/tissue engineering and medical devices; neurobiology methods; transgenic animals, breeding and germplasm; plant tissue culture, transgenics and marker-assisted breeding",
+    "kind": "Study"
   },
   {
     "date": "2026-12-04",
-    "topic": "Immunology: innate/adaptive, antibodies, antigen presentation and development",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 13: Advances in Biotechnology",
+    "topic": "Marine organisms and resources, marine microbes/metabolites, seafood microbiology, biofilms and oceanography; wastewater treatment, bioremediation, phytoremediation, biofertilizers, biopesticides and waste-to-biofuel",
+    "kind": "Study"
   },
   {
     "date": "2026-12-05",
@@ -314,26 +314,26 @@ export default [
   },
   {
     "date": "2026-12-07",
-    "topic": "Immunology: complement, hypersensitivity, vaccines, clinical topics and methods",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 14: Methods in Biology",
+    "topic": "Macromolecule isolation, chromatography, electrophoresis and centrifugation; UV/fluorescence/CD/NMR/ESR, X-ray, cryo-EM, mass spectrometry and SPR; genomics, transcriptomics, proteomics, metabolomics and single-cell methods",
+    "kind": "Study"
   },
   {
     "date": "2026-12-08",
-    "topic": "Weakest two topics from PYQ/mock errors + recurring wrong answers",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 14: Methods in Biology",
+    "topic": "Radiolabeling and safety; ELISA, RIA, western blot, immunoprecipitation, flow cytometry, FISH/GISH; light/electron microscopy; patch clamp, brain imaging and field sampling methods",
+    "kind": "Study"
   },
   {
     "date": "2026-12-09",
-    "topic": "All five parts: diagrams, comparison tables and experimental interpretation",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Unit 14: Methods in Biology",
+    "topic": "Accuracy, precision, probability and distributions; hypothesis testing, confidence intervals, t-test, ANOVA, chi-square, regression and multivariate basics; IPR, patents, biosafety, animal/research ethics and AI in research",
+    "kind": "Study"
   },
   {
     "date": "2026-12-10",
-    "topic": "Final closure: due re-tests, flagged questions and one-page summaries",
-    "part": "Revision",
-    "kind": "Revision"
+    "part": "Final Revision",
+    "kind": "Revision",
+    "topic": "Units 1-14: recurring wrong answers, experimental interpretation, pathway maps, bioprocess calculations, methods and formula sheets; Part A recap"
   }
 ];

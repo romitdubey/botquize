@@ -94,3 +94,38 @@ async def test_actual_two_file_telegram_full_exam_import(monkeypatch):
     assert len(bank['questions'])==145 and all(q['explanation_html'] for q in bank['questions'])
     assert not store.admins[123456789]['import_parts']
     await update('/open');assert store.banks[bank['id']]['status']=='open'
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('filename',['questions.json.txt','questions.txt','questions.JSON','questions','questions.json4.txt',None])
+async def test_daily_json_upload_uses_content_not_filename(filename,monkeypatch):
+    from app.web import telegram as tg
+    store=MemoryStore();store.admins[123456789]={'target_user_id':'me','target_alias':'me'}
+    reply=AsyncMock();monkeypatch.setattr(tg,'telegram',reply)
+    content={'questions':[{'question':'Which one?','options':['A','B'],'correct_option':1,'explanation':'B is correct.'}]}
+    monkeypatch.setattr(tg,'download',AsyncMock(return_value=json.dumps(content).encode()))
+    async def update(**message):
+        await tg.handle_update({'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},**message}},store)
+    await update(text='/topic 2026-10-20 | Daily topic')
+    document={'file_id':'json','mime_type':'application/octet-stream'}
+    if filename is not None:document['file_name']=filename
+    await update(document=document)
+    assert 'Saved 1 questions with explanations.' in reply.call_args.args[1]['text']
+    bank=next(iter(store.banks.values()))
+    assert bank['topic']=='Daily topic' and bank['questions'][0]['correct_option']==1
+    await update(text='/open')
+    assert store.banks[bank['id']]['status']=='open'
+
+
+@pytest.mark.asyncio
+async def test_non_json_attachment_rejected_without_losing_topic(monkeypatch):
+    from app.web import telegram as tg
+    store=MemoryStore();store.admins[123456789]={'target_user_id':'me','target_alias':'me'}
+    reply=AsyncMock();monkeypatch.setattr(tg,'telegram',reply)
+    monkeypatch.setattr(tg,'download',AsyncMock(return_value=b'%PDF-1.7 not JSON'))
+    async def update(**message):
+        await tg.handle_update({'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},**message}},store)
+    await update(text='/topic 2026-10-20 | Keep this topic')
+    await update(document={'file_id':'pdf','file_name':'paper.pdf'})
+    assert 'not valid UTF-8 JSON' in reply.call_args.args[1]['text']
+    assert not store.banks and store.admins[123456789]['topic']=='Keep this topic'

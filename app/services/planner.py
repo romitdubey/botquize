@@ -1,4 +1,4 @@
-"""The book-based Oct-Dec plan, without changing a learner's completion status."""
+"""Dated revision plan; preserve the original schedule through 22 October 2026."""
 import json
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -23,7 +23,7 @@ def today():
     return datetime.now(ZoneInfo(STUDY_TIMEZONE)).date()
 
 
-def plan_rows():
+def _original_book_rows():
     topics=json.loads((Path(__file__).parent.parent/'data'/'study_topics.json').read_text())
     day=date(2026,10,16); end=date(2026,12,10); index=0; rev=0; rows=[]
     while day<=end:
@@ -37,6 +37,20 @@ def plan_rows():
         else:
             row.update(topic=REVISION[rev],part='Revision',kind='Revision',pages=0);rev+=1
         rows.append(row);day+=timedelta(days=1)
+    return rows
+
+
+def plan_rows():
+    revised=json.loads((Path(__file__).parent.parent/'data'/'revised_study_plan.json').read_text())
+    by_day={row['date']:row for row in revised}
+    rows=[]
+    for original in _original_book_rows():
+        if original['date']<='2026-10-22' or original['kind'] in ('PYQ','Mock'):
+            rows.append(original)
+        else:
+            replacement=by_day[original['date']]
+            # Do not attach invented book pages to units absent from the original book.
+            rows.append({**{key:original[key] for key in ('key','date','week')},**replacement,'pages':0})
     return rows
 
 

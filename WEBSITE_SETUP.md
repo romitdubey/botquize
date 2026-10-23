@@ -334,3 +334,16 @@ HTML emails accept UTF-8 `.html`/`.htm` files up to 100 KB. Tables, text, HTTPS 
 
 
 Changing `RESEND_TO_EMAIL` invalidates old Telegram email previews. Compose a new `/email` or `/emailhtml` draft to review the new address before sending. An existing outbox payload is never silently rerouted to another recipient; create a fresh draft if a previous event contains the old address. Email notifications remain limited to actions/results for `/account vishu`, regardless of the recipient setting.
+
+
+Quiz document uploads are identified by UTF-8 JSON content rather than the filename extension. Valid JSON files renamed by a phone to `.json.txt`, `.txt`, or sent without a filename work as well. The existing 10 MB limit, question validation, two-file export matching and image/notes upload modes still apply. Invalid content is rejected without clearing the selected topic.
+
+## Revised syllabus schedule from 23 October 2026
+
+Vishu has completed the old book sequence through **Citric Acid Cycle; Vitamins and Minerals**, as reported on 23 October. Keep the old dated schedule through **22 October** intact; no completion marks are inferred or rewritten. Start the remaining revision on **23 October** with ETC/oxidative phosphorylation, PPP, light/dark photosynthesis and remaining biomolecule structure/biophysics gaps. Completed metabolism is not assigned a new full study block.
+
+`app/data/revised_study_plan.json` supplies 35 remaining weekdays: 34 study blocks across all 14 revised LS&BT units and a mixed revision day on **10 December**. Saturdays remain PYQ + analysis, Sundays paid mock + analysis. Use 4–5 hours/day for focused revision of previously studied subjects: approximately 2.5–3 hours topic revision, 45–60 minutes previous-topic quiz/review and 20 minutes Part A. Monday's review slot includes weekly mistakes, spread across paused sessions if needed. New units need material beyond the original five-part MCQ book.
+
+The public preview, CSV and Excel copy are generated from the same dated plan. Source: [official revised CSIR-HRDG syllabus](https://csirhrdg.res.in/SiteContent/ManagedContent/ContentFiles/20260121115025355Merged_Syllabus_CSIR-DBT_21Jan2026.pdf). This is compressed revision coverage, not a guarantee of mastery in the time available.
+
+Only the schedule is revised. Date keys, studied marks, existing tests/quizzes, release dates, attempts, notes and results are not modified or reassigned. A future quiz already uploaded retains its original label and date. Redeploy Vercel after pushing. No database migration or data-reset command is required.

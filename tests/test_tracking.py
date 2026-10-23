@@ -112,18 +112,23 @@ def test_retest_success_preserves_original_mistake():
     assert db.load_session('quiz').wrong==1
 
 
-def test_plan_covers_every_printed_content_page_once():
-    rows=plan_rows()
+def test_revised_plan_preserves_history_weekends_and_covers_all_units():
+    from app.services.planner import _original_book_rows
+    rows=plan_rows();original=_original_book_rows()
     assert len(rows)==56
-    assert sum(r['kind']=='Study' for r in rows)==30
-    assert sum(r['kind']=='Revision' for r in rows)==10
-    study=[r for r in rows if r['kind']=='Study']
-    pages=[p for r in study for p in range(r['page_start'],r['page_end']+1)]
-    expected=list(range(3,154))+list(range(164,232))+list(range(236,301))+list(range(304,425))+list(range(431,555))
-    assert pages==expected and len(pages)==529
-    assert study[-1]['date']=='2026-11-26'
+    assert [r for r in rows if r['date']<='2026-10-22']==[r for r in original if r['date']<='2026-10-22']
+    assert [r for r in rows if r['kind'] in ('PYQ','Mock')]==[r for r in original if r['kind'] in ('PYQ','Mock')]
+    future=[r for r in rows if r['date']>'2026-10-22' and r['kind'] not in ('PYQ','Mock')]
+    assert len(future)==35
+    assert future[0]['date']=='2026-10-23' and future[0]['topic'].startswith('Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis')
+    assert not any(r['topic']=='Citric Acid Cycle; Vitamins and Minerals' for r in future)
+    assert {r['unit'] for r in future if r['unit'] is not None}==set(range(1,15))
+    assert all('page_start' not in r and r['pages']==0 for r in future)
+    assert [r['date'] for r in future if r['kind']=='Revision']==['2026-12-10']
+    assert len({r['date'] for r in rows})==56
     assert sum(r['kind']=='PYQ' for r in rows)==8
     assert sum(r['kind']=='Mock' for r in rows)==8
+
 
 
 @pytest.mark.parametrize('extra',[{'study_date':'bad'},{'study_date':'20261020'},{'topic':None},{'quiz_kind':'bad'}])
