@@ -220,7 +220,9 @@ async def handle_update(update,store,notify=None):
                 (f'Selected: {quiz["topic"]}\n{quiz["status"]} · {len(quiz["questions"])} questions\nID: {quiz["id"]}' if quiz else 'No test selected.'));return
         if command=='/plan':
             row=next((r for r in plan_rows() if r['date']==today().isoformat()),None)
-            await reply(f'{today()}: '+(row['topic'] if row else 'No scheduled topic today.'));return
+            aptitude=row.get('aptitude') if row else None
+            extra=('\nAptitude: '+aptitude['topic']+f" · Part {aptitude['part']}/{aptitude['parts']}") if aptitude else ''
+            await reply(f'{today()}: '+(row['topic'] if row else 'No scheduled topic today.')+extra);return
         if command=='/image':
             if not state.get('quiz_id'): await reply('Upload or select a test first.');return
             quiz=await selected_quiz()

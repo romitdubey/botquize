@@ -1,57 +1,57 @@
-date,part,kind,topic
-2026-10-16,Biochemistry,Study,Introduction to Biochemistry; Discoveries in Biochemistry
-2026-10-17,Mixed,PYQ,Full PYQ test + analysis
-2026-10-18,Mixed,Mock,Paid mock + analysis
-2026-10-19,Biochemistry,Study,Digestion; Bioenergetics; Biological Oxidation and Reduction
-2026-10-20,Biochemistry,Study,Enzymes and Coenzymes; Enzyme kinetics
-2026-10-21,Biochemistry,Study,Carbohydrate Metabolism; Lipid Metabolism
-2026-10-22,Biochemistry,Study,Amino Acid and Protein Metabolism; Nucleic Acid & Nucleotide Metabolism and the Urea Cycle; Porphyrin Metabolism
-2026-10-23,Unit 1: Biomolecules,Study,"Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis - Light and Dark Reactions; remaining gaps: biomolecule structures, pH/buffers, protein folding and nucleic acid conformations"
-2026-10-24,Mixed,PYQ,Full PYQ test + analysis
-2026-10-25,Mixed,Mock,Paid mock + analysis
-2026-10-26,Unit 2: Cellular Organization,Study,"Membranes, cell walls, transport, ion channels and electrical properties; organelles, protein sorting, cytoskeleton and motility"
-2026-10-27,Unit 2: Cellular Organization,Study,"Chromatin, chromosomes and transposons; cell division and cycle control; apoptosis, necrosis, autophagy; microbial growth, stress and antimicrobial resistance"
-2026-10-28,Unit 3: Fundamental Processes,Study,"DNA replication, fidelity, extrachromosomal replicons, DNA damage and repair; homologous and site-specific recombination"
-2026-10-29,Unit 3: Fundamental Processes,Study,"Transcription machinery and regulation; RNA capping, splicing, editing, polyadenylation and transport; ribozymes, riboswitches and non-coding RNA"
-2026-10-30,Unit 3: Fundamental Processes,Study,"Genetic code and translation; inhibitors, protein modification, trafficking and degradation; phage, viral, prokaryotic and eukaryotic gene regulation; epigenetics"
-2026-10-31,Mixed,PYQ,Full PYQ test + analysis
-2026-11-01,Mixed,Mock,Paid mock + analysis
-2026-11-02,Unit 4: Cell Communication and Signaling,Study,"Receptors, hormones, GPCRs and second messengers; plant and bacterial signaling, chemotaxis and quorum sensing; adhesion, ECM, junctions and neurotransmission"
-2026-11-03,Unit 4: Cell Communication and Signaling,Study,"Innate and adaptive immunity; antigens, antibodies and antibody diversity; MHC and antigen presentation; B/T-cell development, receptors and effector responses"
-2026-11-04,Unit 4: Cell Communication and Signaling,Study,"Complement, cytokines, inflammation, hypersensitivity, autoimmunity and immunodeficiency; vaccines and transplantation; host-pathogen interactions, oncogenes, tumor suppressors and cancer"
-2026-11-05,Unit 5: Developmental Biology,Study,"Potency, specification, induction, cell fate, stem cells and imprinting; animal gametogenesis, fertilization and germ layers; model-organism patterning, organogenesis, regeneration and sex determination"
-2026-11-06,Unit 5: Developmental Biology,Study,"Plant gametogenesis, double fertilization, embryo/endosperm and germination; meristems, roots, shoots, phyllotaxy and flowering; metamorphosis, programmed cell death, aging and senescence"
-2026-11-07,Mixed,PYQ,Full PYQ test + analysis
-2026-11-08,Mixed,Mock,Paid mock + analysis
-2026-11-09,Unit 6: Plant Physiology,Study,"Photosystems, photoprotection, C3/C4/CAM and photorespiration; plant respiration and alternate oxidase; nitrogen assimilation and biological nitrogen fixation"
-2026-11-10,Unit 6: Plant Physiology,Study,"Plant hormone synthesis and action; phytochromes, cryptochromes and phototropins; stomata, photoperiodism, biological clocks and flowering responses"
-2026-11-11,Unit 6: Plant Physiology,Study,"Water, mineral and solute transport; xylem, phloem and transpiration; secondary metabolites and metabolic engineering; biotic/abiotic stress and plant immunity"
-2026-11-12,Unit 7: Animal Physiology,Study,"Blood, haemostasis and circulation; heart, ECG and blood-pressure control; respiration, gas transport and regulation; digestion, absorption, energy balance and BMR"
-2026-11-13,Unit 7: Animal Physiology,Study,"Neurons, action potentials, CNS/PNS, muscle and posture; vision, hearing and touch; kidney, urine formation, osmoregulation, electrolytes and acid-base balance"
-2026-11-14,Mixed,PYQ,Full PYQ test + analysis
-2026-11-15,Mixed,Mock,Paid mock + analysis
-2026-11-16,Unit 7: Animal Physiology,Study,"Endocrinology and reproduction; thermoregulation, stress and adaptation; gut microbiome, holobionts, gut-brain axis and dysbiosis; interorgan communication and metabolic disorders"
-2026-11-17,Unit 8: Inheritance Biology,Study,"Mendelian and non-Mendelian inheritance, gene interactions and imprinting; linkage, crossing-over, tetrads and mapping; bacterial gene transfer and mapping populations"
-2026-11-18,Unit 8: Inheritance Biology,Study,"Mutation and complementation; pedigree, LOD and human genetic disorders; quantitative/polygenic inheritance, heritability and Hardy-Weinberg; chromosomal alterations and ploidy"
-2026-11-19,Unit 9: Evolution and Diversity,Study,"Origin of life, multicellularity and evolutionary mechanisms; speciation, extinction, adaptive radiation, coevolution and human evolution; species concepts, taxonomy and nomenclature"
-2026-11-20,Unit 9: Evolution and Diversity,Study,"Bacteria, archaea and viruses; protists, algae and fungi; plant groups, morphology, anatomy and reproduction; invertebrate/vertebrate diversity and evolutionary relationships"
-2026-11-21,Mixed,PYQ,Full PYQ test + analysis
-2026-11-22,Mixed,Mock,Paid mock + analysis
-2026-11-23,Unit 10: Ecology and Behaviour,Study,"Ecological factors and adaptations; population models, life tables and metapopulations; species interactions, succession, food webs, productivity, energy flow and biogeochemical cycles"
-2026-11-24,Unit 10: Ecology and Behaviour,Study,"Climate change, pollution and invasive species; biodiversity, conservation, PVA, IUCN and seed banks; biodiversity/PPVFR policies; foraging, communication, migration, social and reproductive behaviour"
-2026-11-25,Unit 11: Bioinformatics and Computational Biology,Study,"Sequence, structure and expression databases; BLAST/FASTA, homology, scoring matrices and pairwise/multiple alignments; gene annotation, variation, comparative genomics and phylogenetics"
-2026-11-26,Unit 11: Bioinformatics and Computational Biology,Study,"Molecular modelling, dynamics and force fields; protein structure prediction and AlphaFold; drug design, QSAR, pharmacophores and ADMET; systems biology, data science and pathway modelling"
-2026-11-27,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Calculus, differential equations, linear algebra and numerical methods; material/energy balances, heat/mass/momentum transfer; biological thermodynamics, flux, entropy and coupled reactions"
-2026-11-28,Mixed,PYQ,Full PYQ test + analysis
-2026-11-29,Mixed,Mock,Paid mock + analysis
-2026-11-30,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Microbial growth and substrate kinetics; batch, fed-batch and continuous reactors; sterilization, oxygen transfer, aeration and agitation; industrial fermentation, biotransformation and process economics"
-2026-12-01,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Enzyme/protein engineering, immobilization and Thiele modulus; downstream recovery and purification; plant design and scale-up; metabolic engineering and synthetic biology"
-2026-12-02,Unit 13: Advances in Biotechnology,Study,"Recombinant DNA, cloning, expression, mutagenesis, knockout and genome editing; sequencing and expression analysis; diagnostics, immunotherapy, vaccines, phage display and biosensors"
-2026-12-03,Unit 13: Advances in Biotechnology,Study,"Stem cells, iPSCs, organoids, cell/tissue engineering and medical devices; neurobiology methods; transgenic animals, breeding and germplasm; plant tissue culture, transgenics and marker-assisted breeding"
-2026-12-04,Unit 13: Advances in Biotechnology,Study,"Marine organisms and resources, marine microbes/metabolites, seafood microbiology, biofilms and oceanography; wastewater treatment, bioremediation, phytoremediation, biofertilizers, biopesticides and waste-to-biofuel"
-2026-12-05,Mixed,PYQ,Full PYQ test + analysis
-2026-12-06,Mixed,Mock,Paid mock + analysis
-2026-12-07,Unit 14: Methods in Biology,Study,"Macromolecule isolation, chromatography, electrophoresis and centrifugation; UV/fluorescence/CD/NMR/ESR, X-ray, cryo-EM, mass spectrometry and SPR; genomics, transcriptomics, proteomics, metabolomics and single-cell methods"
-2026-12-08,Unit 14: Methods in Biology,Study,"Radiolabeling and safety; ELISA, RIA, western blot, immunoprecipitation, flow cytometry, FISH/GISH; light/electron microscopy; patch clamp, brain imaging and field sampling methods"
-2026-12-09,Unit 14: Methods in Biology,Study,"Accuracy, precision, probability and distributions; hypothesis testing, confidence intervals, t-test, ANOVA, chi-square, regression and multivariate basics; IPR, patents, biosafety, animal/research ethics and AI in research"
-2026-12-10,Final Revision,Revision,"Units 1-14: recurring wrong answers, experimental interpretation, pathway maps, bioprocess calculations, methods and formula sheets; Part A recap"
+date,part,kind,topic,aptitude_topic,aptitude_part,aptitude_pages
+2026-10-16,Biochemistry,Study,Introduction to Biochemistry; Discoveries in Biochemistry,,,
+2026-10-17,Mixed,PYQ,Full PYQ test + analysis,,,
+2026-10-18,Mixed,Mock,Paid mock + analysis,,,
+2026-10-19,Biochemistry,Study,Digestion; Bioenergetics; Biological Oxidation and Reduction,,,
+2026-10-20,Biochemistry,Study,Enzymes and Coenzymes; Enzyme kinetics,,,
+2026-10-21,Biochemistry,Study,Carbohydrate Metabolism; Lipid Metabolism,,,
+2026-10-22,Biochemistry,Study,Amino Acid and Protein Metabolism; Nucleic Acid & Nucleotide Metabolism and the Urea Cycle; Porphyrin Metabolism,,,
+2026-10-23,Unit 1: Biomolecules,Study,"Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis - Light and Dark Reactions; remaining gaps: biomolecule structures, pH/buffers, protein folding and nucleic acid conformations",Number Systems,1/2,1-6
+2026-10-24,Mixed,PYQ,Full PYQ test + analysis,Number Systems,2/2,7-12
+2026-10-25,Mixed,Mock,Paid mock + analysis,Average,1/1,13-18
+2026-10-26,Unit 2: Cellular Organization,Study,"Membranes, cell walls, transport, ion channels and electrical properties; organelles, protein sorting, cytoskeleton and motility",Alligation or Mixture,1/1,19-24
+2026-10-27,Unit 2: Cellular Organization,Study,"Chromatin, chromosomes and transposons; cell division and cycle control; apoptosis, necrosis, autophagy; microbial growth, stress and antimicrobial resistance",Progressions,1/2,25-29
+2026-10-28,Unit 3: Fundamental Processes,Study,"DNA replication, fidelity, extrachromosomal replicons, DNA damage and repair; homologous and site-specific recombination",Progressions,2/2,30-34
+2026-10-29,Unit 3: Fundamental Processes,Study,"Transcription machinery and regulation; RNA capping, splicing, editing, polyadenylation and transport; ribozymes, riboswitches and non-coding RNA",Surds and Algorithm,1/2,35-38
+2026-10-30,Unit 3: Fundamental Processes,Study,"Genetic code and translation; inhibitors, protein modification, trafficking and degradation; phage, viral, prokaryotic and eukaryotic gene regulation; epigenetics",Surds and Algorithm,2/2,39-42
+2026-10-31,Mixed,PYQ,Full PYQ test + analysis,Percentage and Discount,1/3,43-47
+2026-11-01,Mixed,Mock,Paid mock + analysis,Percentage and Discount,2/3,48-51
+2026-11-02,Unit 4: Cell Communication and Signaling,Study,"Receptors, hormones, GPCRs and second messengers; plant and bacterial signaling, chemotaxis and quorum sensing; adhesion, ECM, junctions and neurotransmission",Percentage and Discount,3/3,52-55
+2026-11-03,Unit 4: Cell Communication and Signaling,Study,"Innate and adaptive immunity; antigens, antibodies and antibody diversity; MHC and antigen presentation; B/T-cell development, receptors and effector responses","Distance, Trains and Boats",1/2,56-61
+2026-11-04,Unit 4: Cell Communication and Signaling,Study,"Complement, cytokines, inflammation, hypersensitivity, autoimmunity and immunodeficiency; vaccines and transplantation; host-pathogen interactions, oncogenes, tumor suppressors and cancer","Distance, Trains and Boats",2/2,62-66
+2026-11-05,Unit 5: Developmental Biology,Study,"Potency, specification, induction, cell fate, stem cells and imprinting; animal gametogenesis, fertilization and germ layers; model-organism patterning, organogenesis, regeneration and sex determination","Work, Pipe and Cistern",1/2,67-72
+2026-11-06,Unit 5: Developmental Biology,Study,"Plant gametogenesis, double fertilization, embryo/endosperm and germination; meristems, roots, shoots, phyllotaxy and flowering; metamorphosis, programmed cell death, aging and senescence","Work, Pipe and Cistern",2/2,73-78
+2026-11-07,Mixed,PYQ,Full PYQ test + analysis,Mensuration & area of plane figures,1/2,79-83
+2026-11-08,Mixed,Mock,Paid mock + analysis,Mensuration & area of plane figures,2/2,84-88
+2026-11-09,Unit 6: Plant Physiology,Study,"Photosystems, photoprotection, C3/C4/CAM and photorespiration; plant respiration and alternate oxidase; nitrogen assimilation and biological nitrogen fixation",Volume & surface area of solid figures,1/1,89-92
+2026-11-10,Unit 6: Plant Physiology,Study,"Plant hormone synthesis and action; phytochromes, cryptochromes and phototropins; stomata, photoperiodism, biological clocks and flowering responses",Geometry,1/2,93-98
+2026-11-11,Unit 6: Plant Physiology,Study,"Water, mineral and solute transport; xylem, phloem and transpiration; secondary metabolites and metabolic engineering; biotic/abiotic stress and plant immunity",Geometry,2/2,99-103
+2026-11-12,Unit 7: Animal Physiology,Study,"Blood, haemostasis and circulation; heart, ECG and blood-pressure control; respiration, gas transport and regulation; digestion, absorption, energy balance and BMR",Height and Distance,1/1,104-107
+2026-11-13,Unit 7: Animal Physiology,Study,"Neurons, action potentials, CNS/PNS, muscle and posture; vision, hearing and touch; kidney, urine formation, osmoregulation, electrolytes and acid-base balance",Venn Diagram,1/1,108-110
+2026-11-14,Mixed,PYQ,Full PYQ test + analysis,Permutation and Combinations,1/2,111-115
+2026-11-15,Mixed,Mock,Paid mock + analysis,Permutation and Combinations,2/2,116-119
+2026-11-16,Unit 7: Animal Physiology,Study,"Endocrinology and reproduction; thermoregulation, stress and adaptation; gut microbiome, holobionts, gut-brain axis and dysbiosis; interorgan communication and metabolic disorders",Probability,1/3,120-124
+2026-11-17,Unit 8: Inheritance Biology,Study,"Mendelian and non-Mendelian inheritance, gene interactions and imprinting; linkage, crossing-over, tetrads and mapping; bacterial gene transfer and mapping populations",Probability,2/3,125-128
+2026-11-18,Unit 8: Inheritance Biology,Study,"Mutation and complementation; pedigree, LOD and human genetic disorders; quantitative/polygenic inheritance, heritability and Hardy-Weinberg; chromosomal alterations and ploidy",Probability,3/3,129-132
+2026-11-19,Unit 9: Evolution and Diversity,Study,"Origin of life, multicellularity and evolutionary mechanisms; speciation, extinction, adaptive radiation, coevolution and human evolution; species concepts, taxonomy and nomenclature",Function and Graph,1/1,133-137
+2026-11-20,Unit 9: Evolution and Diversity,Study,"Bacteria, archaea and viruses; protists, algae and fungi; plant groups, morphology, anatomy and reproduction; invertebrate/vertebrate diversity and evolutionary relationships","Calendar, clock",1/2,138-141
+2026-11-21,Mixed,PYQ,Full PYQ test + analysis,"Calendar, clock",2/2,142-144
+2026-11-22,Mixed,Mock,Paid mock + analysis,Series & missing characters,1/1,145-147
+2026-11-23,Unit 10: Ecology and Behaviour,Study,"Ecological factors and adaptations; population models, life tables and metapopulations; species interactions, succession, food webs, productivity, energy flow and biogeochemical cycles",Syllogism,1/1,148-149
+2026-11-24,Unit 10: Ecology and Behaviour,Study,"Climate change, pollution and invasive species; biodiversity, conservation, PVA, IUCN and seed banks; biodiversity/PPVFR policies; foraging, communication, migration, social and reproductive behaviour",Previous Year NET Solutions,1/11,150-155
+2026-11-25,Unit 11: Bioinformatics and Computational Biology,Study,"Sequence, structure and expression databases; BLAST/FASTA, homology, scoring matrices and pairwise/multiple alignments; gene annotation, variation, comparative genomics and phylogenetics",Previous Year NET Solutions,2/11,156-161
+2026-11-26,Unit 11: Bioinformatics and Computational Biology,Study,"Molecular modelling, dynamics and force fields; protein structure prediction and AlphaFold; drug design, QSAR, pharmacophores and ADMET; systems biology, data science and pathway modelling",Previous Year NET Solutions,3/11,162-167
+2026-11-27,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Calculus, differential equations, linear algebra and numerical methods; material/energy balances, heat/mass/momentum transfer; biological thermodynamics, flux, entropy and coupled reactions",Previous Year NET Solutions,4/11,168-173
+2026-11-28,Mixed,PYQ,Full PYQ test + analysis,Previous Year NET Solutions,5/11,174-179
+2026-11-29,Mixed,Mock,Paid mock + analysis,Previous Year NET Solutions,6/11,180-185
+2026-11-30,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Microbial growth and substrate kinetics; batch, fed-batch and continuous reactors; sterilization, oxygen transfer, aeration and agitation; industrial fermentation, biotransformation and process economics",Previous Year NET Solutions,7/11,186-191
+2026-12-01,Unit 12: Biochemical Engineering and Industrial Biotechnology,Study,"Enzyme/protein engineering, immobilization and Thiele modulus; downstream recovery and purification; plant design and scale-up; metabolic engineering and synthetic biology",Previous Year NET Solutions,8/11,192-197
+2026-12-02,Unit 13: Advances in Biotechnology,Study,"Recombinant DNA, cloning, expression, mutagenesis, knockout and genome editing; sequencing and expression analysis; diagnostics, immunotherapy, vaccines, phage display and biosensors",Previous Year NET Solutions,9/11,198-202
+2026-12-03,Unit 13: Advances in Biotechnology,Study,"Stem cells, iPSCs, organoids, cell/tissue engineering and medical devices; neurobiology methods; transgenic animals, breeding and germplasm; plant tissue culture, transgenics and marker-assisted breeding",Previous Year NET Solutions,10/11,203-207
+2026-12-04,Unit 13: Advances in Biotechnology,Study,"Marine organisms and resources, marine microbes/metabolites, seafood microbiology, biofilms and oceanography; wastewater treatment, bioremediation, phytoremediation, biofertilizers, biopesticides and waste-to-biofuel",Previous Year NET Solutions,11/11,208-212
+2026-12-05,Mixed,PYQ,Full PYQ test + analysis,Previous Year GATE Solutions,1/6,213-218
+2026-12-06,Mixed,Mock,Paid mock + analysis,Previous Year GATE Solutions,2/6,219-224
+2026-12-07,Unit 14: Methods in Biology,Study,"Macromolecule isolation, chromatography, electrophoresis and centrifugation; UV/fluorescence/CD/NMR/ESR, X-ray, cryo-EM, mass spectrometry and SPR; genomics, transcriptomics, proteomics, metabolomics and single-cell methods",Previous Year GATE Solutions,3/6,225-230
+2026-12-08,Unit 14: Methods in Biology,Study,"Radiolabeling and safety; ELISA, RIA, western blot, immunoprecipitation, flow cytometry, FISH/GISH; light/electron microscopy; patch clamp, brain imaging and field sampling methods",Previous Year GATE Solutions,4/6,231-235
+2026-12-09,Unit 14: Methods in Biology,Study,"Accuracy, precision, probability and distributions; hypothesis testing, confidence intervals, t-test, ANOVA, chi-square, regression and multivariate basics; IPR, patents, biosafety, animal/research ethics and AI in research",Previous Year GATE Solutions,5/6,236-240
+2026-12-10,Final Revision,Revision,"Units 1-14: recurring wrong answers, experimental interpretation, pathway maps, bioprocess calculations, methods and formula sheets; Part A recap",Previous Year GATE Solutions,6/6,241-245

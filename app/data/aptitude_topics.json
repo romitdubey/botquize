@@ -1,0 +1,128 @@
+[
+  {
+    "chapter": 1,
+    "topic": "Number Systems",
+    "page_start": 1,
+    "page_end": 12
+  },
+  {
+    "chapter": 2,
+    "topic": "Average",
+    "page_start": 13,
+    "page_end": 18
+  },
+  {
+    "chapter": 3,
+    "topic": "Alligation or Mixture",
+    "page_start": 19,
+    "page_end": 24
+  },
+  {
+    "chapter": 4,
+    "topic": "Progressions",
+    "page_start": 25,
+    "page_end": 34
+  },
+  {
+    "chapter": 5,
+    "topic": "Surds and Algorithm",
+    "page_start": 35,
+    "page_end": 42
+  },
+  {
+    "chapter": 6,
+    "topic": "Percentage and Discount",
+    "page_start": 43,
+    "page_end": 55
+  },
+  {
+    "chapter": 7,
+    "topic": "Distance, Trains and Boats",
+    "page_start": 56,
+    "page_end": 66
+  },
+  {
+    "chapter": 8,
+    "topic": "Work, Pipe and Cistern",
+    "page_start": 67,
+    "page_end": 78
+  },
+  {
+    "chapter": 9,
+    "topic": "Mensuration & area of plane figures",
+    "page_start": 79,
+    "page_end": 88
+  },
+  {
+    "chapter": 10,
+    "topic": "Volume & surface area of solid figures",
+    "page_start": 89,
+    "page_end": 92
+  },
+  {
+    "chapter": 11,
+    "topic": "Geometry",
+    "page_start": 93,
+    "page_end": 103
+  },
+  {
+    "chapter": 12,
+    "topic": "Height and Distance",
+    "page_start": 104,
+    "page_end": 107
+  },
+  {
+    "chapter": 13,
+    "topic": "Venn Diagram",
+    "page_start": 108,
+    "page_end": 110
+  },
+  {
+    "chapter": 14,
+    "topic": "Permutation and Combinations",
+    "page_start": 111,
+    "page_end": 119
+  },
+  {
+    "chapter": 15,
+    "topic": "Probability",
+    "page_start": 120,
+    "page_end": 132
+  },
+  {
+    "chapter": 16,
+    "topic": "Function and Graph",
+    "page_start": 133,
+    "page_end": 137
+  },
+  {
+    "chapter": 17,
+    "topic": "Calendar, clock",
+    "page_start": 138,
+    "page_end": 144
+  },
+  {
+    "chapter": 18,
+    "topic": "Series & missing characters",
+    "page_start": 145,
+    "page_end": 147
+  },
+  {
+    "chapter": 19,
+    "topic": "Syllogism",
+    "page_start": 148,
+    "page_end": 149
+  },
+  {
+    "chapter": 20,
+    "topic": "Previous Year NET Solutions",
+    "page_start": 150,
+    "page_end": 212
+  },
+  {
+    "chapter": 21,
+    "topic": "Previous Year GATE Solutions",
+    "page_start": 213,
+    "page_end": 245
+  }
+]

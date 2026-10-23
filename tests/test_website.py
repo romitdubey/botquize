@@ -282,7 +282,7 @@ def test_preview_schedule_matches_canonical_plan():
     from app.services.planner import plan_rows
     text=Path('web/schedule.js').read_text().split('export default ',1)[1].strip().rstrip(';')
     preview=json.loads(text)
-    canonical=[{k:v for k,v in row.items() if k in ('date','topic','part','kind')} for row in plan_rows()]
+    canonical=[{k:v for k,v in row.items() if k in ('date','topic','part','kind','aptitude')} for row in plan_rows()]
     assert preview==canonical
 
 @pytest.mark.asyncio
@@ -592,3 +592,31 @@ async def test_unselected_account_blocks_new_uploads(cloud,monkeypatch):
     cloud.admins.clear();send=AsyncMock();monkeypatch.setattr(tg,'telegram',send)
     await tg.handle_update({'message':{'from':{'id':123456789},'chat':{'id':123456789,'type':'private'},'text':'/topic 2026-10-16 | Demo'}},cloud)
     assert 'Select an account first' in send.call_args.args[1]['text'] and not cloud.banks
+
+
+@pytest.mark.asyncio
+async def test_aptitude_completion_is_separate_and_preserves_existing_study_data(cloud,monkeypatch,bank):
+    monkeypatch.setattr(api,'today',lambda:date(2026,10,23))
+    await cloud.put_quiz(bank)
+    cloud.states['learner-1']={'days':{'2026-10-23':{'studied':True,'seconds':120},'2026-10-22':{'studied':True}},'attempts':{'existing':{'id':'existing'}}}
+    original_banks=copy.deepcopy(cloud.banks)
+    async with connection() as c:
+        response=await c.put('/api/days/2026-10-23',json={'aptitude_studied':True})
+        assert response.status_code==200 and response.json()=={'studied':True,'seconds':120,'aptitude_studied':True}
+        await c.put('/api/days/2026-10-23',json={'studied':False})
+        assert cloud.states['learner-1']['days']['2026-10-23']['aptitude_studied']
+        assert (await c.put('/api/days/2026-10-22',json={'aptitude_studied':True})).status_code==403
+        assert (await c.put('/api/days/2026-10-24',json={'aptitude_studied':True})).status_code==403
+        assert (await c.put('/api/days/2026-10-23',json={})).status_code==400
+        detail=(await c.get('/api/days/2026-10-23')).json()
+        assert detail['day']['aptitude']['topic']=='Number Systems'
+        assert detail['day']['aptitude']['part']==1
+    assert cloud.states['learner-1']['attempts']=={'existing':{'id':'existing'}}
+    assert cloud.banks==original_banks and cloud.states['learner-1']['days']['2026-10-22']=={'studied':True}
+
+
+@pytest.mark.asyncio
+async def test_no_aptitude_progress_can_be_added_to_a_day_before_aptitude_plan(cloud):
+    async with connection() as c:
+        assert (await c.put('/api/days/2026-10-21',json={'aptitude_studied':True})).status_code==400
+    assert not cloud.states.get('learner-1',{}).get('days')

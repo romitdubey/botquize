@@ -117,7 +117,7 @@ def test_revised_plan_preserves_history_weekends_and_covers_all_units():
     rows=plan_rows();original=_original_book_rows()
     assert len(rows)==56
     assert [r for r in rows if r['date']<='2026-10-22']==[r for r in original if r['date']<='2026-10-22']
-    assert [r for r in rows if r['kind'] in ('PYQ','Mock')]==[r for r in original if r['kind'] in ('PYQ','Mock')]
+    assert [{k:v for k,v in r.items() if k!='aptitude'} for r in rows if r['kind'] in ('PYQ','Mock')]==[r for r in original if r['kind'] in ('PYQ','Mock')]
     future=[r for r in rows if r['date']>'2026-10-22' and r['kind'] not in ('PYQ','Mock')]
     assert len(future)==35
     assert future[0]['date']=='2026-10-23' and future[0]['topic'].startswith('Electron Transport & Oxidative Phosphorylation; Pentose Phosphate Pathway; Photosynthesis')
@@ -236,3 +236,19 @@ async def test_registered_commands_include_manual_sync_and_retry():
     commands={command for handlers in application.handlers.values() for handler in handlers for command in getattr(handler,'commands',[])}
     assert {'sync','wrong','retryweek','topic','notion_setup','backup','plan','result'} <= commands
     await application.bot.shutdown()
+
+
+def test_aptitude_splits_every_printed_page_once_without_gaps():
+    from app.services.planner import aptitude_plan
+    blocks=aptitude_plan()
+    assert len(blocks)==49 and blocks[0]['date']=='2026-10-23' and blocks[-1]['date']=='2026-12-10'
+    assert {b['chapter'] for b in blocks}==set(range(1,22))
+    assert [p for b in blocks for p in range(b['page_start'],b['page_end']+1)]==list(range(1,246))
+    assert all(1<=b['page_end']-b['page_start']+1<=6 for b in blocks)
+    assert all((date.fromisoformat(b['date'])-date.fromisoformat(a['date'])).days==1 for a,b in zip(blocks,blocks[1:]))
+    assert len([b for b in blocks if b['chapter']==20])==11
+    assert len([b for b in blocks if b['chapter']==21])==6
+    rows=plan_rows()
+    assert not any(r.get('aptitude') for r in rows if r['date']<'2026-10-23')
+    assert all(r.get('aptitude') for r in rows if r['date']>='2026-10-23')
+    assert all('page_start' not in r['aptitude'] for r in rows if r.get('aptitude'))

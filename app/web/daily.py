@@ -9,7 +9,7 @@ def scheduled_day(day):
     except (ValueError,TypeError):raise HTTPException(400,'Invalid study date.')
     row=next((r for r in plan_rows() if r['date']==parsed.isoformat()),None)
     if not row:raise HTTPException(404,'No study topic is scheduled on this day.')
-    return {k:v for k,v in row.items() if k in ('date','topic','part','kind')}
+    return {k:v for k,v in row.items() if k in ('date','topic','part','kind','aptitude')}
 
 
 def today_topic(day):

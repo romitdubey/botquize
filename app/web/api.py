@@ -117,14 +117,18 @@ async def day_detail(day:str,user=Depends(learner)):
     return {'day':row,'notes':notes,'quizzes':quizzes,'editable':day==today().isoformat() and not user.get('read_only')}
 
 class DayUpdate(BaseModel):
-    studied: bool
+    studied: bool | None = None
+    aptitude_studied: bool | None = None
 
 @app.put('/api/days/{day}')
 async def update_day(day:str, payload:DayUpdate,user=Depends(participant)):
-    require_today(day,today())
+    row=require_today(day,today())
+    if payload.studied is None and payload.aptitude_studied is None:raise HTTPException(400,'Choose a study task to update.')
+    if payload.aptitude_studied is not None and not row.get('aptitude'):raise HTTPException(400,'No aptitude task is scheduled on this day.')
     def action(data):
         record=data.setdefault('days',{}).setdefault(day,{})
-        record['studied']=payload.studied
+        if payload.studied is not None:record['studied']=payload.studied
+        if payload.aptitude_studied is not None:record['aptitude_studied']=payload.aptitude_studied
         return record
     return await store.mutate(user['id'],action)
 
@@ -286,5 +290,5 @@ WEB_ROOT=Path(__file__).resolve().parents[2]/'web'
 async def index(): return FileResponse(WEB_ROOT/'index.html')
 @app.get('/{asset}')
 async def asset(asset:str):
-    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg','sample-notes.svg','sample-diagram.svg','science-math.js','answer-saver.mjs'): raise HTTPException(404)
+    if asset not in ('app.js','style.css','demo.js','schedule.js','favicon.svg','sample-notes.svg','sample-diagram.svg','science-math.js','answer-saver.mjs','study-progress.mjs'): raise HTTPException(404)
     return FileResponse(WEB_ROOT/asset)

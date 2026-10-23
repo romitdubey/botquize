@@ -347,3 +347,14 @@ Vishu has completed the old book sequence through **Citric Acid Cycle; Vitamins 
 The public preview, CSV and Excel copy are generated from the same dated plan. Source: [official revised CSIR-HRDG syllabus](https://csirhrdg.res.in/SiteContent/ManagedContent/ContentFiles/20260121115025355Merged_Syllabus_CSIR-DBT_21Jan2026.pdf). This is compressed revision coverage, not a guarantee of mastery in the time available.
 
 Only the schedule is revised. Date keys, studied marks, existing tests/quizzes, release dates, attempts, notes and results are not modified or reassigned. A future quiz already uploaded retains its original label and date. Redeploy Vercel after pushing. No database migration or data-reset command is required.
+
+## Daily aptitude subtasks
+
+From 23 October to 10 December, every day has a separate aptitude task. The supplied 21-chapter contents are transcribed in `app/data/aptitude_topics.json`; `aptitude_plan()` distributes all 245 printed pages once across 49 consecutive days, capped at six pages per day and balanced within each chapter. The NET solutions chapter is split across 11 days and GATE solutions across six. Chapter names follow the supplied contents, including “Surds and Algorithm”. These are page portions, not guessed internal subheadings.
+
+The website displays the chapter and part number on My day, Schedule and the day detail; `/plan` includes the aptitude task. Aptitude has an independent `aptitude_studied` completion flag saved inside the existing learner day record. Marking aptitude does not mark the main topic or change an attempt/test. Existing date permissions and mentor read-only access apply. No database migration is required. Printed ranges are provided in the CSV/Excel schedule, not the website. Existing Life Sciences topics and weekend PYQ/mock assignments remain unchanged.
+
+Allow roughly 25–40 minutes for the daily portion, adjusting for the actual question density. On weekends it is a short additional task beside the existing test. Completion of all printed pages allocates this book; it does not imply the book alone covers every Part A skill or that each day's questions take the same time. The separate completion flag can be left pending if needed. Redeploy after pushing to activate the new frontend and API together.
+
+
+The home-page “The bigger picture” now shows all 14 scheduled units and one separate aptitude bar. It counts completed study portions against each unit's scheduled portions, mapping legacy Biochemistry dates to Unit 1. PYQ/mock days and mixed revision are not counted as unit study portions. Aptitude uses only `aptitude_studied`; main-topic completion never marks aptitude. Existing completion records are read without backfilling or changing them. These bars reflect schedule progress, not exam scores or whole-unit mastery.

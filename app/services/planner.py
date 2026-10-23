@@ -40,6 +40,23 @@ def _original_book_rows():
     return rows
 
 
+def aptitude_plan():
+    """Printed ranges from the supplied aptitude contents; at most six pages a day."""
+    topics=json.loads((Path(__file__).parent.parent/'data'/'aptitude_topics.json').read_text())
+    day=date(2026,10,23);blocks=[]
+    for chapter in topics:
+        length=chapter['page_end']-chapter['page_start']+1
+        count=(length+5)//6
+        base,extra=divmod(length,count);page=chapter['page_start']
+        for part in range(1,count+1):
+            size=base+(part<=extra)
+            blocks.append({'date':day.isoformat(),'id':f'aptitude-{day.isoformat()}',
+                'chapter':chapter['chapter'],'topic':chapter['topic'],'part':part,'parts':count,
+                'page_start':page,'page_end':page+size-1})
+            page+=size;day+=timedelta(days=1)
+    return blocks
+
+
 def plan_rows():
     revised=json.loads((Path(__file__).parent.parent/'data'/'revised_study_plan.json').read_text())
     by_day={row['date']:row for row in revised}
@@ -51,6 +68,9 @@ def plan_rows():
             replacement=by_day[original['date']]
             # Do not attach invented book pages to units absent from the original book.
             rows.append({**{key:original[key] for key in ('key','date','week')},**replacement,'pages':0})
+    aptitude={item['date']:{k:v for k,v in item.items() if k not in ('date','page_start','page_end')} for item in aptitude_plan()}
+    for row in rows:
+        if row['date'] in aptitude:row['aptitude']=aptitude[row['date']]
     return rows
 
 
